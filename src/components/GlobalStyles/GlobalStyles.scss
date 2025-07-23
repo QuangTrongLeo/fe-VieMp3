@@ -1,0 +1,13 @@
+@import 'normalize.css';
+
+:root {
+  --primary-color: #1db954;
+  --black-color: #191414;
+  --black-light-1: #2e2b29; /* đen nhạt hơn một chút */
+  --black-light-2: #403d3b; /* nhạt hơn nữa */
+  --white-color: #ffffff;
+}
+
+html {
+  font-size: 62.5%;
+}
