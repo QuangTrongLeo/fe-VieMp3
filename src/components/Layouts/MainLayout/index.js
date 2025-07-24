@@ -1,14 +1,14 @@
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import MusicPlayer from './MusicPlayer';
+import SongPlayer from './SongPlayer';
 
 function MainLayout({ children }) {
   return (
     <div>
       <Header />
 
-      <div className="container-fluid">
+      <div className="container-fluid" style={{ paddingTop: '5%' }}>
         <div className="row">
           {/* Sidebar - chiếm 2 cột */}
           <div className="col-md-2">
@@ -23,7 +23,7 @@ function MainLayout({ children }) {
         </div>
       </div>
 
-      <MusicPlayer />
+      <SongPlayer />
     </div>
   );
 }

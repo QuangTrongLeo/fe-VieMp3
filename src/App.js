@@ -1,14 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publishRoutes } from '~/routes';
+import { publishRoutes, userRoutes, artistRoutes, adminRoutes } from '~/routes';
 import { MainLayout } from './components/Layouts';
 import { Fragment } from 'react';
 
 function App() {
+  const allRoutes = [...publishRoutes, ...userRoutes, ...artistRoutes, ...adminRoutes];
+
   return (
     <Router>
       <div className="App">
         <Routes>
-          {publishRoutes.map((route, index) => {
+          {allRoutes.map((route, index) => {
             const Page = route.component;
             const Layout = route.layout !== undefined ? route.layout || Fragment : MainLayout;
             return (
