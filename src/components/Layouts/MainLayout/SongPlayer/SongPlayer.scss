@@ -1,0 +1,9 @@
+.link-artist-hover-color {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--primary-color-light);
+  }
+}
