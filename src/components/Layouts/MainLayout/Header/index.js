@@ -76,7 +76,7 @@ function Header() {
           </a>
 
           {/* Search form */}
-          <form className="input-group search-form">
+          <form className="input-group search-form w-50">
             <input
               type="search"
               className="form-control"

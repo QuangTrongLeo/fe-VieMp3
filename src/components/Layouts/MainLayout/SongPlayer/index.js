@@ -80,6 +80,7 @@ function SongPlayer() {
     }
   };
 
+  // Flash btn
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 300); // Nháy màu 300ms
@@ -253,7 +254,8 @@ function SongPlayer() {
             </div>
 
             {/* RIGHT ELEMENTS */}
-            <div className="col-4 d-flex justify-content-end align-items-center gap-3">
+            <div className="col-4 d-flex justify-content-end align-items-center gap-2">
+              {/* Like button */}
               <button
                 className={`icon-song-player-right-element-btn ${likedVisible ? 'active' : ''}`}
                 data-bs-toggle="tooltip"
@@ -264,6 +266,7 @@ function SongPlayer() {
                 <span className="dot-indicator"></span>
               </button>
 
+              {/* Lyris button */}
               <button
                 className={`icon-song-player-right-element-btn ${lyricsVisible ? 'active' : ''}`}
                 data-bs-toggle="tooltip"
@@ -274,6 +277,7 @@ function SongPlayer() {
                 <span className="dot-indicator"></span>
               </button>
 
+              {/* Volume button */}
               <button
                 className={`icon-song-player-right-element-btn ${flashVolume ? 'flash' : ''}`}
                 data-bs-toggle="tooltip"
@@ -291,6 +295,7 @@ function SongPlayer() {
                 <div className="volume-bar-fill" style={{ width: `${progressVolume}%` }}></div>
               </div>
 
+              {/* Sidebar playlist button */}
               <button
                 className={`icon-song-player-right-element-btn ${playlistVisible ? 'active' : ''}`}
                 data-bs-toggle="tooltip"
@@ -301,6 +306,7 @@ function SongPlayer() {
                 <span className="dot-indicator"></span>
               </button>
 
+              {/* Close button */}
               <button
                 className={`icon-song-player-right-element-btn ${flashClose ? 'flash' : ''}`}
                 data-bs-toggle="tooltip"
