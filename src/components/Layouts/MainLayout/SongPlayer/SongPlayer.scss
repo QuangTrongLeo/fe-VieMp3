@@ -1,3 +1,4 @@
+// SONGPLAYER LEFT ELEMENT
 .link-artist-hover-color {
   color: #ffffff;
   text-decoration: none;
@@ -7,3 +8,119 @@
     color: var(--primary-color-light);
   }
 }
+
+// SONGPLAYER CENTER ELEMENT
+.play-pause-btn {
+  background-color: var(--white-color);
+  color: var(--black-color);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.play-pause-btn:hover {
+  opacity: 0.9;
+  background-color: var(--white-darker-color);
+}
+
+.player-btn {
+  color: var(--black-color-light-2);
+  background-color: transparent;
+  border: none;
+  transition: color 0.2s ease;
+}
+
+.player-btn:hover {
+  color: var(--white-color);
+}
+
+.player-btn.active {
+  color: var(--primary-color);
+}
+
+.player-btn.flash {
+  color: var(--primary-color);
+  transition: color 0.1s ease;
+}
+
+.center-label-wrapper {
+  position: relative;
+}
+
+// Time bar
+// .progress-bar-center {
+//   position: absolute;
+//   padding-top: 8%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   width: 80%;
+
+//   .time-text {
+//     font-size: 12px;
+//     color: white;
+//     min-width: 35px;
+//     text-align: center;
+//   }
+
+//   .progress-bar-wrapper {
+//     flex-grow: 1;
+//     height: 4px;
+//     margin: 0 8px;
+//     background-color: #555;
+//     border-radius: 2px;
+//     overflow: hidden;
+//     cursor: pointer;
+
+//     .progress-bar-fill {
+//       height: 100%;
+//       background-color: #fff;
+//       transition: width 0.2s ease;
+//     }
+//   }
+// }
+
+.progress-bar-center {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  pointer-events: none;
+
+  .time-text {
+    font-size: 12px;
+    color: white;
+    min-width: 35px;
+    text-align: center;
+  }
+
+  .progress-bar-wrapper {
+    flex-grow: 1;
+    height: 4px;
+    margin: 0 8px;
+    background-color: var(--black-color-light-2);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    pointer-events: auto;
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: var(--white-color);
+      transition: width 0.2s ease;
+    }
+  }
+}
+
+// SONGPLAYER RIGHT ELEMENT

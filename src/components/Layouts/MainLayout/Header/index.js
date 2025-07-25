@@ -109,7 +109,7 @@ function Header() {
 
         {/* Collapsible content */}
         <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-          <ul className="navbar-nav d-flex align-items-center flex-row gap-3 mb-0">
+          <ul className="navbar-nav navbar-nav-header d-flex align-items-center flex-row gap-3 mb-0">
             {/* Nút Khám phá Premium */}
             <li>
               <button className="btn-premium">Khám phá Premium</button>

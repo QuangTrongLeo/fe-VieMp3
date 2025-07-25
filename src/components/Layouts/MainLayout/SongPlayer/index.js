@@ -1,8 +1,40 @@
 import { Dropdown, initMDB } from 'mdb-ui-kit';
+import React, { useState, useRef } from 'react';
 import './SongPlayer.scss';
 initMDB({ Dropdown });
 
 function SongPlayer() {
+  const progressRef = useRef(null);
+
+  const [progress, setProgress] = useState(0);
+  const [mode, setMode] = useState(null); // 'shuffle', 'repeat', hoặc null
+  const [flashPrev, setFlashPrev] = useState(false);
+  const [flashNext, setFlashNext] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
+
+  const toggleShuffle = () => {
+    setMode(prev => (prev === 'shuffle' ? null : 'shuffle'));
+  };
+
+  const toggleRepeat = () => {
+    setMode(prev => (prev === 'repeat' ? null : 'repeat'));
+  };
+
+  const togglePlayPause = () => setIsPaused(prev => !prev);
+
+  const flashButton = setter => {
+    setter(true);
+    setTimeout(() => setter(false), 300); // Nháy màu 300ms
+  };
+
+  const handleClick = e => {
+    const bar = progressRef.current;
+    const rect = bar.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percent = (clickX / rect.width) * 100;
+    setProgress(percent);
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -52,36 +84,82 @@ function SongPlayer() {
             </div>
 
             {/* Center elements */}
-            <div className="col-4 d-flex justify-content-center align-items-center">
-              <ul class="navbar-nav flex-row d-none d-md-flex">
-                <li class="nav-item me-3 me-lg-1 active">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-home fa-lg"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                  </a>
+            <div className="col-4 d-flex justify-content-center position-relative">
+              <ul className="navbar-nav flex-row d-none d-md-flex">
+                {/* Shuffle */}
+                <li className="nav-item me-4">
+                  <button
+                    className={`player-btn ${mode === 'shuffle' ? 'active' : ''}`}
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Phát ngẫu nhiên"
+                    onClick={toggleShuffle}
+                  >
+                    <i className="fa-solid fa-shuffle"></i>
+                  </button>
                 </li>
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-flag fa-lg"></i>
-                  </a>
+
+                {/* Prev */}
+                <li className="nav-item me-4">
+                  <button
+                    className={`player-btn ${flashPrev ? 'flash' : ''}`}
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    onClick={() => flashButton(setFlashPrev)}
+                  >
+                    <i className="fa-solid fa-backward-step"></i>
+                  </button>
                 </li>
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-video fa-lg"></i>
-                  </a>
+
+                {/* Play/Pause */}
+                <li className="nav-item me-4">
+                  <button
+                    className="play-pause-btn"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title={isPaused ? 'Phát' : 'Tạm dừng'}
+                    onClick={togglePlayPause}
+                  >
+                    <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
+                  </button>
+                  {/* Anchor tàng hình dùng để định vị */}
+                  <span id="play-anchor" className="anchor-marker"></span>
                 </li>
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-shopping-bag fa-lg"></i>
-                  </a>
+
+                {/* Next */}
+                <li className="nav-item me-4">
+                  <button
+                    className={`player-btn ${flashNext ? 'flash' : ''}`}
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    onClick={() => flashButton(setFlashNext)}
+                  >
+                    <i className="fa-solid fa-forward-step"></i>
+                  </button>
                 </li>
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-users fa-lg"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger">2</span>
-                  </a>
+
+                {/* Repeat */}
+                <li className="nav-item me-4">
+                  <button
+                    className={`player-btn ${mode === 'repeat' ? 'active' : ''}`}
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Phát lại"
+                    onClick={toggleRepeat}
+                  >
+                    <i className="fa-solid fa-repeat"></i>
+                  </button>
                 </li>
               </ul>
+
+              {/* Thanh thời gian nằm ngoài ul nhưng căn giữa */}
+              <div className="progress-bar-center position-absolute start-50 translate-middle-x mt-2">
+                <span className="time-text">4:09</span>
+                <div className="progress-bar-wrapper" ref={progressRef} onClick={handleClick}>
+                  <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+                </div>
+                <span className="time-text">4:43</span>
+              </div>
             </div>
 
             {/* Right elements */}

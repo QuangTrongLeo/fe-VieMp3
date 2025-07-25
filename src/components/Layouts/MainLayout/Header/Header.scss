@@ -56,12 +56,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.navbar-nav .nav-link i {
+.navbar-nav-header .nav-link i {
   color: var(--white-color);
   transition: color 0.3s ease;
 }
 
-.navbar-nav .nav-link:hover i {
+.navbar-nav-header .nav-link:hover i {
   color: var(--primary-color);
 }
 
