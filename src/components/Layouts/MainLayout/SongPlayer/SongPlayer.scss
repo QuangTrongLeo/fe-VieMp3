@@ -1,3 +1,16 @@
+// NAV SONG PLAYER
+.navbar-song-player {
+  height: 90px;
+  border-top: 2px solid var(--black-color-light-1);
+  background-color: var(--black-color);
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(0); // mặc định hiện
+}
+
+.navbar-song-player.slide-down-song-player {
+  transform: translateY(100%); // trượt xuống khi ẩn
+}
+
 // SONGPLAYER LEFT ELEMENT
 .link-artist-hover-color {
   color: #ffffff;
@@ -119,6 +132,10 @@
       border-radius: 50%;
     }
   }
+}
+
+.icon-song-player-right-element-btn.flash {
+  color: var(--primary-color);
 }
 
 .volume-bar-wrapper {

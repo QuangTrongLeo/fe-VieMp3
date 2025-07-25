@@ -10,14 +10,18 @@ function SongPlayer() {
 
   const [progressTime, setProgressTime] = useState(0);
   const [progressVolume, setProgressVolume] = useState(100);
+  const [previousVolume, setPreviousVolume] = useState(100);
   const [mode, setMode] = useState(null);
   const [flashPrev, setFlashPrev] = useState(false);
   const [flashNext, setFlashNext] = useState(false);
+  const [flashVolume, setFlashVolume] = useState(false);
+  const [flashClose, setFlashClose] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [likedVisible, setLikedVisible] = useState(false);
   const [lyricsVisible, setLyricsVisible] = useState(false);
   const [playlistVisible, setPlaylistVisible] = useState(false);
+  const [closedSongPlayer, setClosedSongPlayer] = useState(false);
 
   // Tooltip init (chỉ chạy 1 lần khi component mount)
   useEffect(() => {
@@ -65,7 +69,15 @@ function SongPlayer() {
   const togglePlayPause = () => setIsPaused(prev => !prev);
 
   const toggleVolume = () => {
-    setProgressVolume(prev => (prev === 0 ? 100 : 0));
+    // setProgressVolume(prev => (prev === 0 ? 100 : 0));
+    if (progressVolume === 0) {
+      // Nếu đang mute → unmute và quay lại previousVolume
+      setProgressVolume(previousVolume);
+    } else {
+      // Nếu đang có volume → lưu lại rồi mute
+      setPreviousVolume(progressVolume);
+      setProgressVolume(0);
+    }
   };
 
   const flashButton = setter => {
@@ -120,18 +132,16 @@ function SongPlayer() {
     const percent = Math.max(0, Math.min(1, clickX / rect.width));
     const volume = Math.round(percent * 100);
     setProgressVolume(volume);
+    setPreviousVolume(volume);
   };
 
   return (
     <>
       {/* Navbar */}
       <nav
-        className="navbar navbar-expand-lg fixed-bottom"
-        style={{
-          height: '90px',
-          borderTop: '2px solid var(--black-color-light-1)',
-          backgroundColor: 'var(--black-color)',
-        }}
+        className={`navbar navbar-expand-lg fixed-bottom navbar-song-player ${
+          closedSongPlayer ? 'slide-down-song-player' : ''
+        }`}
       >
         <div class="container-fluid">
           <div className="row w-100">
@@ -265,10 +275,13 @@ function SongPlayer() {
               </button>
 
               <button
-                className="icon-song-player-right-element-btn"
+                className={`icon-song-player-right-element-btn ${flashVolume ? 'flash' : ''}`}
                 data-bs-toggle="tooltip"
                 title="Âm lượng"
-                onClick={toggleVolume}
+                onClick={() => {
+                  toggleVolume();
+                  flashButton(setFlashVolume);
+                }}
               >
                 {progressVolume === 0 ? <i className="fas fa-volume-mute"></i> : <i className="fas fa-volume-up"></i>}
               </button>
@@ -286,6 +299,19 @@ function SongPlayer() {
               >
                 <i className="fas fa-bars"></i>
                 <span className="dot-indicator"></span>
+              </button>
+
+              <button
+                className={`icon-song-player-right-element-btn ${flashClose ? 'flash' : ''}`}
+                data-bs-toggle="tooltip"
+                title="Đóng"
+                onClick={() => {
+                  flashButton(setFlashClose);
+                  if (!isPaused) setIsPaused(true);
+                  setClosedSongPlayer(true); // Kích hoạt ẩn nav
+                }}
+              >
+                <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
