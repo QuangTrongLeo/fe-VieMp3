@@ -1,17 +1,59 @@
 import { Dropdown, initMDB } from 'mdb-ui-kit';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import * as bootstrap from 'bootstrap';
 import './SongPlayer.scss';
 initMDB({ Dropdown });
 
 function SongPlayer() {
-  const progressRef = useRef(null);
+  const timeRef = useRef(null);
+  const volumeRef = useRef(null);
 
-  const [progress, setProgress] = useState(0);
-  const [mode, setMode] = useState(null); // 'shuffle', 'repeat', hoặc null
+  const [progressTime, setProgressTime] = useState(0);
+  const [progressVolume, setProgressVolume] = useState(100);
+  const [mode, setMode] = useState(null);
   const [flashPrev, setFlashPrev] = useState(false);
   const [flashNext, setFlashNext] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [likedVisible, setLikedVisible] = useState(false);
+  const [lyricsVisible, setLyricsVisible] = useState(false);
+  const [playlistVisible, setPlaylistVisible] = useState(false);
 
+  // Tooltip init (chỉ chạy 1 lần khi component mount)
+  useEffect(() => {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+    const tooltipList = [...tooltipTriggerList].map(el => {
+      const tooltip = new bootstrap.Tooltip(el, {
+        placement: 'top',
+        fallbackPlacements: [],
+        delay: { show: 0, hide: 0 },
+      });
+
+      // Khi rời chuột khỏi button, ép tooltip ẩn
+      el.addEventListener('mouseleave', () => {
+        tooltip.hide();
+      });
+
+      return tooltip;
+    });
+
+    return () => {
+      tooltipList.forEach(t => t.dispose());
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = document.querySelector('.play-pause-btn');
+    if (!el) return;
+    const tooltip = bootstrap.Tooltip.getInstance(el);
+    if (tooltip) {
+      el.setAttribute('data-bs-title', isPaused ? 'Phát' : 'Tạm dừng');
+      tooltip.setContent({ '.tooltip-inner': isPaused ? 'Phát' : 'Tạm dừng' });
+    }
+  }, [isPaused]);
+
+  // TOGGLE
   const toggleShuffle = () => {
     setMode(prev => (prev === 'shuffle' ? null : 'shuffle'));
   };
@@ -22,17 +64,62 @@ function SongPlayer() {
 
   const togglePlayPause = () => setIsPaused(prev => !prev);
 
+  const toggleVolume = () => {
+    setProgressVolume(prev => (prev === 0 ? 100 : 0));
+  };
+
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 300); // Nháy màu 300ms
   };
 
-  const handleClick = e => {
-    const bar = progressRef.current;
+  // TIME BAR
+  const duration = 200; // tổng thời gian bài hát, bạn có thể thay đổi tùy bài
+  const handleClickTimeBar = e => {
+    const bar = timeRef.current;
     const rect = bar.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
-    const percent = (clickX / rect.width) * 100;
-    setProgress(percent);
+    const percent = Math.max(0, Math.min(1, clickX / rect.width));
+    setCurrentTime(duration * percent);
+  };
+
+  useEffect(() => {
+    let interval = null;
+
+    if (!isPaused) {
+      interval = setInterval(() => {
+        setCurrentTime(prev => {
+          if (prev >= duration) {
+            clearInterval(interval);
+            return duration;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
+  useEffect(() => {
+    setProgressTime((currentTime / duration) * 100);
+  }, [currentTime]);
+
+  const formatTimeBar = seconds => {
+    seconds = Math.floor(seconds);
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
+
+  // VOLUME BAR
+  const handleClickVolumeBar = e => {
+    const bar = volumeRef.current;
+    const rect = bar.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percent = Math.max(0, Math.min(1, clickX / rect.width));
+    const volume = Math.round(percent * 100);
+    setProgressVolume(volume);
   };
 
   return (
@@ -48,7 +135,7 @@ function SongPlayer() {
       >
         <div class="container-fluid">
           <div className="row w-100">
-            {/* Left elements */}
+            {/* LEFT ELEMENTS */}
             <div className="col-4 d-flex align-items-center">
               {/* Brand */}
               <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
@@ -83,7 +170,7 @@ function SongPlayer() {
               </div>
             </div>
 
-            {/* Center elements */}
+            {/* CENTER ELEMENTS */}
             <div className="col-4 d-flex justify-content-center position-relative">
               <ul className="navbar-nav flex-row d-none d-md-flex">
                 {/* Shuffle */}
@@ -91,7 +178,6 @@ function SongPlayer() {
                   <button
                     className={`player-btn ${mode === 'shuffle' ? 'active' : ''}`}
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     title="Phát ngẫu nhiên"
                     onClick={toggleShuffle}
                   >
@@ -104,7 +190,6 @@ function SongPlayer() {
                   <button
                     className={`player-btn ${flashPrev ? 'flash' : ''}`}
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     onClick={() => flashButton(setFlashPrev)}
                   >
                     <i className="fa-solid fa-backward-step"></i>
@@ -116,14 +201,11 @@ function SongPlayer() {
                   <button
                     className="play-pause-btn"
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
-                    title={isPaused ? 'Phát' : 'Tạm dừng'}
+                    data-bs-title={isPaused ? 'Phát' : 'Tạm dừng'}
                     onClick={togglePlayPause}
                   >
                     <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
                   </button>
-                  {/* Anchor tàng hình dùng để định vị */}
-                  <span id="play-anchor" className="anchor-marker"></span>
                 </li>
 
                 {/* Next */}
@@ -131,7 +213,6 @@ function SongPlayer() {
                   <button
                     className={`player-btn ${flashNext ? 'flash' : ''}`}
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     onClick={() => flashButton(setFlashNext)}
                   >
                     <i className="fa-solid fa-forward-step"></i>
@@ -143,7 +224,6 @@ function SongPlayer() {
                   <button
                     className={`player-btn ${mode === 'repeat' ? 'active' : ''}`}
                     data-bs-toggle="tooltip"
-                    data-bs-placement="top"
                     title="Phát lại"
                     onClick={toggleRepeat}
                   >
@@ -153,125 +233,60 @@ function SongPlayer() {
               </ul>
 
               {/* Thanh thời gian nằm ngoài ul nhưng căn giữa */}
-              <div className="progress-bar-center position-absolute start-50 translate-middle-x mt-2">
-                <span className="time-text">4:09</span>
-                <div className="progress-bar-wrapper" ref={progressRef} onClick={handleClick}>
-                  <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+              <div className="progress-time-bar-center position-absolute start-50 translate-middle-x mt-2">
+                <span className="time-text">{formatTimeBar(currentTime)}</span>
+                <div className="progress-bar-wrapper" ref={timeRef} onClick={handleClickTimeBar}>
+                  <div className="progress-bar-fill" style={{ width: `${progressTime}%` }}></div>
                 </div>
-                <span className="time-text">4:43</span>
+                <span className="time-text">{formatTimeBar(duration)}</span>
               </div>
             </div>
 
-            {/* Right elements */}
-            <div className="col-4 d-flex justify-content-end align-items-center">
-              <ul class="navbar-nav flex-row">
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link d-sm-flex align-items-sm-center" href="#">
-                    <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                      class="rounded-circle"
-                      height="22"
-                      alt="Avatar"
-                      loading="lazy"
-                    />
-                    <strong class="d-none d-sm-block ms-1">John</strong>
-                  </a>
-                </li>
-                <li class="nav-item me-3 me-lg-1">
-                  <a class="nav-link" href="#">
-                    <i class="fas fa-plus-circle fa-lg"></i>
-                  </a>
-                </li>
-                <li class="nav-item dropdown me-3 me-lg-1">
-                  <a
-                    class="nav-link dropdown-toggle hidden-arrow"
-                    href="#"
-                    id="navbarDropdownMenuLink"
-                    data-mdb-dropdown-init
-                    role="button"
-                    aria-expanded="false"
-                  >
-                    <i class="fas fa-comments fa-lg"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger">6</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Some news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Another news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item dropdown me-3 me-lg-1">
-                  <a
-                    class="nav-link dropdown-toggle hidden-arrow"
-                    href="#"
-                    id="navbarDropdownMenuLink"
-                    data-mdb-dropdown-init
-                    role="button"
-                    aria-expanded="false"
-                  >
-                    <i class="fas fa-bell fa-lg"></i>
-                    <span class="badge rounded-pill badge-notification bg-danger">12</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Some news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Another news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item dropdown me-3 me-lg-1">
-                  <a
-                    class="nav-link dropdown-toggle hidden-arrow"
-                    href="#"
-                    id="navbarDropdownMenuLink"
-                    data-mdb-dropdown-init
-                    role="button"
-                    aria-expanded="false"
-                  >
-                    <i class="fas fa-chevron-circle-down fa-lg"></i>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Some news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Another news
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+            {/* RIGHT ELEMENTS */}
+            <div className="col-4 d-flex justify-content-end align-items-center gap-3">
+              <button
+                className={`icon-song-player-right-element-btn ${likedVisible ? 'active' : ''}`}
+                data-bs-toggle="tooltip"
+                title="Thích"
+                onClick={() => setLikedVisible(prev => !prev)}
+              >
+                <i className="fas fa-heart"></i>
+                <span className="dot-indicator"></span>
+              </button>
+
+              <button
+                className={`icon-song-player-right-element-btn ${lyricsVisible ? 'active' : ''}`}
+                data-bs-toggle="tooltip"
+                title="Lời bài hát"
+                onClick={() => setLyricsVisible(prev => !prev)}
+              >
+                <i className="fas fa-microphone"></i>
+                <span className="dot-indicator"></span>
+              </button>
+
+              <button
+                className="icon-song-player-right-element-btn"
+                data-bs-toggle="tooltip"
+                title="Âm lượng"
+                onClick={toggleVolume}
+              >
+                {progressVolume === 0 ? <i className="fas fa-volume-mute"></i> : <i className="fas fa-volume-up"></i>}
+              </button>
+
+              {/* Volume bar */}
+              <div className="volume-bar-wrapper" ref={volumeRef} onClick={handleClickVolumeBar}>
+                <div className="volume-bar-fill" style={{ width: `${progressVolume}%` }}></div>
+              </div>
+
+              <button
+                className={`icon-song-player-right-element-btn ${playlistVisible ? 'active' : ''}`}
+                data-bs-toggle="tooltip"
+                title="Danh sách phát"
+                onClick={() => setPlaylistVisible(prev => !prev)}
+              >
+                <i className="fas fa-bars"></i>
+                <span className="dot-indicator"></span>
+              </button>
             </div>
           </div>
         </div>
