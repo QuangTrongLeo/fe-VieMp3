@@ -4,7 +4,7 @@ import * as bootstrap from 'bootstrap';
 import './SongPlayer.scss';
 initMDB({ Dropdown });
 
-function SongPlayer() {
+function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
   const timeRef = useRef(null);
   const volumeRef = useRef(null);
 
@@ -20,7 +20,6 @@ function SongPlayer() {
   const [currentTime, setCurrentTime] = useState(0);
   const [likedVisible, setLikedVisible] = useState(false);
   const [lyricsVisible, setLyricsVisible] = useState(false);
-  const [playlistVisible, setPlaylistVisible] = useState(false);
   const [closedSongPlayer, setClosedSongPlayer] = useState(false);
 
   // Tooltip init (chỉ chạy 1 lần khi component mount)
@@ -164,18 +163,20 @@ function SongPlayer() {
               </a>
 
               <div style={{ paddingLeft: '0.5%' }}>
-                <h5
-                  style={{
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    width: '350px',
-                  }}
-                >
-                  Nơi này có anh kabakjbakv kahakjakdvg
-                </h5>
+                <a className="link-song-hover-color" href="/">
+                  <h5
+                    style={{
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      width: '350px',
+                    }}
+                  >
+                    Nơi này có anh kabakjbakv kahakjakdvg
+                  </h5>
+                </a>
 
-                <a className="link-artist-hover-color" href="#">
+                <a className="link-artist-hover-color" href="/">
                   Sơn Tùng - MTP
                 </a>
               </div>
@@ -297,10 +298,13 @@ function SongPlayer() {
 
               {/* Sidebar playlist button */}
               <button
-                className={`icon-song-player-right-element-btn ${playlistVisible ? 'active' : ''}`}
+                className={`icon-song-player-right-element-btn ${isShowPlayListSideBar ? 'active' : ''}`}
                 data-bs-toggle="tooltip"
                 title="Danh sách phát"
-                onClick={() => setPlaylistVisible(prev => !prev)}
+                onClick={() => {
+                  // setPlaylistVisible(prev => !prev);
+                  togglePlayListSidebar();
+                }}
               >
                 <i className="fas fa-bars"></i>
                 <span className="dot-indicator"></span>

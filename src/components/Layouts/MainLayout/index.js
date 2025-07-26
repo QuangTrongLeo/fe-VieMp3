@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
@@ -5,6 +6,16 @@ import PlayListSideBar from './PlayListSideBar';
 import SongPlayer from './SongPlayer';
 
 function MainLayout({ children }) {
+  const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
+
+  const togglePlayListSideBar = () => {
+    setShowPlayListSideBar(prev => !prev);
+  };
+
+  const closePlayListSideBar = () => {
+    setShowPlayListSideBar(false);
+  };
+
   return (
     <div>
       <Header />
@@ -52,9 +63,10 @@ function MainLayout({ children }) {
       </div>
 
       {/* Playlist SideBar */}
-      <PlayListSideBar />
+      <PlayListSideBar isShowPlayListSideBar={isShowPlayListSideBar} closePlayListSideBar={closePlayListSideBar} />
 
-      <SongPlayer />
+      {/* SongPlayer */}
+      <SongPlayer isShowPlayListSideBar={isShowPlayListSideBar} togglePlayListSidebar={togglePlayListSideBar} />
     </div>
   );
 }

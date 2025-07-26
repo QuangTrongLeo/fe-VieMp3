@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './PlayListSideBar.scss';
 
-function PlayListSideBar() {
+function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
   const [flashClose, setFlashClose] = useState(false);
-  const [isClosePlayListSideBar, setClosePlayListSideBar] = useState(true);
   // Flash btn
   const flashButton = setter => {
     setter(true);
@@ -86,7 +85,7 @@ function PlayListSideBar() {
   ];
 
   return (
-    <div className={`playlist-sidebar-container ${isClosePlayListSideBar ? 'show' : 'hide'}`}>
+    <div className={`playlist-sidebar-container ${isShowPlayListSideBar ? 'show' : 'hide'}`}>
       {/* Header: Bài đang phát + Tiêu đề "Bài tiếp theo" */}
       <div className="playlist-sidebar-header">
         <div className="d-flex justify-content-between align-items-center">
@@ -99,7 +98,7 @@ function PlayListSideBar() {
             className={`mb-3 me-2 playlist-sidebar-btn ${flashClose ? 'flash' : ''}`}
             onClick={() => {
               flashButton(setFlashClose);
-              setClosePlayListSideBar(false);
+              closePlayListSideBar();
             }}
           >
             <i className="fa-solid fa-xmark"></i>
