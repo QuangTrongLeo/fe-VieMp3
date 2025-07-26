@@ -14,13 +14,25 @@
 // SONGPLAYER LEFT ELEMENT
 .link-artist-hover-color,
 .link-song-hover-color {
-  color: #ffffff;
+  color: var(--white-color);
   text-decoration: none;
   transition: color 0.3s ease;
 
   &:hover {
     color: var(--primary-color-light);
   }
+}
+
+.song-info-wrapper {
+  max-width: 30vw; /* 30% chiều rộng viewport */
+  overflow: hidden;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0; /* loại bỏ margin mặc định của h5 nếu cần */
 }
 
 // SONGPLAYER CENTER ELEMENT
@@ -140,7 +152,7 @@
 }
 
 .volume-bar-wrapper {
-  width: 20%;
+  width: 30%;
   height: 4px;
   background-color: var(--black-color-light-2);
   border-radius: 2px;

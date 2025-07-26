@@ -66,7 +66,11 @@ function MainLayout({ children }) {
       <PlayListSideBar isShowPlayListSideBar={isShowPlayListSideBar} closePlayListSideBar={closePlayListSideBar} />
 
       {/* SongPlayer */}
-      <SongPlayer isShowPlayListSideBar={isShowPlayListSideBar} togglePlayListSidebar={togglePlayListSideBar} />
+      <SongPlayer
+        isShowPlayListSideBar={isShowPlayListSideBar}
+        togglePlayListSidebar={togglePlayListSideBar}
+        closePlayListSideBar={closePlayListSideBar}
+      />
     </div>
   );
 }

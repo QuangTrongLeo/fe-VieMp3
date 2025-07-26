@@ -4,7 +4,7 @@ import * as bootstrap from 'bootstrap';
 import './SongPlayer.scss';
 initMDB({ Dropdown });
 
-function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
+function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar, closePlayListSideBar }) {
   const timeRef = useRef(null);
   const volumeRef = useRef(null);
 
@@ -162,22 +162,15 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
                 />
               </a>
 
-              <div style={{ paddingLeft: '0.5%' }}>
+              <div className="song-info-wrapper">
                 <a className="link-song-hover-color" href="/">
-                  <h5
-                    style={{
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      width: '350px',
-                    }}
-                  >
-                    Nơi này có anh kabakjbakv kahakjakdvg
-                  </h5>
+                  <h5 className="text-ellipsis">Nơi này có anh đã đến bên em kabakjbakv kahakjakdvg</h5>
                 </a>
 
                 <a className="link-artist-hover-color" href="/">
-                  Sơn Tùng - MTP
+                  <p className="text-ellipsis" style={{ fontSize: '14px' }}>
+                    Sơn Tùng - MTP - Skibidi - Toilet
+                  </p>
                 </a>
               </div>
             </div>
@@ -255,7 +248,7 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
             </div>
 
             {/* RIGHT ELEMENTS */}
-            <div className="col-4 d-flex justify-content-end align-items-center gap-2">
+            <div className="col-4 d-flex justify-content-end align-items-center gap-1">
               {/* Like button */}
               <button
                 className={`icon-song-player-right-element-btn ${likedVisible ? 'active' : ''}`}
@@ -302,7 +295,6 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
                 data-bs-toggle="tooltip"
                 title="Danh sách phát"
                 onClick={() => {
-                  // setPlaylistVisible(prev => !prev);
                   togglePlayListSidebar();
                 }}
               >
@@ -319,6 +311,7 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar }) {
                   flashButton(setFlashClose);
                   if (!isPaused) setIsPaused(true);
                   setClosedSongPlayer(true);
+                  closePlayListSideBar();
                 }}
               >
                 <i class="fa-solid fa-xmark"></i>
