@@ -3,6 +3,7 @@ import './PlayListSideBar.scss';
 
 function PlayListSideBar() {
   const [flashClose, setFlashClose] = useState(false);
+  const [isClosePlayListSideBar, setClosePlayListSideBar] = useState(true);
   // Flash btn
   const flashButton = setter => {
     setter(true);
@@ -85,17 +86,20 @@ function PlayListSideBar() {
   ];
 
   return (
-    <div className="playlist-sidebar-container">
+    <div className={`playlist-sidebar-container ${isClosePlayListSideBar ? 'show' : 'hide'}`}>
       {/* Header: Bài đang phát + Tiêu đề "Bài tiếp theo" */}
       <div className="playlist-sidebar-header">
         <div className="d-flex justify-content-between align-items-center">
-          <h6 className="text-white mb-2" style={{ margin: '0.5%' }}>
+          <h6 className="text-white mb-3" style={{ margin: '0.5%' }}>
             Bài đang phát
           </h6>
+
+          {/* Close PlayList SideBar */}
           <button
-            className={`mb-2 me-2 playlist-sidebar-btn ${flashClose ? 'flash' : ''}`}
+            className={`mb-3 me-2 playlist-sidebar-btn ${flashClose ? 'flash' : ''}`}
             onClick={() => {
               flashButton(setFlashClose);
+              setClosePlayListSideBar(false);
             }}
           >
             <i className="fa-solid fa-xmark"></i>
