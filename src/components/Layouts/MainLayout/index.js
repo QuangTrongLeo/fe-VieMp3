@@ -44,9 +44,8 @@ function MainLayout({ children }) {
               {[...Array(30)].map((_, i) => (
                 <p key={i}>Dòng nội dung {i + 1}</p>
               ))}
+              <Footer />
             </div>
-
-            <Footer />
           </div>
         </div>
       </div>

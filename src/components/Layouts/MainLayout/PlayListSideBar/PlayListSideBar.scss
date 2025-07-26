@@ -1,0 +1,16 @@
+.icon-play-list-sidebar {
+  color: var(--black-color-light-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: var(--black-color-light-1);
+    color: var(--white-color);
+  }
+}
