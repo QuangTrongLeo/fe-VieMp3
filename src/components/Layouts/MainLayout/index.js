@@ -9,6 +9,7 @@ function MainLayout({ children }) {
     <div>
       <Header />
 
+      {/* SideBar + Content */}
       <div className="container-fluid" style={{ paddingTop: '80px' }}>
         <div className="row" style={{ minHeight: 'calc(100vh - 80px)' }}>
           {/* Sidebar - chiếm 2 cột, scroll riêng */}
@@ -50,6 +51,7 @@ function MainLayout({ children }) {
         </div>
       </div>
 
+      {/* Playlist SideBar */}
       <PlayListSideBar />
 
       <SongPlayer />

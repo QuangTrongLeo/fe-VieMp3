@@ -314,7 +314,7 @@ function SongPlayer() {
                 onClick={() => {
                   flashButton(setFlashClose);
                   if (!isPaused) setIsPaused(true);
-                  setClosedSongPlayer(true); // Kích hoạt ẩn nav
+                  setClosedSongPlayer(true);
                 }}
               >
                 <i class="fa-solid fa-xmark"></i>

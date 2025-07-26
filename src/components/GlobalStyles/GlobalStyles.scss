@@ -3,8 +3,8 @@
 :root {
   --primary-color: #1db954;
   --primary-color-light: #4af08a;
-  --black-color: #191414;
-  --black-dark-color: rgba(0, 0, 0, 0.2);
+  --black-color: #121212;
+  --black-dark-color: #191919;
   --black-color-light-1: #2e2b29; /* đen nhạt hơn một chút */
   --black-color-light-2: #403d3b; /* nhạt hơn nữa */
   --white-color: #ffffff;
@@ -21,7 +21,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  // overflow: hidden;
+  overflow: hidden;
 }
 
 /* Áp dụng cho mọi phần tử có overflow scroll */
