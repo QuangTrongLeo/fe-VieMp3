@@ -1,24 +1,24 @@
+import './SideBar.scss';
+
 function Sidebar() {
+  const items = [
+    { label: 'Khám phá', iconClass: 'fas fa-compass', href: '/' },
+    { label: 'Thư viện', iconClass: 'fas fa-book', href: '/' },
+    { label: 'Chủ đề & Thể loại', iconClass: 'fas fa-layer-group', href: '/' },
+    { label: 'Nghe gần đây', iconClass: 'fas fa-history', href: '/' },
+    { label: 'Playlist', iconClass: 'fas fa-list', href: '/' },
+    { label: 'Bài hát yêu thích', iconClass: 'fas fa-heart', href: '/' },
+    { label: 'Album yêu thích', iconClass: 'fas fa-compact-disc', href: '/' },
+    { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-user', href: '/' },
+  ];
+
   return (
-    <div
-      className="d-flex flex-md-column flex-row"
-      style={{
-        overflowX: 'auto',
-        overflowY: 'hidden',
-        whiteSpace: 'nowrap',
-      }}
-    >
-      {[...Array(30)].map((_, i) => (
-        <div
-          key={i}
-          className="p-2"
-          style={{
-            minWidth: '120px', // chiều rộng cố định từng item để scroll ngang mượt
-            flexShrink: 0, // ngăn thu nhỏ ở mobile
-          }}
-        >
-          Dòng nội dung {i + 1}
-        </div>
+    <div className="d-flex flex-md-column flex-row sidebar-container">
+      {items.map((item, i) => (
+        <a key={i} className="p-3 sidebar-item d-flex align-items-center gap-2" href={item.href}>
+          <i className={item.iconClass}></i>
+          <span>{item.label}</span>
+        </a>
       ))}
     </div>
   );

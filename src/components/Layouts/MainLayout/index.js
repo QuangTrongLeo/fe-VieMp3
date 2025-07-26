@@ -1,7 +1,7 @@
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import PlayListSideBar from './Footer copy';
+import PlayListSideBar from './PlayListSideBar';
 import SongPlayer from './SongPlayer';
 
 function MainLayout({ children }) {
@@ -18,7 +18,7 @@ function MainLayout({ children }) {
               maxHeight: 'calc(100vh - 80px)',
               overflowY: 'auto',
               overflowX: 'hidden',
-              // paddingBottom: '80px',
+              paddingBottom: '8px',
             }}
           >
             <Sidebar />
@@ -30,10 +30,16 @@ function MainLayout({ children }) {
             style={{
               maxHeight: 'calc(100vh - 80px)',
               overflowY: 'auto',
-              paddingBottom: '80px',
+              backgroundColor: 'var(--black-dark-color)',
+              borderRadius: '8px',
+              padding: '8px',
             }}
           >
-            <div>
+            <div
+              style={{
+                margin: '0 4%',
+              }}
+            >
               {children}{' '}
               {[...Array(30)].map((_, i) => (
                 <p key={i}>Dòng nội dung {i + 1}</p>
