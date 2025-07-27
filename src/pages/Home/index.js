@@ -1,4 +1,5 @@
 import React from 'react';
+import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import './Home.scss';
 
@@ -181,17 +182,16 @@ function Home() {
       {/* NEW SONGS */}
       <section className="section-block">
         <h3>Bài hát mới ra</h3>
+
         <HorizontalScroll>
           {apiNewSongs.map(song => (
-            <a href={`/song/${song.title}`} className="new-song-card" key={song.title}>
-              <div className="cover-container">
-                <img src={song.cover} alt={song.title} />
-              </div>
-              <div className="text-info">
-                <span className="song-title">{song.title}</span>
-                <span className="artist-name">{song.artistName}</span>
-              </div>
-            </a>
+            <RectangleCard
+              key={song.title}
+              content={song.title}
+              desc={song.artistName}
+              cover={song.cover}
+              href={`/song/${song.title}`}
+            />
           ))}
         </HorizontalScroll>
       </section>
@@ -199,15 +199,16 @@ function Home() {
       {/* FAVORITE SONGS OF THE WEEK */}
       <section className="section-block">
         <h3>Top bài hát yêu thích của tuần</h3>
+
         <HorizontalScroll>
           {apiFavoriteSongsOfTheWeek.map(song => (
-            <a href={`/song/${song.title}`} className="favorite-song-of-the-week-card" key={song.title}>
-              <div className="cover-container">
-                <img src={song.cover} alt={song.title} />
-              </div>
-              <div className="song-title">{song.title}</div>
-              <div className="artist-name">{song.artistName}</div>
-            </a>
+            <SquareCard
+              key={song.title}
+              content={song.title}
+              desc={song.artistName}
+              cover={song.cover}
+              href={`/song/${song.title}`}
+            />
           ))}
         </HorizontalScroll>
       </section>
@@ -215,14 +216,15 @@ function Home() {
       {/* FAVORITE ARTISTS */}
       <section className="section-block">
         <h3>Nghệ sĩ phổ biến</h3>
+
         <HorizontalScroll>
           {apiFavoriteArtists.map(artist => (
-            <a href={`/artist/${artist.artistName}`} key={artist.artistId} className="artist-card">
-              <div className="avatar-container">
-                <img src={artist.avatar} alt={artist.artistName} />
-              </div>
-              <div className="artist-name">{artist.artistName}</div>
-            </a>
+            <CircleCard
+              key={artist.artistId}
+              content={artist.artistName}
+              cover={artist.avatar}
+              href={`/artist/${artist.artistName}`}
+            />
           ))}
         </HorizontalScroll>
       </section>
