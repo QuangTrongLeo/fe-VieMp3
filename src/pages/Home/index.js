@@ -3,63 +3,54 @@ import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import './Home.scss';
 
 function Home() {
-  const data = [
+  // FAVORITE ARTISTS
+  const apiFavoriteArtists = [
     {
-      artistId: '1',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Sơn Tùng - MTP',
     },
     {
-      artistId: '2',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Vũ.',
     },
     {
-      artistId: '3',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Obito',
     },
     {
-      artistId: '4',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Đen Vâu',
     },
     {
-      artistId: '5',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Binz',
     },
     {
-      artistId: '1',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'SOOBIN',
     },
     {
-      artistId: '2',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Vũ.',
     },
     {
-      artistId: '3',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Obito',
     },
     {
-      artistId: '4',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Đen Vâu',
     },
     {
-      artistId: '5',
       avatar:
         'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
       artistName: 'Binz',
@@ -67,31 +58,174 @@ function Home() {
     // Thêm các artist khác...
   ];
 
+  // FAVORITE SONGS OF THE WEEK
+  const apiFavoriteSongsOfTheWeek = [
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau bờ mi vậy khi xưa đợi mong',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+  ];
+
+  // NEW SONGS
+  const apiNewSongs = [
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+    {
+      cover:
+        'https://www.bing.com/ck/a?!&&p=b5edf5b627dc57d187b29c9608b60c36526e079c862dc91ca0ea57e0b6843869JmltdHM9MTc1MzQ4ODAwMA&ptn=3&ver=2&hsh=4&fclid=36ff236f-6320-6782-3100-371b62326657&u=a1L2ltYWdlcy9zZWFyY2g_cT1oJWMzJWFjbmgrc29iaW4maWQ9Qzg5MTk4RUNBMDRFNDJBQTU2NkQxQUY2Q0M2RDFGQzNEODBEMTUzOCZGT1JNPUlBQ0ZJUg&ntb=1',
+      title: 'Chúng ta không thuộc về nhau',
+      artistName: 'Sơn Tùng - MTP',
+    },
+  ];
+
   return (
     <div className="home-wrapper">
-      {/* <h1>Top 10 bài hát trending trong tuần</h1>
-      <HorizontalScroll>
-        {data.map(item => (
-          <a href={`/artist/${item.artistName}`} key={item.artistId} className="artist-card">
-            <div className="avatar-container">
-              <img src={item.avatar} alt={item.artistName} />
-            </div>
-            <div className="artist-name">{item.artistName}</div>
-          </a>
-        ))}
-      </HorizontalScroll> */}
-      <br />
-      <h1>Nghệ sĩ yêu thích</h1>
-      <HorizontalScroll>
-        {data.map(item => (
-          <a href={`/artist/${item.artistName}`} key={item.artistId} className="artist-card">
-            <div className="avatar-container">
-              <img src={item.avatar} alt={item.artistName} />
-            </div>
-            <div className="artist-name">{item.artistName}</div>
-          </a>
-        ))}
-      </HorizontalScroll>
+      <h1 className="text-center">VieMp3 - Nhạc dành cho người Việt</h1>
+
+      {/* NEW SONGS */}
+      <section className="section-block">
+        <h3>Bài hát mới ra</h3>
+        <HorizontalScroll>
+          {apiNewSongs.map(song => (
+            <a href={`/song/${song.title}`} className="new-song-card" key={song.title}>
+              <div className="cover-container">
+                <img src={song.cover} alt={song.title} />
+              </div>
+              <div className="text-info">
+                <span className="song-title">{song.title}</span>
+                <span className="artist-name">{song.artistName}</span>
+              </div>
+            </a>
+          ))}
+        </HorizontalScroll>
+      </section>
+
+      {/* FAVORITE SONGS OF THE WEEK */}
+      <section className="section-block">
+        <h3>Top bài hát yêu thích của tuần</h3>
+        <HorizontalScroll>
+          {apiFavoriteSongsOfTheWeek.map(song => (
+            <a href={`/song/${song.title}`} className="favorite-song-of-the-week-card" key={song.title}>
+              <div className="cover-container">
+                <img src={song.cover} alt={song.title} />
+              </div>
+              <div className="song-title">{song.title}</div>
+              <div className="artist-name">{song.artistName}</div>
+            </a>
+          ))}
+        </HorizontalScroll>
+      </section>
+
+      {/* FAVORITE ARTISTS */}
+      <section className="section-block">
+        <h3>Nghệ sĩ phổ biến</h3>
+        <HorizontalScroll>
+          {apiFavoriteArtists.map(artist => (
+            <a href={`/artist/${artist.artistName}`} key={artist.artistId} className="artist-card">
+              <div className="avatar-container">
+                <img src={artist.avatar} alt={artist.artistName} />
+              </div>
+              <div className="artist-name">{artist.artistName}</div>
+            </a>
+          ))}
+        </HorizontalScroll>
+      </section>
     </div>
   );
 }

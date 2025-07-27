@@ -18,11 +18,11 @@
   display: flex;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; // Firefox
+  scrollbar-width: none;
 }
 
 .scroll-container::-webkit-scrollbar {
-  display: none; // Chrome
+  display: none;
 }
 
 .scroll-btn {
@@ -37,8 +37,8 @@
   padding: 10px;
   cursor: pointer;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
