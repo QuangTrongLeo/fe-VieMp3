@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Footer from './Footer';
-import PlayListSideBar from './PlayListSideBar';
-import SongPlayer from './SongPlayer';
+import Header from '../../Components/Header';
+import Sidebar from '../../Components/Sidebar';
+import Footer from '../../Components/Footer';
+import PlayListSideBar from '../../Components/PlayListSideBar';
+import SongPlayer from '../../Components/SongPlayer';
 
 function MainLayout({ children }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
@@ -52,10 +52,11 @@ function MainLayout({ children }) {
                 margin: '0 4%',
               }}
             >
-              {children}{' '}
+              {children}
+              {/* {' '}
               {[...Array(30)].map((_, i) => (
                 <p key={i}>Dòng nội dung {i + 1}</p>
-              ))}
+              ))} */}
               <Footer />
             </div>
           </div>

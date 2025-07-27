@@ -57,7 +57,7 @@ function Footer() {
             </ul>
           </div>
           <div>
-            <h5 className="fw-bold">Các gói của Spotify</h5>
+            <h5 className="fw-bold">Các gói của VieMp3</h5>
             <ul className="list-unstyled">
               <li>
                 <a href="/">Premium Individual</a>
@@ -66,7 +66,7 @@ function Footer() {
                 <a href="/">Premium Student</a>
               </li>
               <li>
-                <a href="/">Spotify Free</a>
+                <a href="/">VieMp3 Free</a>
               </li>
             </ul>
           </div>
