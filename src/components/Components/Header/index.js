@@ -6,7 +6,7 @@ import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 function Header() {
   const [roles, setRoles] = useState([]);
-  const [currentUser, setCurrentUser] = useState('user2');
+  const [currentUser, setCurrentUser] = useState('user3');
 
   const base64Encode = obj => {
     return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));

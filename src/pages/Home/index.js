@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
+import { CircleCard, RectangleCard, SquareCard, CreateCard } from '~/components/Components/Card';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import './Home.scss';
 
@@ -432,20 +432,25 @@ function Home() {
     <div className="home-wrapper">
       <h1 className="text-center">VieMp3 - Nhạc dành cho người Việt</h1>
 
+      <CreateCard content="Tạo playlist mới" />
+
       {/* NEW SONGS */}
       <section className="section-block">
         <h3>Bài hát mới ra</h3>
 
         <HorizontalScroll>
-          {apiNewSongs.map(song => (
-            <RectangleCard
-              key={song.songId}
-              content={song.songName}
-              desc={song.artistName}
-              cover={song.cover}
-              href={`/song/${song.songName}`}
-            />
-          ))}
+          {apiNewSongs
+            .sort((a, b) => b.songId - a.songId)
+            .slice(0, 10)
+            .map(song => (
+              <RectangleCard
+                key={song.songId}
+                content={song.songName}
+                desc={song.artistName}
+                cover={song.cover}
+                href={`/song/${song.songName}`}
+              />
+            ))}
         </HorizontalScroll>
       </section>
 
