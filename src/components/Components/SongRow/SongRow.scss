@@ -1,0 +1,23 @@
+.song-row {
+  border-bottom: 1px solid var(--black-color-light-2);
+
+  .song-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .song-title {
+    font-weight: 500;
+  }
+
+  .icon-favorite-song {
+    color: var(--primary-color);
+  }
+
+  &:hover {
+    background-color: var(--black-color-light-1);
+    cursor: pointer;
+  }
+}

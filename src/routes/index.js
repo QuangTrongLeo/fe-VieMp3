@@ -6,6 +6,7 @@ import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Register from '~/pages/Register';
 import Searched from '~/pages/Searched';
+import FavoriteSong from '~/pages/FavoriteSongs';
 
 // userRoutes
 import History from '~/pages/History';
@@ -21,13 +22,14 @@ import MyAlbums from '~/pages/MyAlbums';
 const publishRoutes = [
   { path: '/', component: Home },
   { path: '/playlist', component: PlayList },
+  { path: '/favorite-songs', component: FavoriteSong },
+  { path: '/history', component: History },
   { path: '/login', component: Login, layout: HeaderOnlyLayout },
   { path: '/register', component: Register, layout: HeaderOnlyLayout },
   { path: '/searched', component: Searched },
 ];
 
 const userRoutes = [
-  { path: '/history', component: History },
   { path: '/library', component: Library },
   { path: '/profile', component: Profile },
   // { path: '/playlist', component: PlayList },
