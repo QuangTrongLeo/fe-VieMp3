@@ -8,7 +8,7 @@ function Sidebar() {
   const items = [
     { label: 'Khám phá', iconClass: 'fas fa-compass', href: '/' },
     { label: 'Thư viện', iconClass: 'fas fa-book', href: '/library' },
-    { label: 'Chủ đề & Thể loại', iconClass: 'fas fa-layer-group', href: '/genres' },
+    { label: 'Thể loại nhạc', iconClass: 'fas fa-layer-group', href: '/genres' },
     { label: 'Nghe gần đây', iconClass: 'fas fa-history', href: '/history' },
     { label: 'PlayList', iconClass: 'fas fa-list', href: '/playlist' },
     { label: 'Bài hát yêu thích', iconClass: 'fas fa-heart', href: '/favorite-songs' },
