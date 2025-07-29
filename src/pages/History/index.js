@@ -2,17 +2,17 @@ import React from 'react';
 import SongRow from '~/components/Components/SongRow';
 // import './History.scss';
 
-function History() {
-  const apiNewSongs = [
-    {
-      songId: '1',
-      cover: 'https://link-image.com/song1.jpg',
-      songName: 'Chúng ta không thuộc về nhau',
-      artistName: 'Sơn Tùng - MTP',
-    },
-    // ...các bài khác
-  ];
+const apiNewSongs = [
+  {
+    songId: '1',
+    cover: 'https://link-image.com/song1.jpg',
+    songName: 'Chúng ta không thuộc về nhau',
+    artistName: 'Sơn Tùng - MTP',
+  },
+  // ...các bài khác
+];
 
+function History() {
   return (
     <>
       <h1 className="text-center">

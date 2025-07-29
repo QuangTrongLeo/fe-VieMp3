@@ -6,60 +6,60 @@ import LimitedList from '~/components/Components/LimitedList';
 
 const cx = classNames.bind(styles);
 
-function FavoriteArtists() {
-  const apiYourFavoriteArtists = [
-    {
-      artistId: '1',
-      avatar: 'https://example.com/son-tung.jpg',
-      artistName: 'Sơn Tùng - MTP',
-    },
-    {
-      artistId: '2',
-      avatar: 'https://example.com/vu.jpg',
-      artistName: 'Vũ.',
-    },
-    {
-      artistId: '3',
-      avatar: 'https://example.com/obito.jpg',
-      artistName: 'Obito',
-    },
-    {
-      artistId: '4',
-      avatar: 'https://example.com/den-vau.jpg',
-      artistName: 'Đen Vâu',
-    },
-    {
-      artistId: '5',
-      avatar: 'https://example.com/binz.jpg',
-      artistName: 'Binz',
-    },
-    {
-      artistId: '6',
-      avatar: 'https://example.com/soobin.jpg',
-      artistName: 'SOOBIN',
-    },
-    {
-      artistId: '7',
-      avatar: 'https://example.com/vu-2.jpg',
-      artistName: 'Vũ.',
-    },
-    {
-      artistId: '8',
-      avatar: 'https://example.com/obito-2.jpg',
-      artistName: 'Obito',
-    },
-    {
-      artistId: '9',
-      avatar: 'https://example.com/den-vau-2.jpg',
-      artistName: 'Đen Vâu',
-    },
-    {
-      artistId: '10',
-      avatar: 'https://example.com/binz-2.jpg',
-      artistName: 'Binz',
-    },
-  ];
+const apiYourFavoriteArtists = [
+  {
+    artistId: '1',
+    avatar: 'https://example.com/son-tung.jpg',
+    artistName: 'Sơn Tùng - MTP',
+  },
+  {
+    artistId: '2',
+    avatar: 'https://example.com/vu.jpg',
+    artistName: 'Vũ.',
+  },
+  {
+    artistId: '3',
+    avatar: 'https://example.com/obito.jpg',
+    artistName: 'Obito',
+  },
+  {
+    artistId: '4',
+    avatar: 'https://example.com/den-vau.jpg',
+    artistName: 'Đen Vâu',
+  },
+  {
+    artistId: '5',
+    avatar: 'https://example.com/binz.jpg',
+    artistName: 'Binz',
+  },
+  {
+    artistId: '6',
+    avatar: 'https://example.com/soobin.jpg',
+    artistName: 'SOOBIN',
+  },
+  {
+    artistId: '7',
+    avatar: 'https://example.com/vu-2.jpg',
+    artistName: 'Vũ.',
+  },
+  {
+    artistId: '8',
+    avatar: 'https://example.com/obito-2.jpg',
+    artistName: 'Obito',
+  },
+  {
+    artistId: '9',
+    avatar: 'https://example.com/den-vau-2.jpg',
+    artistName: 'Đen Vâu',
+  },
+  {
+    artistId: '10',
+    avatar: 'https://example.com/binz-2.jpg',
+    artistName: 'Binz',
+  },
+];
 
+function FavoriteArtists() {
   return (
     <>
       <h1 className="text-center mb-4">

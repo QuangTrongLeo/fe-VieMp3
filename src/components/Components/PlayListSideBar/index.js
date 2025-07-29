@@ -4,6 +4,81 @@ import styles from './PlayListSideBar.module.scss';
 
 const cx = classNames.bind(styles);
 
+const songs = [
+  {
+    songId: 1,
+    thumb: 'https://i.imgur.com/x1eX5xP.png',
+    songName: 'Vương Vấn (BLUE REMIX)',
+    artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
+  },
+  {
+    songId: 2,
+    thumb: 'https://i.imgur.com/PeWajqF.png',
+    songName: 'Yêu Từ Đâu Mà Ra?',
+    artist: 'Lil Zpoet',
+  },
+  {
+    songId: 3,
+    thumb: 'https://i.imgur.com/bvOl6Fw.png',
+    songName: 'Mah Boo',
+    artist: 'Phạm Việt Thắng',
+  },
+  {
+    songId: 4,
+    thumb: 'https://i.imgur.com/Jg04IG2.png',
+    songName: 'Em Không Sai Chúng Ta Sai',
+    artist: 'ERIK',
+  },
+  {
+    songId: 5,
+    thumb: 'https://i.imgur.com/WczTHAx.png',
+    songName: 'Thích Thì Đến',
+    artist: 'Lê Bảo Bình',
+  },
+  {
+    songId: 6,
+    thumb: 'https://i.imgur.com/ZRUzKGo.png',
+    songName: 'Chạy Khỏi Thế Giới Này',
+    artist: 'Da LAB, Phương Ly',
+  },
+  {
+    songId: 7,
+    thumb: 'https://i.imgur.com/x1eX5xP.png',
+    songName: 'Vương Vấn (BLUE REMIX)',
+    artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
+  },
+  {
+    songId: 8,
+    thumb: 'https://i.imgur.com/PeWajqF.png',
+    songName: 'Yêu Từ Đâu Mà Ra?',
+    artist: 'Lil Zpoet',
+  },
+  {
+    songId: 9,
+    thumb: 'https://i.imgur.com/bvOl6Fw.png',
+    songName: 'Mah Boo',
+    artist: 'Phạm Việt Thắng',
+  },
+  {
+    songId: 10,
+    thumb: 'https://i.imgur.com/Jg04IG2.png',
+    songName: 'Em Không Sai Chúng Ta Sai',
+    artist: 'ERIK',
+  },
+  {
+    songId: 11,
+    thumb: 'https://i.imgur.com/WczTHAx.png',
+    songName: 'Thích Thì Đến',
+    artist: 'Lê Bảo Bình',
+  },
+  {
+    songId: 12,
+    thumb: 'https://i.imgur.com/ZRUzKGo.png',
+    songName: 'Chạy Khỏi Thế Giới Này',
+    artist: 'Da LAB, Phương Ly',
+  },
+];
+
 function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
   const [flashClose, setFlashClose] = useState(false);
 
@@ -11,81 +86,6 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
     setter(true);
     setTimeout(() => setter(false), 200);
   };
-
-  const songs = [
-    {
-      songId: 1,
-      thumb: 'https://i.imgur.com/x1eX5xP.png',
-      songName: 'Vương Vấn (BLUE REMIX)',
-      artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
-    },
-    {
-      songId: 2,
-      thumb: 'https://i.imgur.com/PeWajqF.png',
-      songName: 'Yêu Từ Đâu Mà Ra?',
-      artist: 'Lil Zpoet',
-    },
-    {
-      songId: 3,
-      thumb: 'https://i.imgur.com/bvOl6Fw.png',
-      songName: 'Mah Boo',
-      artist: 'Phạm Việt Thắng',
-    },
-    {
-      songId: 4,
-      thumb: 'https://i.imgur.com/Jg04IG2.png',
-      songName: 'Em Không Sai Chúng Ta Sai',
-      artist: 'ERIK',
-    },
-    {
-      songId: 5,
-      thumb: 'https://i.imgur.com/WczTHAx.png',
-      songName: 'Thích Thì Đến',
-      artist: 'Lê Bảo Bình',
-    },
-    {
-      songId: 6,
-      thumb: 'https://i.imgur.com/ZRUzKGo.png',
-      songName: 'Chạy Khỏi Thế Giới Này',
-      artist: 'Da LAB, Phương Ly',
-    },
-    {
-      songId: 7,
-      thumb: 'https://i.imgur.com/x1eX5xP.png',
-      songName: 'Vương Vấn (BLUE REMIX)',
-      artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
-    },
-    {
-      songId: 8,
-      thumb: 'https://i.imgur.com/PeWajqF.png',
-      songName: 'Yêu Từ Đâu Mà Ra?',
-      artist: 'Lil Zpoet',
-    },
-    {
-      songId: 9,
-      thumb: 'https://i.imgur.com/bvOl6Fw.png',
-      songName: 'Mah Boo',
-      artist: 'Phạm Việt Thắng',
-    },
-    {
-      songId: 10,
-      thumb: 'https://i.imgur.com/Jg04IG2.png',
-      songName: 'Em Không Sai Chúng Ta Sai',
-      artist: 'ERIK',
-    },
-    {
-      songId: 11,
-      thumb: 'https://i.imgur.com/WczTHAx.png',
-      songName: 'Thích Thì Đến',
-      artist: 'Lê Bảo Bình',
-    },
-    {
-      songId: 12,
-      thumb: 'https://i.imgur.com/ZRUzKGo.png',
-      songName: 'Chạy Khỏi Thế Giới Này',
-      artist: 'Da LAB, Phương Ly',
-    },
-  ];
 
   return (
     <div
