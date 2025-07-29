@@ -1,13 +1,16 @@
 import React from 'react';
-import './CreateCard.scss';
+import classNames from 'classnames/bind';
+import styles from './CreateCard.module.scss';
+
+const cx = classNames.bind(styles);
 
 function CreateCard({ content }) {
   return (
-    <button className="create-card">
-      <div className="create-icon">
-        <i class="fa-solid fa-circle-plus"></i>
+    <button className={cx('create-card')}>
+      <div className={cx('create-icon')}>
+        <i className="fa-solid fa-circle-plus"></i>
       </div>
-      <div className="create-content">{content}</div>
+      <div className={cx('create-content')}>{content}</div>
     </button>
   );
 }

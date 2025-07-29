@@ -1,5 +1,9 @@
 import React from 'react';
 import { CreateCard, SquareCard } from '~/components/Components/Card';
+import styles from './PlayList.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 function PlayList() {
   const apiPlayLists = [
@@ -27,16 +31,17 @@ function PlayList() {
       cover: 'https://i.scdn.co/image/ab6761610000e5ebc29f15a5b9b46fed41a0f2af',
     },
   ];
+
   return (
-    <>
+    <div className={cx('playlist-wrapper')}>
       <h1 className="text-center">
-        <i class="fas fa-list"></i>
+        <i className="fas fa-list"></i>
         <span style={{ paddingLeft: '10px' }}>PlayList</span>
       </h1>
 
       <CreateCard content="Tạo playlist mới" />
 
-      <section className="section-block">
+      <section className={cx('section-block')}>
         <h3>Playlist của bạn</h3>
         <div className="row">
           {apiPlayLists
@@ -53,7 +58,7 @@ function PlayList() {
             ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }
 

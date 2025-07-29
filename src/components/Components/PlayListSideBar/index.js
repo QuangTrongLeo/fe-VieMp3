@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import './PlayListSideBar.scss';
+import classNames from 'classnames/bind';
+import styles from './PlayListSideBar.module.scss';
+
+const cx = classNames.bind(styles);
 
 function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
   const [flashClose, setFlashClose] = useState(false);
-  // Flash btn
+
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 200);
@@ -85,17 +88,21 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
   ];
 
   return (
-    <div className={`playlist-sidebar-container ${isShowPlayListSideBar ? 'show' : 'hide'}`}>
-      {/* Header: Bài đang phát + Tiêu đề "Bài tiếp theo" */}
-      <div className="playlist-sidebar-header">
+    <div
+      className={cx('playlist-sidebar-container', {
+        show: isShowPlayListSideBar,
+        hide: !isShowPlayListSideBar,
+      })}
+    >
+      {/* Header */}
+      <div className={cx('playlist-sidebar-header')}>
         <div className="d-flex justify-content-between align-items-center">
           <h6 className="text-white mb-3" style={{ margin: '0.5%' }}>
             Bài đang phát
           </h6>
 
-          {/* Close PlayList SideBar */}
           <button
-            className={`mb-3 me-2 playlist-sidebar-btn ${flashClose ? 'flash' : ''}`}
+            className={cx('playlist-sidebar-btn', 'mb-3', 'me-2', { flash: flashClose })}
             onClick={() => {
               flashButton(setFlashClose);
               closePlayListSideBar();
@@ -111,10 +118,10 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
           href="/"
           style={{ borderRadius: '6px', backgroundColor: 'var(--primary-color)' }}
         >
-          <img className="playlist-sidebar-img" src={songs[0].thumb} alt={songs[0].songName} />
+          <img className={cx('playlist-sidebar-img')} src={songs[0].thumb} alt={songs[0].songName} />
           <div className="d-flex flex-column align-items-start" style={{ minWidth: 0 }}>
-            <span className="fw-semibold text-truncate playlist-sidebar-song">{songs[0].songName}</span>
-            <span className="text-truncate playlist-sidebar-artist">{songs[0].artist}</span>
+            <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{songs[0].songName}</span>
+            <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{songs[0].artist}</span>
           </div>
         </a>
 
@@ -123,8 +130,8 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
         </h6>
       </div>
 
-      {/* Scrollable phần danh sách tiếp theo */}
-      <div className="playlist-sidebar-scrollable">
+      {/* Danh sách tiếp theo */}
+      <div className={cx('playlist-sidebar-scrollable')}>
         {songs.slice(1).map(song => (
           <a
             key={song.songId}
@@ -132,10 +139,10 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
             href="/"
             style={{ borderRadius: '6px', transition: 'background 0.2s' }}
           >
-            <img className="playlist-sidebar-img" src={song.thumb} alt={song.songName} />
+            <img className={cx('playlist-sidebar-img')} src={song.thumb} alt={song.songName} />
             <div className="d-flex flex-column align-items-start" style={{ minWidth: 0 }}>
-              <span className="fw-semibold text-truncate playlist-sidebar-song">{song.songName}</span>
-              <span className="text-truncate playlist-sidebar-artist">{song.artist}</span>
+              <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{song.songName}</span>
+              <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{song.artist}</span>
             </div>
           </a>
         ))}

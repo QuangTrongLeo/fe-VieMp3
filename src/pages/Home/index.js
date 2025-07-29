@@ -1,7 +1,10 @@
 import React from 'react';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
-import './Home.scss';
+import styles from './Home.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 function Home() {
   // NEW SONGS
@@ -429,13 +432,12 @@ function Home() {
   ];
 
   return (
-    <div className="home-wrapper">
+    <div className={cx('home-wrapper')}>
       <h1 className="text-center">VieMp3 - Nhạc dành cho người Việt</h1>
 
       {/* NEW SONGS */}
-      <section className="section-block">
+      <section className={cx('section-block')}>
         <h3>Bài hát mới ra</h3>
-
         <HorizontalScroll>
           {apiNewSongs
             .sort((a, b) => b.songId - a.songId)
@@ -453,9 +455,8 @@ function Home() {
       </section>
 
       {/* FAVORITE SONGS OF THE WEEK */}
-      <section className="section-block">
+      <section className={cx('section-block')}>
         <h3>Top bài hát yêu thích của tuần</h3>
-
         <HorizontalScroll>
           {apiFavoriteSongsOfTheWeek.map(song => (
             <SquareCard
@@ -470,9 +471,8 @@ function Home() {
       </section>
 
       {/* FAVORITE ARTISTS */}
-      <section className="section-block">
+      <section className={cx('section-block')}>
         <h3>Nghệ sĩ phổ biến</h3>
-
         <HorizontalScroll>
           {apiFavoriteArtists.map(artist => (
             <CircleCard
@@ -486,9 +486,8 @@ function Home() {
       </section>
 
       {/* HOT ALBUMS */}
-      <section className="section-block">
+      <section className={cx('section-block')}>
         <h3>Album hot</h3>
-
         <HorizontalScroll>
           {apiHotAlbums.map(album => (
             <SquareCard
@@ -502,10 +501,9 @@ function Home() {
         </HorizontalScroll>
       </section>
 
-      {/* SUITABLE SONGS*/}
-      <section className="section-block">
+      {/* SUITABLE SONGS */}
+      <section className={cx('section-block')}>
         <h3>Phù hợp với bạn</h3>
-
         <HorizontalScroll>
           {apiSuitableSongs.map(song => (
             <SquareCard
@@ -519,10 +517,9 @@ function Home() {
         </HorizontalScroll>
       </section>
 
-      {/*YOUR FAVORITE ARTISTS */}
-      <section className="section-block">
+      {/* YOUR FAVORITE ARTISTS */}
+      <section className={cx('section-block')}>
         <h3>Nghệ sĩ yêu thích của bạn</h3>
-
         <HorizontalScroll>
           {apiYourFavoriteArtists.map(artist => (
             <CircleCard

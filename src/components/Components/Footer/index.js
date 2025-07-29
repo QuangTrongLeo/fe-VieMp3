@@ -1,9 +1,12 @@
 import React from 'react';
-import './Footer.scss';
+import classNames from 'classnames/bind';
+import styles from './Footer.module.scss';
+
+const cx = classNames.bind(styles);
 
 function Footer() {
   return (
-    <footer className="footer text-white pt-5 pb-4">
+    <footer className={cx('footer', 'text-white', 'pt-5', 'pb-4')}>
       <div className="container">
         <hr className="border-secondary" />
 

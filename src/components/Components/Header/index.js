@@ -1,6 +1,7 @@
 import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import './Header.scss';
+// import './Header.module.scss';
 import { useEffect, useState } from 'react';
 import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 

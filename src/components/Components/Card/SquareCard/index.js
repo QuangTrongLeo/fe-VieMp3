@@ -1,18 +1,21 @@
 import React from 'react';
-import './SquareCard.scss';
+import classNames from 'classnames/bind';
+import styles from './SquareCard.module.scss';
+
+const cx = classNames.bind(styles);
 
 function SquareCard({ content, desc, cover, href, icon }) {
   return (
-    <a href={href} className="square-card">
-      <div className="square-cover-container">
+    <a href={href} className={cx('square-card')}>
+      <div className={cx('square-cover-container')}>
         {cover ? (
           <img src={cover} alt={content} />
         ) : (
-          <div className="icon-placeholder">{icon || <i className="fas fa-image fa-3x"></i>}</div>
+          <div className={cx('icon-placeholder')}>{icon || <i className="fas fa-image fa-3x"></i>}</div>
         )}
       </div>
-      <div className="square-content">{content}</div>
-      <div className="square-desc">{desc}</div>
+      <div className={cx('square-content')}>{content}</div>
+      <div className={cx('square-desc')}>{desc}</div>
     </a>
   );
 }

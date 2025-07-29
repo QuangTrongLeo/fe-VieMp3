@@ -10,7 +10,6 @@
   gap: 4px;
 }
 
-/* Mobile: scroll ngang */
 .sidebar-item {
   cursor: pointer;
   text-decoration: none;
@@ -21,15 +20,14 @@
   display: block;
   min-width: 120px;
   flex-shrink: 0;
+
+  &:hover {
+    background-color: var(--black-color-light-2);
+  }
 }
 
-.sidebar-item:hover {
-  background-color: var(--black-color-light-2);
-}
-
-/* Từ md trở lên: dùng class Bootstrap để đổi hướng sang dọc => chiều rộng full container */
 .flex-md-column .sidebar-item {
-  width: 100%; /* full chiều ngang của sidebar-container */
+  width: 100%;
   min-width: unset;
   flex-shrink: 1;
 }

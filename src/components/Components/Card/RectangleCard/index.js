@@ -1,15 +1,18 @@
 import React from 'react';
-import './RectangleCard.scss';
+import classNames from 'classnames/bind';
+import styles from './RectangleCard.module.scss';
+
+const cx = classNames.bind(styles);
 
 function RectangleCard({ content, desc, cover, href }) {
   return (
-    <a href={href} className="rectangle-card">
-      <div className="rectangle-cover-container">
+    <a href={href} className={cx('rectangle-card')}>
+      <div className={cx('rectangle-cover-container')}>
         <img src={cover} alt={content} />
       </div>
-      <div className="rectangle-info">
-        <span className="rectangle-content">{content}</span>
-        <span className="rectangle-desc">{desc}</span>
+      <div className={cx('rectangle-info')}>
+        <span className={cx('rectangle-content')}>{content}</span>
+        <span className={cx('rectangle-desc')}>{desc}</span>
       </div>
     </a>
   );
