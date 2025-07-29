@@ -14,7 +14,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: var(--black-color-light-1);
+    background: var(--black-color-light-1);
 
     .rectangle-cover-container img {
       transform: scale(1.1);

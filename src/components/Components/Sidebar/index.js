@@ -13,7 +13,7 @@ function Sidebar() {
     { label: 'PlayList', iconClass: 'fas fa-list', href: '/playlist' },
     { label: 'Bài hát yêu thích', iconClass: 'fas fa-heart', href: '/favorite-songs' },
     { label: 'Album yêu thích', iconClass: 'fas fa-compact-disc', href: '/favorite-albums' },
-    { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-user', href: '/favorite-artists' },
+    { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-star', href: '/favorite-artists' },
   ];
 
   return (

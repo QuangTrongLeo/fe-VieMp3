@@ -7,13 +7,8 @@ function LimitedList({ items = [], renderItem, limit = 6, showAllText = 'Hiện 
 
   return (
     <div>
-      <div className="row">
-        {displayedItems.map((item, index) => (
-          <div key={index} className="col-12 col-sm-12 col-md-4 mb-3 d-flex justify-content-center">
-            {renderItem(item, index)}
-          </div>
-        ))}
-      </div>
+      {/* Không wrap bằng col- nữa, giao cho renderItem xử lý */}
+      <div className="row">{displayedItems.map((item, index) => renderItem(item, index))}</div>
 
       {items.length > limit && (
         <div className="text-center mt-3">

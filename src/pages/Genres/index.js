@@ -32,13 +32,15 @@ function Genres() {
         <LimitedList
           items={apiGenres}
           limit={6}
-          renderItem={genre => (
-            <RectangleCard
-              content={genre.genreName}
-              desc={genre.genreDesc}
-              href={`/genres/${genre.genreName.toLowerCase()}`}
-              icon={<i className="fas fa-music fa-3x"></i>}
-            />
+          renderItem={(genre, index) => (
+            <div key={genre.id} className="col-12 col-sm-12 col-md-4 mb-3 d-flex justify-content-center">
+              <RectangleCard
+                content={genre.genreName}
+                desc={genre.genreDesc}
+                href={`/genres/${genre.genreName.toLowerCase()}`}
+                icon={<i className="fas fa-music fa-3x"></i>}
+              />
+            </div>
           )}
         />
       </section>
