@@ -1,4 +1,4 @@
-function FavoriteSong() {
+function FavoriteSongs() {
   return (
     <>
       <h1 className="text-center">
@@ -9,4 +9,4 @@ function FavoriteSong() {
   );
 }
 
-export default FavoriteSong;
+export default FavoriteSongs;

@@ -2,28 +2,35 @@
 import { HeaderOnlyLayout } from '~/components/Layouts';
 
 // publishRoutes
-import Home from '~/pages/Home';
-import Login from '~/pages/Login';
-import Register from '~/pages/Register';
-import Searched from '~/pages/Searched';
-import FavoriteSong from '~/pages/FavoriteSongs';
+import {
+  Home,
+  Library,
+  Genres,
+  History,
+  PlayList,
+  FavoriteSongs,
+  FavoriteAlbums,
+  FavoriteArtists,
+  Login,
+  Register,
+  Searched,
+} from '~/pages';
 
 // userRoutes
-import History from '~/pages/History';
-import Library from '~/pages/Library';
-import Profile from '~/pages/Profile';
-import PlayList from '~/pages/PlayList';
+import { Profile } from '~/pages';
 
 // artistRoutes
-import Upload from '~/pages/Upload';
-import MySongs from '~/pages/MySongs';
-import MyAlbums from '~/pages/MyAlbums';
+import { Upload, MySongs, MyAlbums } from '~/pages';
 
 const publishRoutes = [
   { path: '/', component: Home },
-  { path: '/playlist', component: PlayList },
-  { path: '/favorite-songs', component: FavoriteSong },
+  { path: '/library', component: Home },
+  { path: '/genres', component: Genres },
   { path: '/history', component: History },
+  { path: '/playlist', component: PlayList },
+  { path: '/favorite-songs', component: FavoriteSongs },
+  { path: '/favorite-albums', component: FavoriteAlbums },
+  { path: '/favorite-artists', component: FavoriteArtists },
   { path: '/login', component: Login, layout: HeaderOnlyLayout },
   { path: '/register', component: Register, layout: HeaderOnlyLayout },
   { path: '/searched', component: Searched },

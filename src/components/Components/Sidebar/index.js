@@ -3,13 +3,13 @@ import './SideBar.scss';
 function Sidebar() {
   const items = [
     { label: 'Khám phá', iconClass: 'fas fa-compass', href: '/' },
-    { label: 'Thư viện', iconClass: 'fas fa-book', href: '/' },
-    { label: 'Chủ đề & Thể loại', iconClass: 'fas fa-layer-group', href: '/' },
+    { label: 'Thư viện', iconClass: 'fas fa-book', href: '/library' },
+    { label: 'Chủ đề & Thể loại', iconClass: 'fas fa-layer-group', href: '/genres' },
     { label: 'Nghe gần đây', iconClass: 'fas fa-history', href: '/history' },
     { label: 'PlayList', iconClass: 'fas fa-list', href: '/playlist' },
     { label: 'Bài hát yêu thích', iconClass: 'fas fa-heart', href: '/favorite-songs' },
-    { label: 'Album yêu thích', iconClass: 'fas fa-compact-disc', href: '/' },
-    { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-user', href: '/' },
+    { label: 'Album yêu thích', iconClass: 'fas fa-compact-disc', href: '/favorite-albums' },
+    { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-user', href: '/favorite-artists' },
   ];
 
   return (
