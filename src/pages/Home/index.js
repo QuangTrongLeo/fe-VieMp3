@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircleCard, RectangleCard, SquareCard, CreateCard } from '~/components/Components/Card';
+import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import './Home.scss';
 
@@ -431,8 +431,6 @@ function Home() {
   return (
     <div className="home-wrapper">
       <h1 className="text-center">VieMp3 - Nhạc dành cho người Việt</h1>
-
-      <CreateCard content="Tạo playlist mới" />
 
       {/* NEW SONGS */}
       <section className="section-block">

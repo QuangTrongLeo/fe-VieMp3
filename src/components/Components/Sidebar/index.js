@@ -6,7 +6,7 @@ function Sidebar() {
     { label: 'Thư viện', iconClass: 'fas fa-book', href: '/' },
     { label: 'Chủ đề & Thể loại', iconClass: 'fas fa-layer-group', href: '/' },
     { label: 'Nghe gần đây', iconClass: 'fas fa-history', href: '/' },
-    { label: 'Playlist', iconClass: 'fas fa-list', href: '/' },
+    { label: 'PlayList', iconClass: 'fas fa-list', href: '/playlist' },
     { label: 'Bài hát yêu thích', iconClass: 'fas fa-heart', href: '/' },
     { label: 'Album yêu thích', iconClass: 'fas fa-compact-disc', href: '/' },
     { label: 'Nghệ sĩ yêu thích', iconClass: 'fas fa-user', href: '/' },

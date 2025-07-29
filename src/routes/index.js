@@ -11,6 +11,7 @@ import Searched from '~/pages/Searched';
 import History from '~/pages/History';
 import Library from '~/pages/Library';
 import Profile from '~/pages/Profile';
+import PlayList from '~/pages/PlayList';
 
 // artistRoutes
 import Upload from '~/pages/Upload';
@@ -19,6 +20,7 @@ import MyAlbums from '~/pages/MyAlbums';
 
 const publishRoutes = [
   { path: '/', component: Home },
+  { path: '/playlist', component: PlayList },
   { path: '/login', component: Login, layout: HeaderOnlyLayout },
   { path: '/register', component: Register, layout: HeaderOnlyLayout },
   { path: '/searched', component: Searched },
@@ -28,6 +30,7 @@ const userRoutes = [
   { path: '/history', component: History },
   { path: '/library', component: Library },
   { path: '/profile', component: Profile },
+  // { path: '/playlist', component: PlayList },
 ];
 
 const artistRoutes = [
