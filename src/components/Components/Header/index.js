@@ -1,7 +1,7 @@
 import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import './Header.scss';
-// import './Header.module.scss';
+import images from '~/assets/images';
 import { useEffect, useState } from 'react';
 import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
@@ -73,7 +73,8 @@ function Header() {
         <div className="d-flex align-items-center flex-grow-1 gap-3">
           {/* Logo */}
           <a className="navbar-brand mb-0" href="/">
-            <i className="fab fa-linkedin fa-2x"></i>
+            {/* <i className="fab fa-linkedin fa-2x"></i> */}
+            <img className="navbar-logo" src={images.logo} alt="VieMp3" />
           </a>
 
           {/* Search form */}
