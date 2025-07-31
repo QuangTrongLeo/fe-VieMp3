@@ -1,5 +1,5 @@
 // Layouts
-import { HeaderOnlyLayout } from '~/components/Layouts';
+import { SecondLayout } from '~/components/Layouts';
 
 // publishRoutes
 import {
@@ -31,8 +31,8 @@ const publishRoutes = [
   { path: '/favorite-songs', component: FavoriteSongs },
   { path: '/favorite-albums', component: FavoriteAlbums },
   { path: '/favorite-artists', component: FavoriteArtists },
-  { path: '/login', component: Login, layout: HeaderOnlyLayout },
-  { path: '/register', component: Register, layout: HeaderOnlyLayout },
+  { path: '/login', component: Login, layout: SecondLayout },
+  { path: '/register', component: Register, layout: SecondLayout },
   { path: '/searched', component: Searched },
 ];
 
