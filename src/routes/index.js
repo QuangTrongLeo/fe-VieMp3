@@ -24,7 +24,7 @@ import { Upload, MySongs, MyAlbums } from '~/pages';
 
 const publishRoutes = [
   { path: '/', component: Home },
-  { path: '/library', component: Home },
+  { path: '/library', component: Library },
   { path: '/genres', component: Genres },
   { path: '/history', component: History },
   { path: '/playlist', component: PlayList },

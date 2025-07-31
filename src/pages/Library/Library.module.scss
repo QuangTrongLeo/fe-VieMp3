@@ -1,0 +1,43 @@
+// SESSION BLOCK
+.section-block {
+  margin-top: 48px;
+
+  h3 {
+    margin-bottom: 16px;
+  }
+}
+
+.tab-header {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid var(--black-color-light-1);
+  margin-bottom: 12px;
+  padding-left: 12px;
+
+  .tab-item {
+    position: relative;
+    padding: 8px 0;
+    color: var(--grey-color);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+
+    &:hover {
+      color: var(--white-color);
+    }
+
+    &.active {
+      color: var(--primary-color);
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 100%;
+        height: 3px;
+        background-color: var(--primary-color);
+      }
+    }
+  }
+}

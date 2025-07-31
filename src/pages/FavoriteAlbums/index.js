@@ -6,31 +6,33 @@ import LimitedList from '~/components/Components/LimitedList';
 
 const cx = classNames.bind(styles);
 
-const apiPlayLists = [
+const apiFavoriteAlbums = [
   {
-    playlistId: '1',
-    playlistName: 'Sơn Tùng - MTP',
+    albumId: '1',
+    albumName: 'Sơn Tùng - MTP',
     cover:
       'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSStpZEMzpTrUEK0QZHAG48NV3sMuoCO0ReV2JEIY7ot7KnICpz7shfmmJFKmNF3Og1tN9JWWJqD6m3vKg4LB_U_Sqy0TTpQdKmMO67ehT1JQ',
   },
   {
-    playlistId: '2',
-    playlistName: 'Mono',
+    albumId: '2',
+    albumName: 'Mono',
   },
   {
-    playlistId: '3',
-    playlistName: 'Hiếu Thứ 2',
+    albumId: '3',
+    albumName: 'Hiếu Thứ 2',
   },
   {
-    playlistId: '4',
-    playlistName: 'Bình Gold',
+    albumId: '4',
+    albumName: 'Bình Gold',
   },
   {
-    playlistId: '5',
-    playlistName: 'QNT',
+    albumId: '5',
+    albumName: 'QNT',
     cover: 'https://i.scdn.co/image/ab6761610000e5ebc29f15a5b9b46fed41a0f2af',
   },
 ];
+
+const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => b.playlistId - a.playlistId);
 
 function FavoriteAlbums() {
   return (
@@ -41,17 +43,17 @@ function FavoriteAlbums() {
       </h1>
 
       <section className={cx('section-block')}>
-        <h3>Playlist của bạn</h3>
+        <h3>Album yêu thích của bạn của bạn</h3>
 
         <LimitedList
-          items={apiPlayLists.sort((a, b) => b.playlistId - a.playlistId)}
+          items={sortedFavoriteAlbums}
           limit={8}
-          renderItem={playlist => (
-            <div key={playlist.playlistId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+          renderItem={album => (
+            <div key={album.albumId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
               <SquareCard
-                content={playlist.playlistName}
-                cover={playlist.cover}
-                href={`/playlist/${playlist.playlistName}`}
+                content={album.albumName}
+                cover={album.cover}
+                href={`/album/${album.albumName}`}
                 icon={<i className="fas fa-list fa-3x"></i>}
               />
             </div>
