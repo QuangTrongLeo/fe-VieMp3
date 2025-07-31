@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
@@ -6,101 +6,142 @@ import images from '~/assets/images';
 const cx = classNames.bind(styles);
 
 function Register() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const validateEmail = email => {
+    const regex = /^\S+@\S+\.\S+$/;
+    return regex.test(email);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    let valid = true;
+
+    // Reset lỗi
+    setEmailError('');
+    setConfirmPasswordError('');
+
+    // Kiểm tra email
+    if (!validateEmail(email)) {
+      setEmailError('Email không hợp lệ.');
+      valid = false;
+    }
+
+    // Kiểm tra confirm password
+    if (confirmPassword !== password) {
+      setConfirmPasswordError('Mật khẩu nhập lại không khớp.');
+      valid = false;
+    }
+
+    if (valid) {
+      // Gửi dữ liệu lên backend hoặc xử lý logic tiếp
+      alert('Form hợp lệ!');
+    }
+  };
+
   return (
-    <>
-      <section className={cx('text-center', 'text-lg-start')}>
-        <div className={cx('container', 'py-4')}>
-          <div className={cx('row', 'g-0', 'align-items-center', 'justify-content-center')}>
-            <div className={cx('col-lg-5', 'mb-5', 'mb-lg-0', 'd-none', 'd-lg-block')}>
-              <img
-                src={images.imageLoginRegister}
-                className={cx('w-100', 'rounded-4', 'shadow-4')}
-                style={{ height: '400px', objectFit: 'cover' }}
-                alt=""
-              />
-            </div>
-            <div className={cx('col-lg-6', 'mb-5', 'mb-lg-0')}>
-              <div
-                className={cx('card', 'cascading-right', 'bg-body-tertiary', 'mx-auto')}
-                style={{
-                  maxWidth: '420px',
-                  backdropFilter: 'blur(30px)',
-                }}
-              >
-                <div className={cx('card-body', 'p-3', 'shadow-5')} style={{ fontSize: '0.9rem' }}>
-                  <h2 className={cx('fw-bold', 'mb-3')} style={{ fontSize: '1.5rem' }}>
-                    Đăng Ký
-                  </h2>
-                  <form>
-                    <div data-mdb-input-init className={cx('form-outline', 'mb-2')}>
-                      <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Tên người dùng*:
-                      </label>
-                      <input type="text" id="form3Example3" className={cx('form-control')} />
-                    </div>
-
-                    <div data-mdb-input-init className={cx('form-outline', 'mb-2')}>
-                      <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Email*:
-                      </label>
-                      <input type="email" id="form3Example3" className={cx('form-control')} />
-                    </div>
-
-                    <div data-mdb-input-init className={cx('form-outline', 'mb-2')}>
-                      <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Mật khẩu*:
-                      </label>
-                      <input type="password" id="form3Example4" className={cx('form-control')} />
-                    </div>
-
-                    <div data-mdb-input-init className={cx('form-outline', 'mb-2')}>
-                      <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Nhập lại mật khẩu*:
-                      </label>
-                      <input type="password" id="form3Example4" className={cx('form-control')} />
-                    </div>
-
-                    <div className={cx('text-center')}>
-                      <button
-                        type="submit"
-                        data-mdb-button-init
-                        data-mdb-ripple-init
-                        className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}
-                      >
-                        Đăng nhập
-                      </button>
-                    </div>
-                  </form>
-                  {/* REGISTER */}
-                  <div className={cx('text-center')}>
-                    <p style={{ fontSize: '0.85rem' }}>
-                      Nếu đã có tài khoản?{' '}
-                      <a href="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
-                        Đăng nhập
-                      </a>
-                    </p>
+    <section className={cx('text-center', 'text-lg-start')}>
+      <div className={cx('container', 'py-4')}>
+        <div className={cx('row', 'g-0', 'align-items-center', 'justify-content-center')}>
+          <div className={cx('col-lg-5', 'mb-5', 'mb-lg-0', 'd-none', 'd-lg-block')}>
+            <img
+              src={images.imageLoginRegister}
+              className={cx('w-100', 'rounded-4', 'shadow-4')}
+              style={{ height: '400px', objectFit: 'cover' }}
+              alt=""
+            />
+          </div>
+          <div className={cx('col-lg-6', 'mb-5', 'mb-lg-0')}>
+            <div
+              className={cx('card', 'cascading-right', 'bg-body-tertiary', 'mx-auto')}
+              style={{ maxWidth: '420px', backdropFilter: 'blur(30px)' }}
+            >
+              <div className={cx('card-body', 'p-3', 'shadow-5')} style={{ fontSize: '0.9rem' }}>
+                <h2 className={cx('fw-bold', 'mb-3')} style={{ fontSize: '1.5rem' }}>
+                  Đăng Ký
+                </h2>
+                <form onSubmit={handleSubmit}>
+                  <div className={cx('form-outline', 'mb-2')}>
+                    <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="username">
+                      Tên người dùng*:
+                    </label>
+                    <input type="text" id="username" className={cx('form-control')} />
                   </div>
 
-                  {/* LOGIN BY GG */}
-                  <div className={cx('text-center')}>
-                    <p>hoặc đăng nhập với</p>
+                  <div className={cx('form-outline', 'mb-2')}>
+                    <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="email">
+                      Email*:
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className={cx('form-control')}
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                    />
+                    {emailError && <p className="text-danger mt-1">{emailError}</p>}
+                  </div>
 
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className={cx('btn', 'btn-link', 'btn-floating', 'mx-1')}
-                    >
-                      <i className={cx('fab', 'fa-google')} style={{ fontSize: '0.9rem' }}></i>
+                  <div className={cx('form-outline', 'mb-2')}>
+                    <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="password">
+                      Mật khẩu*:
+                    </label>
+                    <input
+                      type="password"
+                      id="password"
+                      className={cx('form-control')}
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                    />
+                  </div>
+
+                  <div className={cx('form-outline', 'mb-2')}>
+                    <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="confirm-password">
+                      Nhập lại mật khẩu*:
+                    </label>
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      className={cx('form-control')}
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                    />
+                    {confirmPasswordError && <p className="text-danger mt-1">{confirmPasswordError}</p>}
+                  </div>
+
+                  <div className={cx('text-center')}>
+                    <button type="submit" className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}>
+                      Đăng nhập
                     </button>
                   </div>
+                </form>
+
+                <div className={cx('text-center')}>
+                  <p style={{ fontSize: '0.85rem' }}>
+                    Nếu đã có tài khoản?{' '}
+                    <a href="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
+                      Đăng nhập
+                    </a>
+                  </p>
+                </div>
+
+                <div className={cx('text-center')}>
+                  <p>hoặc đăng nhập với</p>
+                  <button type="button" className={cx('btn', 'btn-link', 'btn-floating', 'mx-1')}>
+                    <i className={cx('fab', 'fa-google')} style={{ fontSize: '0.9rem' }}></i>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
