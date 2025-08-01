@@ -37,12 +37,13 @@
   }
 }
 
-.suggestion-box {
+.tippy-popup-box {
   background-color: var(--black-color-light-1);
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   max-height: 500px;
+  width: 380px;
   overflow-y: auto;
   z-index: 10;
 }
