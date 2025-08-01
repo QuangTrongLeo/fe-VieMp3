@@ -1,9 +1,9 @@
 import React from 'react';
-import SongRow from '~/components/Components/SongRow';
 import LimitedList from '~/components/Components/LimitedList';
 import audios from '~/assets/audios';
 import classNames from 'classnames/bind';
 import styles from './History.module.scss';
+import { SongRow } from '~/components/Components/Row';
 
 const cx = classNames.bind(styles);
 

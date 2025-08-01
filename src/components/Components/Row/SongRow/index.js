@@ -24,7 +24,7 @@ function SongRow({ cover, song, artist, album, mp3 }) {
 
   return (
     <a href={`/song/${song}`} className={cx('song-row-link')}>
-      <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
+      <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-2')}>
         {/* Cột: Bài hát */}
         <div className="col-6 d-flex align-items-center">
           <img src={cover} alt={song} className={cx('song-row-cover', 'me-3')} />
