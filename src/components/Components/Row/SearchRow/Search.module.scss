@@ -4,7 +4,7 @@
   display: block;
 
   &:hover .search-row {
-    background-color: var(--black-color-light-1);
+    background-color: var(--black-color-light-2);
   }
 
   &:hover .search-row-content {
@@ -25,10 +25,18 @@
 
   .search-row-content {
     font-weight: 500;
+    max-width: 274px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .search-row-desc {
     color: var(--white-darker-color);
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   cursor: pointer;

@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 
-function LimitedList({ items = [], renderItem, limit = 6, showAllText = 'Hiện tất cả', showLessText = 'Ẩn bớt' }) {
+function LimitedList({
+  items = [],
+  renderItem,
+  limit = 6,
+  showAllText = 'Hiện tất cả',
+  showLessText = 'Ẩn bớt',
+  wrapInRow = true, // <--- Thêm option này
+}) {
   const [showAll, setShowAll] = useState(false);
-
   const displayedItems = showAll ? items : items.slice(0, limit);
 
   return (
     <div>
-      {/* Không wrap bằng col- nữa, giao cho renderItem xử lý */}
-      <div className="row">{displayedItems.map((item, index) => renderItem(item, index))}</div>
+      {wrapInRow ? (
+        <div className="row">{displayedItems.map((item, index) => renderItem(item, index))}</div>
+      ) : (
+        <>{displayedItems.map((item, index) => renderItem(item, index))}</>
+      )}
 
       {items.length > limit && (
         <div className="text-center mt-3">
