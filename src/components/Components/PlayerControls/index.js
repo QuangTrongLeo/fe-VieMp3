@@ -25,6 +25,7 @@ function PlayerControls({
   formatTimeBar,
   handleClickTimeBar,
   setDurationAudio,
+  onEndedAudio,
 }) {
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
@@ -38,7 +39,7 @@ function PlayerControls({
   return (
     <>
       {/* Audio element */}
-      <audio ref={audioRef} src={song.audio} onLoadedMetadata={handleLoadedMetadata} />
+      <audio ref={audioRef} src={song.audio} onLoadedMetadata={handleLoadedMetadata} onEnded={onEndedAudio} />
 
       {/* Control buttons */}
       <ul className="navbar-nav flex-row d-none d-md-flex">

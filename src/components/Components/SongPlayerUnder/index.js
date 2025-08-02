@@ -46,7 +46,23 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
     setMode(prev => (prev === 'repeat' ? null : 'repeat'));
   };
 
-  const togglePlayPause = () => setIsPaused(prev => !prev);
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPaused) {
+        // Nếu đang ở cuối bài → reset về 0
+        if (audioRef.current.currentTime === audioRef.current.duration) {
+          audioRef.current.currentTime = 0;
+          setCurrentTime(0);
+          setProgressTime(0);
+        }
+
+        audioRef.current.play();
+      } else {
+        audioRef.current.pause();
+      }
+      setIsPaused(prev => !prev);
+    }
+  };
 
   const toggleVolume = () => {
     // setProgressVolume(prev => (prev === 0 ? 100 : 0));
@@ -137,6 +153,19 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 300); // Nháy màu 300ms
+  };
+
+  const handleAudioEnded = () => {
+    if (mode === 'repeat') {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+      setCurrentTime(0);
+      setProgressTime(0);
+    } else {
+      setIsPaused(true); // Dừng nhạc nếu không repeat
+    }
   };
 
   // TIME BAR
@@ -234,6 +263,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 formatTimeBar={formatTimeBar}
                 handleClickTimeBar={handleClickTimeBar}
                 setDurationAudio={setDurationAudio}
+                onEndedAudio={handleAudioEnded}
               />
             </div>
 
