@@ -23,7 +23,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
   const audioRef = useRef(null);
   const [durationAudio, setDurationAudio] = useState(0);
 
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
   const [progressTime, setProgressTime] = useState(0);
   const [progressVolume, setProgressVolume] = useState(100);
   const [previousVolume, setPreviousVolume] = useState(100);
@@ -145,7 +145,12 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
     const rect = bar.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const percent = Math.max(0, Math.min(1, clickX / rect.width));
-    setCurrentTime(durationAudio * percent);
+    const newTime = durationAudio * percent;
+
+    setCurrentTime(newTime); // Cập nhật UI
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime; // Cập nhật thời gian thật trong audio
+    }
   };
 
   const formatTimeBar = seconds => {
