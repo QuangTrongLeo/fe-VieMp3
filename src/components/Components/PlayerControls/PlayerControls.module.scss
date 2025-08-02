@@ -42,6 +42,24 @@
   position: relative;
 }
 
+.repeat-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -1px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: 1px solid var(--black-color);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
 // TIME BAR
 .progress-time-bar-center {
   position: absolute;

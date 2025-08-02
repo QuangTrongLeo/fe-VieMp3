@@ -95,11 +95,12 @@ function PlayerControls({
         <li className="nav-item me-4">
           <button
             className={cx('player-btn', { active: mode === 'repeat' })}
-            data-bs-toggle="tooltip"
             title="Phát lại"
             onClick={toggleRepeat}
+            style={{ position: 'relative' }}
           >
             <i className="fa-solid fa-repeat"></i>
+            {mode === 'repeat' && <span className={cx('repeat-badge')}>1</span>}
           </button>
         </li>
       </ul>
