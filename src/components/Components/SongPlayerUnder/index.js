@@ -242,7 +242,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
 
             {/* CENTER ELEMENTS */}
 
-            <div className="col-4 d-flex justify-content-center position-relative">
+            <div className="col-5 d-flex justify-content-center position-relative">
               <PlayerControls
                 audioRef={audioRef}
                 song={song}
@@ -268,7 +268,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
             </div>
 
             {/* RIGHT ELEMENTS */}
-            <div className="col-4 d-flex justify-content-end align-items-center gap-1">
+            <div className="col-3 d-flex justify-content-end align-items-center gap-1">
               {/* Like button */}
               <button
                 className={`icon-song-player-right-element-btn ${likedVisible ? 'active' : ''}`}
@@ -292,7 +292,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
               </button>
 
               {/* Volume button */}
-              <button
+              {/* <button
                 className={`icon-song-player-right-element-btn ${flashVolume ? 'flash' : ''}`}
                 data-bs-toggle="tooltip"
                 title="Âm lượng"
@@ -302,12 +302,12 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 }}
               >
                 {progressVolume === 0 ? <i className="fas fa-volume-mute"></i> : <i className="fas fa-volume-up"></i>}
-              </button>
+              </button> */}
 
               {/* Volume bar */}
-              <div className="volume-bar-wrapper" ref={volumeRef} onClick={handleClickVolumeBar}>
+              {/* <div className="volume-bar-wrapper" ref={volumeRef} onClick={handleClickVolumeBar}>
                 <div className="volume-bar-fill" style={{ width: `${progressVolume}%` }}></div>
-              </div>
+              </div> */}
 
               {/* Sidebar playlist button */}
               <button

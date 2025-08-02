@@ -42,71 +42,73 @@ function PlayerControls({
       <audio ref={audioRef} src={song.audio} onLoadedMetadata={handleLoadedMetadata} onEnded={onEndedAudio} />
 
       {/* Control buttons */}
-      <ul className="navbar-nav flex-row d-none d-md-flex">
-        {/* Shuffle */}
-        <li className="nav-item me-4">
-          <button
-            className={cx('player-btn', { active: mode === 'shuffle' })}
-            data-bs-toggle="tooltip"
-            title="Phát ngẫu nhiên"
-            onClick={toggleShuffle}
-          >
-            <i className="fa-solid fa-shuffle"></i>
-          </button>
-        </li>
+      <div className="d-flex" style={{ height: '100%' }}>
+        <ul className="navbar-nav flex-row">
+          {/* Shuffle */}
+          <li className="nav-item mx-1 mx-sm-2 mx-md-3">
+            <button
+              className={cx('player-btn', { active: mode === 'shuffle' })}
+              data-bs-toggle="tooltip"
+              title="Phát ngẫu nhiên"
+              onClick={toggleShuffle}
+            >
+              <i className="fa-solid fa-shuffle"></i>
+            </button>
+          </li>
 
-        {/* Previous */}
-        <li className="nav-item me-4">
-          <button
-            className={cx('player-btn', { flash: flashPrev })}
-            data-bs-toggle="tooltip"
-            title="Bài trước"
-            onClick={() => flashButton(setFlashPrev)}
-          >
-            <i className="fa-solid fa-backward-step"></i>
-          </button>
-        </li>
+          {/* Previous */}
+          <li className="nav-item mx-1 mx-sm-2 mx-md-3">
+            <button
+              className={cx('player-btn', { flash: flashPrev })}
+              data-bs-toggle="tooltip"
+              title="Bài trước"
+              onClick={() => flashButton(setFlashPrev)}
+            >
+              <i className="fa-solid fa-backward-step"></i>
+            </button>
+          </li>
 
-        {/* Play/Pause */}
-        <li className="nav-item me-4">
-          <button
-            className={cx('play-pause-btn')}
-            data-bs-toggle="tooltip"
-            title={isPaused ? 'Phát' : 'Tạm dừng'}
-            onClick={togglePlayPause}
-          >
-            <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
-          </button>
-        </li>
+          {/* Play/Pause */}
+          <li className="nav-item mx-1 mx-sm-2 mx-md-3">
+            <button
+              className={cx('play-pause-btn')}
+              data-bs-toggle="tooltip"
+              title={isPaused ? 'Phát' : 'Tạm dừng'}
+              onClick={togglePlayPause}
+            >
+              <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
+            </button>
+          </li>
 
-        {/* Next */}
-        <li className="nav-item me-4">
-          <button
-            className={cx('player-btn', { flash: flashNext })}
-            data-bs-toggle="tooltip"
-            title="Bài tiếp theo"
-            onClick={() => flashButton(setFlashNext)}
-          >
-            <i className="fa-solid fa-forward-step"></i>
-          </button>
-        </li>
+          {/* Next */}
+          <li className="nav-item mx-1 mx-sm-2 mx-md-3">
+            <button
+              className={cx('player-btn', { flash: flashNext })}
+              data-bs-toggle="tooltip"
+              title="Bài tiếp theo"
+              onClick={() => flashButton(setFlashNext)}
+            >
+              <i className="fa-solid fa-forward-step"></i>
+            </button>
+          </li>
 
-        {/* Repeat */}
-        <li className="nav-item me-4">
-          <button
-            className={cx('player-btn', { active: mode === 'repeat' })}
-            title="Phát lại"
-            onClick={toggleRepeat}
-            style={{ position: 'relative' }}
-          >
-            <i className="fa-solid fa-repeat"></i>
-            {mode === 'repeat' && <span className={cx('repeat-badge')}>1</span>}
-          </button>
-        </li>
-      </ul>
+          {/* Repeat */}
+          <li className="nav-item mx-1 mx-sm-2 mx-md-3">
+            <button
+              className={cx('player-btn', { active: mode === 'repeat' })}
+              title="Phát lại"
+              onClick={toggleRepeat}
+              style={{ position: 'relative' }}
+            >
+              <i className="fa-solid fa-repeat"></i>
+              {mode === 'repeat' && <span className={cx('repeat-badge')}>1</span>}
+            </button>
+          </li>
+        </ul>
+      </div>
 
       {/* Time Bar */}
-      <div className={cx('progress-time-bar-center', 'position-absolute', 'start-50', 'translate-middle-x', 'mt-2')}>
+      <div className={cx('progress-time-bar-center', 'position-absolute', 'mt-2')}>
         <span className={cx('time-text')}>{formatTimeBar(currentTime)}</span>
 
         <div className={cx('progress-bar-wrapper')} ref={timeRef} onClick={handleClickTimeBar}>
