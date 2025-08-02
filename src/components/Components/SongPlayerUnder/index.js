@@ -2,7 +2,8 @@ import { Dropdown, initMDB } from 'mdb-ui-kit';
 import React, { useState, useRef, useEffect } from 'react';
 import { audios } from '~/assets';
 import * as bootstrap from 'bootstrap';
-import './SongPlayer.scss';
+import './SongPlayerUnder.scss';
+import PlayerControls from '../PlayerControls';
 initMDB({ Dropdown });
 
 const song = {
@@ -14,7 +15,7 @@ const song = {
   audio: audios.mp3Querry,
 };
 
-function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar, closePlayListSideBar }) {
+function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePlayListSideBar }) {
   const timeRef = useRef(null);
   const volumeRef = useRef(null);
 
@@ -22,7 +23,7 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar, closePlayLis
   const audioRef = useRef(null);
   const [durationAudio, setDurationAudio] = useState(0);
 
-  const [isPaused, setIsPaused] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const [progressTime, setProgressTime] = useState(0);
   const [progressVolume, setProgressVolume] = useState(100);
   const [previousVolume, setPreviousVolume] = useState(100);
@@ -206,85 +207,29 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar, closePlayLis
             </div>
 
             {/* CENTER ELEMENTS */}
-            <audio
-              ref={audioRef}
-              src={song.audio}
-              onLoadedMetadata={() => {
-                if (audioRef.current) {
-                  setDurationAudio(audioRef.current.duration);
-                }
-              }}
-            />
 
             <div className="col-4 d-flex justify-content-center position-relative">
-              <ul className="navbar-nav flex-row d-none d-md-flex">
-                {/* Shuffle */}
-                <li className="nav-item me-4">
-                  <button
-                    className={`player-btn ${mode === 'shuffle' ? 'active' : ''}`}
-                    data-bs-toggle="tooltip"
-                    title="Phát ngẫu nhiên"
-                    onClick={toggleShuffle}
-                  >
-                    <i className="fa-solid fa-shuffle"></i>
-                  </button>
-                </li>
-
-                {/* Prev */}
-                <li className="nav-item me-4">
-                  <button
-                    className={`player-btn ${flashPrev ? 'flash' : ''}`}
-                    data-bs-toggle="tooltip"
-                    onClick={() => flashButton(setFlashPrev)}
-                  >
-                    <i className="fa-solid fa-backward-step"></i>
-                  </button>
-                </li>
-
-                {/* Play/Pause */}
-                <li className="nav-item me-4">
-                  <button
-                    className="play-pause-btn"
-                    data-bs-toggle="tooltip"
-                    data-bs-title={isPaused ? 'Phát' : 'Tạm dừng'}
-                    onClick={togglePlayPause}
-                  >
-                    <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
-                  </button>
-                </li>
-
-                {/* Next */}
-                <li className="nav-item me-4">
-                  <button
-                    className={`player-btn ${flashNext ? 'flash' : ''}`}
-                    data-bs-toggle="tooltip"
-                    onClick={() => flashButton(setFlashNext)}
-                  >
-                    <i className="fa-solid fa-forward-step"></i>
-                  </button>
-                </li>
-
-                {/* Repeat */}
-                <li className="nav-item me-4">
-                  <button
-                    className={`player-btn ${mode === 'repeat' ? 'active' : ''}`}
-                    data-bs-toggle="tooltip"
-                    title="Phát lại"
-                    onClick={toggleRepeat}
-                  >
-                    <i className="fa-solid fa-repeat"></i>
-                  </button>
-                </li>
-              </ul>
-
-              {/* Thanh thời gian nằm ngoài ul nhưng căn giữa */}
-              <div className="progress-time-bar-center position-absolute start-50 translate-middle-x mt-2">
-                <span className="time-text">{formatTimeBar(currentTime)}</span>
-                <div className="progress-bar-wrapper" ref={timeRef} onClick={handleClickTimeBar}>
-                  <div className="progress-bar-fill" style={{ width: `${progressTime}%` }}></div>
-                </div>
-                <span className="time-text">{formatTimeBar(durationAudio)}</span>
-              </div>
+              <PlayerControls
+                audioRef={audioRef}
+                song={song}
+                mode={mode}
+                isPaused={isPaused}
+                flashPrev={flashPrev}
+                flashNext={flashNext}
+                progressTime={progressTime}
+                currentTime={currentTime}
+                durationAudio={durationAudio}
+                timeRef={timeRef}
+                toggleShuffle={toggleShuffle}
+                toggleRepeat={toggleRepeat}
+                togglePlayPause={togglePlayPause}
+                flashButton={flashButton}
+                setFlashPrev={setFlashPrev}
+                setFlashNext={setFlashNext}
+                formatTimeBar={formatTimeBar}
+                handleClickTimeBar={handleClickTimeBar}
+                setDurationAudio={setDurationAudio}
+              />
             </div>
 
             {/* RIGHT ELEMENTS */}
@@ -364,4 +309,4 @@ function SongPlayer({ isShowPlayListSideBar, togglePlayListSidebar, closePlayLis
   );
 }
 
-export default SongPlayer;
+export default SongPlayerUnder;

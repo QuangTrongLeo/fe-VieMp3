@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
-import SongPlayer from '~/components/Components/SongPlayer';
+import SongPlayer from '~/components/Components/SongPlayerUnder';
 
 function BaseLayout({ children, renderMainContent }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
