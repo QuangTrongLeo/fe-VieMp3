@@ -276,7 +276,7 @@ function Header() {
         {/* Logo + Search */}
         <div className="d-flex align-items-center flex-grow-1 gap-3">
           {/* Logo */}
-          <Link className="navbar-brand mb-0" href="/">
+          <Link className="navbar-brand mb-0" to="/">
             {/* <i className="fab fa-linkedin fa-2x"></i> */}
             <img className="navbar-logo" src={images.logo} alt="VieMp3" />
           </Link>

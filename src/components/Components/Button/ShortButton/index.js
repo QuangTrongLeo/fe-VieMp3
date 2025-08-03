@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function ShortButton({ color, backgroundColor, borderColor, href, children, minWidth, maxWidth }) {
+function ShortButton({ color, backgroundColor, borderColor, href, children, minWidth, maxWidth, onClick }) {
   return (
     <Link
-      to={href}
+      to={href || '#'}
+      onClick={onClick}
       className={cx('short-button')}
       style={{
         color,
