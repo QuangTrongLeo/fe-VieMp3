@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { SearchRow } from '../Row';
 import LimitedList from '../LimitedList';
-import { ShortButton } from '../Button';
+import { ShortButton, LongButton } from '../Button';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 const base64Encode = obj => {
@@ -325,36 +325,34 @@ function Header() {
           <ul className="navbar-nav navbar-nav-header d-flex align-items-center flex-row gap-3 mb-0">
             {/* Nút Khám phá Premium */}
             <li>
-              <button className="btn-premium">Khám phá Premium</button>
+              <LongButton href="/premium" backgroundColor="var(--white-color)" color="var(--black-color)">
+                Khám phá Premium
+              </LongButton>
             </li>
 
-            {/* Nút đăng ky */}
-            <li>
+            {/* Nút đăng ký */}
+            {/* <li>
               <ShortButton
                 color="var(--white-color)"
                 backgroundColor="var(--black-color-light-2)"
                 borderColor="var(--black-dark-color)"
                 href="/register"
-                // minWidth="120px"
-                // maxWidth="180px"
               >
                 Đăng ký
               </ShortButton>
-            </li>
+            </li> */}
 
             {/* Nút đăng nhập */}
-            <li>
+            {/* <li>
               <ShortButton
                 color="var(--white-color)"
                 backgroundColor="var(--primary-color)"
                 borderColor="var(--black-dark-color)"
                 href="/login"
-                // minWidth="120px"
-                // maxWidth="180px"
               >
                 Đăng nhập
               </ShortButton>
-            </li>
+            </li> */}
             {[
               { icon: 'comment-dots', label: 'Messaging' },
               { icon: 'bell', label: 'Notifications' },
