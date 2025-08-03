@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './Login.module.scss';
+import styles from './Otp.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Otp() {
   return (
     <>
       <section className={cx('text-center', 'text-lg-start')} style={{ marginTop: '5%' }}>
@@ -30,64 +30,33 @@ function Login() {
               >
                 <div className={cx('card-body', 'p-3', 'shadow-5')} style={{ fontSize: '0.9rem' }}>
                   <h2 className={cx('fw-bold', 'mb-4')} style={{ fontSize: '1.5rem' }}>
-                    Đăng nhập
+                    Xác thực OTP
                   </h2>
                   <form>
                     <div data-mdb-input-init className={cx('form-outline', 'mb-3')}>
                       <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Email*:
+                        Otp*:
                       </label>
-                      <input type="email" id="form3Example3" className={cx('form-control')} />
-                    </div>
-
-                    <div data-mdb-input-init className={cx('form-outline', 'mb-3')}>
-                      <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
-                        Mật khẩu*:
-                      </label>
-                      <input type="password" id="form3Example4" className={cx('form-control')} />
+                      <input type="text" id="form3Example3" className={cx('form-control')} />
                     </div>
 
                     <div className={cx('text-center')}>
-                      {/* <button
-                        type="submit"
-                        data-mdb-button-init
-                        data-mdb-ripple-init
-                        className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}
-                      >
-                        Đăng nhập
-                      </button> */}
                       <ShortButton
                         color="var(--black-color)"
                         backgroundColor="var(--primary-color)"
                         borderColor="var(--primary-color)"
                         href="/"
                       >
-                        Đăng nhập
+                        Xác thực
                       </ShortButton>
                     </div>
                   </form>
                   {/* REGISTER */}
                   <div className={cx('text-center')}>
-                    <p style={{ fontSize: '0.85rem', paddingTop: '4%' }}>
-                      Nếu chưa có tài khoản?{' '}
-                      <a href="/register" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
-                        Đăng ký
-                      </a>
-                    </p>
-                  </div>
-
-                  {/* LOGIN BY GG */}
-                  <div className={cx('text-center')}>
-                    <p>hoặc đăng nhập với</p>
-
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className={cx('btn', 'btn-link', 'btn-floating', 'mx-1')}
-                    >
-                      <i className={cx('fab', 'fa-google')} style={{ fontSize: '0.9rem' }}></i>
-                    </button>
+                    <div style={{ fontSize: '0.85rem', paddingTop: '4%' }}>Mã OTP đã được gửi vào gmail của bạn </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--primary-color)' }}>
+                      Bạn có 5 phút để xác thực OTP{' '}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -99,4 +68,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Otp;

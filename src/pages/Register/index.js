@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
+import { ShortButton } from '~/components/Components/Button';
 
 const cx = classNames.bind(styles);
 
@@ -115,14 +116,22 @@ function Register() {
                   </div>
 
                   <div className={cx('text-center')}>
-                    <button type="submit" className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}>
+                    {/* <button type="submit" className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}>
                       Đăng nhập
-                    </button>
+                    </button> */}
+                    <ShortButton
+                      color="var(--black-color)"
+                      backgroundColor="var(--primary-color)"
+                      borderColor="var(--primary-color)"
+                      href="/otp"
+                    >
+                      Đăng ký
+                    </ShortButton>
                   </div>
                 </form>
 
                 <div className={cx('text-center')}>
-                  <p style={{ fontSize: '0.85rem' }}>
+                  <p style={{ fontSize: '0.85rem', paddingTop: '4%' }}>
                     Nếu đã có tài khoản?{' '}
                     <a href="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
                       Đăng nhập

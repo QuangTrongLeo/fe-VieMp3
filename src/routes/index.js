@@ -13,6 +13,7 @@ import {
   FavoriteArtists,
   Login,
   Register,
+  Otp,
   Searched,
 } from '~/pages';
 
@@ -33,6 +34,7 @@ const publishRoutes = [
   { path: '/favorite-artists', component: FavoriteArtists },
   { path: '/login', component: Login, layout: SecondLayout },
   { path: '/register', component: Register, layout: SecondLayout },
+  { path: '/otp', component: Otp, layout: SecondLayout },
   { path: '/searched', component: Searched },
 ];
 

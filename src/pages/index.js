@@ -8,6 +8,7 @@ export { default as Library } from './Library';
 export { default as Login } from './Login';
 export { default as MyAlbums } from './MyAlbums';
 export { default as MySongs } from './MySongs';
+export { default as Otp } from './Otp';
 export { default as PlayList } from './PlayList';
 export { default as Profile } from './Profile';
 export { default as Register } from './Register';
