@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
-import SongPlayer from '~/components/Components/SongPlayerUnder';
+import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 
 function BaseLayout({ children, renderMainContent }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
@@ -22,7 +22,7 @@ function BaseLayout({ children, renderMainContent }) {
 
       <PlayListSideBar isShowPlayListSideBar={isShowPlayListSideBar} closePlayListSideBar={closePlayListSideBar} />
 
-      <SongPlayer
+      <SongPlayerUnder
         isShowPlayListSideBar={isShowPlayListSideBar}
         togglePlayListSidebar={togglePlayListSideBar}
         closePlayListSideBar={closePlayListSideBar}

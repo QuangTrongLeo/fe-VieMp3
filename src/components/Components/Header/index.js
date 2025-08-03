@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { SearchRow } from '../Row';
 import LimitedList from '../LimitedList';
+import { ShortButton } from '../Button';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 const base64Encode = obj => {
@@ -325,6 +326,34 @@ function Header() {
             {/* Nút Khám phá Premium */}
             <li>
               <button className="btn-premium">Khám phá Premium</button>
+            </li>
+
+            {/* Nút đăng ky */}
+            <li>
+              <ShortButton
+                color="var(--white-color)"
+                backgroundColor="var(--black-color-light-2)"
+                borderColor="var(--black-dark-color)"
+                href="/register"
+                // minWidth="120px"
+                // maxWidth="180px"
+              >
+                Đăng ký
+              </ShortButton>
+            </li>
+
+            {/* Nút đăng nhập */}
+            <li>
+              <ShortButton
+                color="var(--white-color)"
+                backgroundColor="var(--primary-color)"
+                borderColor="var(--black-dark-color)"
+                href="/login"
+                // minWidth="120px"
+                // maxWidth="180px"
+              >
+                Đăng nhập
+              </ShortButton>
             </li>
             {[
               { icon: 'comment-dots', label: 'Messaging' },

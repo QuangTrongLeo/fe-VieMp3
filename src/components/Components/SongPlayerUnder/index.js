@@ -30,7 +30,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
   const [mode, setMode] = useState(null);
   const [flashPrev, setFlashPrev] = useState(false);
   const [flashNext, setFlashNext] = useState(false);
-  const [flashVolume, setFlashVolume] = useState(false);
+  // const [flashVolume, setFlashVolume] = useState(false);
   const [flashClose, setFlashClose] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [likedVisible, setLikedVisible] = useState(false);
