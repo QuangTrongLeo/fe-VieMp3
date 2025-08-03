@@ -14,7 +14,7 @@ const base64Encode = obj => {
 };
 
 const tokens = {
-  user1: [
+  token1: [
     base64Encode({ alg: 'HS256', typ: 'JWT' }),
     base64Encode({
       sub: 'user1',
@@ -24,7 +24,7 @@ const tokens = {
     'signature',
   ].join('.'),
 
-  user2: [
+  token2: [
     base64Encode({ alg: 'HS256', typ: 'JWT' }),
     base64Encode({
       sub: 'user2',
@@ -34,7 +34,7 @@ const tokens = {
     'signature',
   ].join('.'),
 
-  user3: [
+  token3: [
     base64Encode({ alg: 'HS256', typ: 'JWT' }),
     base64Encode({
       sub: 'user3',
@@ -204,10 +204,45 @@ function Header() {
   const [searchResults, setSearchResults] = useState([]);
 
   // USER TOKEN
+  const [currentToken, setCurrentToken] = useState(''); // mặc định không có token
   const [roles, setRoles] = useState([]);
-  const [currentUser, setCurrentUser] = useState('user3');
 
-  // NHẬP KEYWORD TRONG INPUT SEARCH
+  // Khi currentToken thay đổi => ghi localStorage + decode role
+  useEffect(() => {
+    if (!currentToken) {
+      localStorage.removeItem('token'); // không có token => xóa
+      setRoles([]);
+      return;
+    }
+    const tokenFake = tokens[currentToken];
+    localStorage.setItem('token', tokenFake);
+    try {
+      const decoded = jwtDecode(tokenFake);
+      let userRoles = decoded.roles || [];
+      if (typeof userRoles === 'string') {
+        userRoles = userRoles.split(',').map(r => r.trim().toUpperCase());
+      }
+      setRoles(userRoles);
+    } catch (error) {
+      console.log('invalid token', error);
+      setRoles([]);
+    }
+  }, [currentToken]);
+
+  // kiểm tra token
+  const token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
+
+  const isArtist = roles.includes('ARTIST');
+  const isAdmin = roles.includes('ADMIN');
+
+  const handleLogout = () => {
+    setCurrentToken('');
+    localStorage.removeItem('token');
+    setRoles([]);
+  };
+
+  // nhập keyword trong input search
   const handleInputSearch = e => {
     const value = e.target.value;
     setSearchKeyword(value);
@@ -226,8 +261,6 @@ function Header() {
       const matchedSongs = apiNewSongs
         .filter(
           song => song.songName.toLowerCase().includes(keyword) || song.artistName.toLowerCase().includes(keyword)
-          // ||
-          // song.albumName?.toLowerCase().includes(keyword)
         )
         .map(song => ({ ...song, type: 'song' }));
 
@@ -235,27 +268,6 @@ function Header() {
       setSearchResults([...matchedArtists, ...matchedSongs]);
     }
   };
-
-  // Khi chọn user, cập nhật token và decode roles
-  useEffect(() => {
-    const token = tokens[currentUser];
-    localStorage.setItem('token', token);
-
-    try {
-      const decoded = jwtDecode(token);
-      let userRoles = decoded.roles || [];
-      if (typeof userRoles === 'string') {
-        userRoles = userRoles.split(',').map(r => r.trim().toUpperCase());
-      }
-      setRoles(userRoles);
-    } catch (err) {
-      console.error('Invalid token', err);
-      setRoles([]);
-    }
-  }, [currentUser]);
-
-  const isArtist = roles.includes('ARTIST');
-  const isAdmin = roles.includes('ADMIN');
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
@@ -330,111 +342,115 @@ function Header() {
               </LongButton>
             </li>
 
-            {/* Nút đăng ký */}
-            {/* <li>
-              <ShortButton
-                color="var(--white-color)"
-                backgroundColor="var(--black-color-light-2)"
-                borderColor="var(--black-dark-color)"
-                href="/register"
-              >
-                Đăng ký
-              </ShortButton>
-            </li> */}
+            {/* Nếu đã đăng nhập */}
+            {isLoggedIn ? (
+              <>
+                {[
+                  { icon: 'comment-dots', label: 'Messaging' },
+                  { icon: 'bell', label: 'Notifications' },
+                ].map((item, i) => (
+                  <li key={i} className="nav-item position-relative icon-tooltip-wrapper">
+                    <a className="nav-link d-flex flex-column text-center" href="#" onClick={e => e.preventDefault()}>
+                      <i className={`fas fa-${item.icon} fa-lg my-1`}></i>
+                      <div className="icon-tooltip">{item.label}</div>
+                    </a>
+                  </li>
+                ))}
 
-            {/* Nút đăng nhập */}
-            {/* <li>
-              <ShortButton
-                color="var(--white-color)"
-                backgroundColor="var(--primary-color)"
-                borderColor="var(--black-dark-color)"
-                href="/login"
-              >
-                Đăng nhập
-              </ShortButton>
-            </li> */}
-            {[
-              { icon: 'comment-dots', label: 'Messaging' },
-              { icon: 'bell', label: 'Notifications' },
-            ].map((item, i) => (
-              <li key={i} className="nav-item position-relative icon-tooltip-wrapper">
-                <a className="nav-link d-flex flex-column text-center" href="#" onClick={e => e.preventDefault()}>
-                  <i className={`fas fa-${item.icon} fa-lg my-1`}></i>
-                  <div className="icon-tooltip">{item.label}</div>
-                </a>
-              </li>
-            ))}
-
-            {/* Avatar dropdown */}
-            <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle d-flex align-items-center"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                onClick={e => e.preventDefault()}
-              >
-                <img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEXFxcX////CwsLHx8fz8/P5+fnm5ubLy8vb29v39/fh4eHw8PDT09Ps7OzJycn8/PzW1taDZ0PNAAAFXklEQVR4nO2dB7arOgxFiagJdf6jfSFcfkilSLKO87VHwFm21SyLJHEcx3Ecx3Ecx3Ecx3Ecx3Ecx3Ecx3Ecx3EcxwJaYP0t0oya0qYq2mykLS5DmfyOTErKZjifXsmLpkyT6GVSWRXv5E307aWJWiNRU+cf5f2JzKpYtyul5bCibqZtughFUtmuLd+CurL+3r0QVTv03dYxjWsZh36fvpvGMhqN1LT79V05XyKRuHuD3imiMKvdsQX8W8YBX2JZMwReQTeqVGY8gacT9mGkiqvvSmut4hsSAq/2BtZtiKzgSJ1aS3mPmEDYjVqKCbyaG2sx7+Bb0QV9hXcUU6YffAbO9VMhK/CUd9aSHqGtye52amtNjzSHg+3PYFkb6T06kjfWqhbI79GRGsfYkMIeHYGxp4LBzCMZij0tlZYQJ5PSMDMTeWmt7Ub5uWrPBiJ4U3D2dzIIhWqncGSwlpfIJk2vAPhE4hQP1wGwNalkWvgGc1uj5u1nWuuaDV2UFWbW27RT3qSnk3WGUR64RttHYXsQVd39xNlYoa6vuGGsUDWgmbA1pqQv0DgPDqGwNVWYBlBoml+oRzQjZ0OB+hHNTaGlqRGv5b9VaFmPIvWYzRW6QleIodAyQwwReBt7i9/3h0FiGtPkQrdYOmFb9w6RW/y+QtuK6f8gx//9Oo2+u+iNy/r6xtT69knzAnjCvCFDOwc2v15TP4i1eceJ9ja1724j4b7SJ/LG+hgmSaOqEKEZQzdwQ+iKUs2gcgCBmm1tGEuYJKlebNpbX3FPUKN2011Ya5vRimvOGEuY6JlT826h/1AK3TAM6USnEdj05lnFAhWfiPWATUEiTBv7H/IBOEDI/Yh0ZIMRzSwh2adPML5+ieRRtM/s3yHYttBbt81+QMzxm96JfiWVWcUMzowuEFlFyDM4QxU7kzJvXV+DmywW0Cs4Qg2rgHpBX8FkHIJ1vKpRw878eISqY8vYxzPvi8ojbiNHeKe2GSr3btXzEMUUrBlKqmKnTa2riEZEUloc6XfLijiOIXXD8Xa+bIAfEXndnrxkH32zUsMvZtS4cfd1f8oUa2rQvUrcaXtLjYCxDSWFZJ0mL+COo/gIHqjpNAejtDWARu9RqnMLnINEANTpNQ1dEIwqqdw7zdT2Epkp/Spna/8vUHlawXi+YJDXCJYSgzw/tJw5oNhI84hVCXV3oYIh0eQiQ3qc51cs5u5qT955IgsuMdgZnAl9FoXu0fZQBJUYyE08SQzoNII8rHwlXHtGkEjmHaGiG8V+0hX6QGG4/miozxKDeP4g77c/EWJWjYkZvaNvUOnIX4AE0W867Uz1jWh3MoQMt9+jPKvdxtU/ovqarQvwdHsVzX8KhHibvgG9Hn6zaO0ZtehN8wnXLtTeBtv6+iVKPdK6j0X3oXL1pvzgdx8qYwiQllBlEWHMzIS8sYHxFDPiHkN//sVOpPv54ZZQfBFDTEvai6hCo/Lhd0SLix3aKRyRnKeof5d9BMn77+DXMNsQvKzBCmfuiAU2kHZmRM7WWCv5iJA+QG8/I2VrkNKmR4Qqixp/bxRCpgkV1s6MiNga1d5DLiJvvs3uQ7cgMYQIepOKbFNCDLrvCPxnJ8QsZA7sVB98kwpsU6gq6TvYlVOwIuIr3LKiXe/MVrg9NvDHkH0QQbP7JcxMH64Q/AqzNIzuDUdYCoGT3zusNNi0h20rrF438KB0ghWaIl5XvMJyF9YfvwnOEsZgaFimJoKIZoQR1QT5YRUfzlTzSBQeF/j7CiOISkcYkSlwtXvJ8cq3ddf6Vo53t0fiDhkOMRJ3yHGIOA2l3zncbhpBCWPicCHjNxT+A7hBYW0zNQIyAAAAAElFTkSuQmCC"
-                  className="rounded-circle"
-                  height="40"
-                  alt="Avatar"
-                  loading="lazy"
-                />
-              </a>
-              <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
-                {/* USER */}
-                <li>
-                  <a className="dropdown-item" href="/profile">
-                    <i className="fas fa-user me-2"></i> Hồ sơ
+                {/* Avatar dropdown */}
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    id="navbarDropdownMenuLink"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    onClick={e => e.preventDefault()}
+                  >
+                    <img
+                      src={images.avatarDefault}
+                      className="rounded-circle"
+                      height="40"
+                      alt="Avatar"
+                      loading="lazy"
+                    />
                   </a>
+                  <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                      <a className="dropdown-item" href="/profile">
+                        <i className="fas fa-user me-2"></i> Hồ sơ
+                      </a>
+                    </li>
+
+                    {/* ARTIST */}
+                    {isArtist && (
+                      <>
+                        <li>
+                          <a className="dropdown-item" href="/my-songs">
+                            <i className="fas fa-music me-2"></i> Bài hát của tôi
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/my-albums">
+                            <i className="fas fa-compact-disc me-2"></i> Album của tôi
+                          </a>
+                        </li>
+                      </>
+                    )}
+
+                    {/* ADMIN */}
+                    {isAdmin && (
+                      <>
+                        <li>
+                          <a className="dropdown-item" href="/manage-users">
+                            <i className="fas fa-users-cog me-2"></i> Quản lý người dùng
+                          </a>
+                        </li>
+                        <li>
+                          <a className="dropdown-item" href="/moderate-songs">
+                            <i className="fas fa-check-circle me-2"></i> Kiểm duyệt bài hát
+                          </a>
+                        </li>
+                      </>
+                    )}
+
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="/logout">
+                        <i className="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                      </a>
+                    </li>
+                  </ul>
                 </li>
-
-                {/* ARTIST */}
-                {isArtist && (
-                  <>
-                    <li>
-                      <a className="dropdown-item" href="/my-songs">
-                        <i className="fas fa-music me-2"></i> Bài hát của tôi
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/my-albums">
-                        <i className="fas fa-compact-disc me-2"></i> Album của tôi
-                      </a>
-                    </li>
-                  </>
-                )}
-
-                {/* ADMIN */}
-                {isAdmin && (
-                  <>
-                    <li>
-                      <a className="dropdown-item" href="/manage-users">
-                        <i className="fas fa-users-cog me-2"></i> Quản lý người dùng
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="/moderate-songs">
-                        <i className="fas fa-check-circle me-2"></i> Kiểm duyệt bài hát
-                      </a>
-                    </li>
-                  </>
-                )}
-
+              </>
+            ) : (
+              <>
+                {/* Nếu chưa đăng nhập */}
                 <li>
-                  <hr className="dropdown-divider" />
+                  <ShortButton
+                    color="var(--white-color)"
+                    backgroundColor="var(--black-color-light-2)"
+                    borderColor="var(--black-dark-color)"
+                    href="/register"
+                  >
+                    Đăng ký
+                  </ShortButton>
                 </li>
-
                 <li>
-                  <a className="dropdown-item" href="/logout">
-                    <i className="fas fa-sign-out-alt me-2"></i> Đăng xuất
-                  </a>
+                  <ShortButton
+                    color="var(--white-color)"
+                    backgroundColor="var(--primary-color)"
+                    borderColor="var(--black-dark-color)"
+                    href="/login"
+                  >
+                    Đăng nhập
+                  </ShortButton>
                 </li>
-              </ul>
-            </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
