@@ -1,12 +1,13 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './SquareCard.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function SquareCard({ content, desc, cover, href, icon }) {
   return (
-    <a href={href} className={cx('square-card')}>
+    <Link to={href} className={cx('square-card')}>
       <div className={cx('square-cover-container')}>
         {cover ? (
           <img src={cover} alt={content} />
@@ -16,7 +17,7 @@ function SquareCard({ content, desc, cover, href, icon }) {
       </div>
       <div className={cx('square-content')}>{content}</div>
       <div className={cx('square-desc')}>{desc}</div>
-    </a>
+    </Link>
   );
 }
 

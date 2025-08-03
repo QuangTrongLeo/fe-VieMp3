@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './LongButton.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -14,8 +15,8 @@ function LongButton({
   maxWidth,
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={cx('long-button')}
       style={{
         color,
@@ -26,7 +27,7 @@ function LongButton({
       }}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 

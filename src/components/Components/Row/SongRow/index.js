@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SongRow.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +24,7 @@ function SongRow({ cover, song, artist, album, mp3 }) {
   };
 
   return (
-    <a href={`/song/${song}`} className={cx('song-row-link')}>
+    <Link to={`/song/${song}`} className={cx('song-row-link')}>
       <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-2')}>
         {/* Cột: Bài hát */}
         <div className="col-6 d-flex align-items-center">
@@ -52,7 +53,7 @@ function SongRow({ cover, song, artist, album, mp3 }) {
         {/* Audio ẩn để lấy duration */}
         {mp3 && <audio ref={audioRef} src={mp3} onLoadedMetadata={handleLoadedMetadata} style={{ display: 'none' }} />}
       </div>
-    </a>
+    </Link>
   );
 }
 

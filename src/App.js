@@ -5,7 +5,6 @@ import { Fragment } from 'react';
 
 function App() {
   const allRoutes = [...publishRoutes, ...userRoutes, ...artistRoutes, ...adminRoutes];
-
   return (
     <Router>
       <div className="App">

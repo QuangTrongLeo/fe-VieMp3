@@ -1,12 +1,13 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './RectangleCard.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function RectangleCard({ content, desc, cover, href, icon }) {
   return (
-    <a href={href} className={cx('rectangle-card')}>
+    <Link to={href} className={cx('rectangle-card')}>
       <div className={cx('rectangle-cover-container')}>
         {cover ? (
           <img src={cover} alt={content} />
@@ -18,7 +19,7 @@ function RectangleCard({ content, desc, cover, href, icon }) {
         <span className={cx('rectangle-content')}>{content}</span>
         <span className={cx('rectangle-desc')}>{desc}</span>
       </div>
-    </a>
+    </Link>
   );
 }
 

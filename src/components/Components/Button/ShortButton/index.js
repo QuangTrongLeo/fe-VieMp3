@@ -1,13 +1,14 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './ShortButton.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 function ShortButton({ color, backgroundColor, borderColor, href, children, minWidth, maxWidth }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={cx('short-button')}
       style={{
         color,
@@ -18,7 +19,7 @@ function ShortButton({ color, backgroundColor, borderColor, href, children, minW
       }}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 

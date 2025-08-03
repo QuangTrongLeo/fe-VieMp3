@@ -3,6 +3,7 @@ import styles from './Login.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -70,9 +71,9 @@ function Login() {
                   <div className={cx('text-center')}>
                     <p style={{ fontSize: '0.85rem', paddingTop: '4%' }}>
                       Nếu chưa có tài khoản?{' '}
-                      <a href="/register" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
+                      <Link to="/register" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
                         Đăng ký
-                      </a>
+                      </Link>
                     </p>
                   </div>
 

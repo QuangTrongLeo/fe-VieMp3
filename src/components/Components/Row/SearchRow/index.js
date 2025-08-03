@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -8,7 +9,7 @@ function SearchRow({ type, cover, content, desc }) {
   const path = type === 'artist' ? `/artist/${encodeURIComponent(content)}` : `/song/${encodeURIComponent(content)}`;
 
   return (
-    <a href={path} className={cx('search-row-link')}>
+    <Link to={path} className={cx('search-row-link')}>
       <div className={cx('search-row', 'd-flex', 'align-items-center', 'px-3', 'py-1')}>
         <img
           src={cover}
@@ -21,7 +22,7 @@ function SearchRow({ type, cover, content, desc }) {
           <div className={cx('search-row-desc', 'small')}>{desc}</div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 

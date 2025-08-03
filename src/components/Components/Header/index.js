@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { SearchRow } from '../Row';
 import LimitedList from '../LimitedList';
 import { ShortButton, LongButton } from '../Button';
+import { Link } from 'react-router-dom';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 const base64Encode = obj => {
@@ -204,7 +205,7 @@ function Header() {
   const [searchResults, setSearchResults] = useState([]);
 
   // USER TOKEN
-  const [currentToken, setCurrentToken] = useState(''); // mặc định không có token
+  const [currentToken, setCurrentToken] = useState('token1'); // mặc định không có token
   const [roles, setRoles] = useState([]);
 
   // Khi currentToken thay đổi => ghi localStorage + decode role
@@ -275,10 +276,10 @@ function Header() {
         {/* Logo + Search */}
         <div className="d-flex align-items-center flex-grow-1 gap-3">
           {/* Logo */}
-          <a className="navbar-brand mb-0" href="/">
+          <Link className="navbar-brand mb-0" href="/">
             {/* <i className="fab fa-linkedin fa-2x"></i> */}
             <img className="navbar-logo" src={images.logo} alt="VieMp3" />
-          </a>
+          </Link>
           {/* Search form */}
           <Tippy
             visible={searchKeyword.length > 0 && searchResults.length > 0}
@@ -350,18 +351,18 @@ function Header() {
                   { icon: 'bell', label: 'Notifications' },
                 ].map((item, i) => (
                   <li key={i} className="nav-item position-relative icon-tooltip-wrapper">
-                    <a className="nav-link d-flex flex-column text-center" href="#" onClick={e => e.preventDefault()}>
+                    <Link className="nav-link d-flex flex-column text-center" to="#" onClick={e => e.preventDefault()}>
                       <i className={`fas fa-${item.icon} fa-lg my-1`}></i>
                       <div className="icon-tooltip">{item.label}</div>
-                    </a>
+                    </Link>
                   </li>
                 ))}
 
                 {/* Avatar dropdown */}
                 <li className="nav-item dropdown">
-                  <a
+                  <Link
                     className="nav-link dropdown-toggle d-flex align-items-center"
-                    href="#"
+                    to="#"
                     id="navbarDropdownMenuLink"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -375,26 +376,26 @@ function Header() {
                       alt="Avatar"
                       loading="lazy"
                     />
-                  </a>
+                  </Link>
                   <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
                     <li>
-                      <a className="dropdown-item" href="/profile">
+                      <Link className="dropdown-item" to="/profile">
                         <i className="fas fa-user me-2"></i> Hồ sơ
-                      </a>
+                      </Link>
                     </li>
 
                     {/* ARTIST */}
                     {isArtist && (
                       <>
                         <li>
-                          <a className="dropdown-item" href="/my-songs">
+                          <Link className="dropdown-item" to="/my-songs">
                             <i className="fas fa-music me-2"></i> Bài hát của tôi
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/my-albums">
+                          <Link className="dropdown-item" to="/my-albums">
                             <i className="fas fa-compact-disc me-2"></i> Album của tôi
-                          </a>
+                          </Link>
                         </li>
                       </>
                     )}
@@ -403,14 +404,14 @@ function Header() {
                     {isAdmin && (
                       <>
                         <li>
-                          <a className="dropdown-item" href="/manage-users">
+                          <Link className="dropdown-item" to="/manage-users">
                             <i className="fas fa-users-cog me-2"></i> Quản lý người dùng
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/moderate-songs">
+                          <Link className="dropdown-item" to="/moderate-songs">
                             <i className="fas fa-check-circle me-2"></i> Kiểm duyệt bài hát
-                          </a>
+                          </Link>
                         </li>
                       </>
                     )}
@@ -419,9 +420,9 @@ function Header() {
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
-                      <a className="dropdown-item" href="/logout">
+                      <Link className="dropdown-item" to="/" onClick={handleLogout}>
                         <i className="fas fa-sign-out-alt me-2"></i> Đăng xuất
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </li>

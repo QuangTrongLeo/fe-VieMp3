@@ -3,6 +3,7 @@ import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -133,9 +134,9 @@ function Register() {
                 <div className={cx('text-center')}>
                   <p style={{ fontSize: '0.85rem', paddingTop: '4%' }}>
                     Nếu đã có tài khoản?{' '}
-                    <a href="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
+                    <Link to="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
                       Đăng nhập
-                    </a>
+                    </Link>
                   </p>
                 </div>
 

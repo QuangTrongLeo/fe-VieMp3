@@ -6,7 +6,6 @@ import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 
 function BaseLayout({ children, renderMainContent }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
-
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
 

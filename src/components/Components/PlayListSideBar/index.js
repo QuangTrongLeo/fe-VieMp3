@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayListSideBar.module.scss';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -113,9 +114,9 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
         </div>
 
         {/* Bài đang phát */}
-        <a
+        <Link
           className="p-2 sidebar-item d-flex align-items-center text-decoration-none text-white"
-          href="/"
+          to="/"
           style={{ borderRadius: '6px', backgroundColor: 'var(--primary-color)' }}
         >
           <img className={cx('playlist-sidebar-img')} src={songs[0].thumb} alt={songs[0].songName} />
@@ -123,7 +124,7 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
             <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{songs[0].songName}</span>
             <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{songs[0].artist}</span>
           </div>
-        </a>
+        </Link>
 
         <h6 className="text-white mt-3 mb-2" style={{ margin: '0 0.5%' }}>
           Bài tiếp theo
@@ -133,10 +134,10 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
       {/* Danh sách tiếp theo */}
       <div className={cx('playlist-sidebar-scrollable')}>
         {songs.slice(1).map(song => (
-          <a
+          <Link
             key={song.songId}
             className="p-2 sidebar-item d-flex align-items-center text-decoration-none text-white"
-            href="/"
+            to="/"
             style={{ borderRadius: '6px', transition: 'background 0.2s' }}
           >
             <img className={cx('playlist-sidebar-img')} src={song.thumb} alt={song.songName} />
@@ -144,7 +145,7 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
               <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{song.songName}</span>
               <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{song.artist}</span>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>
