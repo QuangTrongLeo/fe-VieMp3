@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
+import routes from '~/config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -124,7 +125,7 @@ function Register() {
                       color="var(--black-color)"
                       backgroundColor="var(--primary-color)"
                       borderColor="var(--primary-color)"
-                      href="/otp"
+                      href={routes.otp}
                     >
                       Đăng ký
                     </ShortButton>
@@ -134,7 +135,7 @@ function Register() {
                 <div className={cx('text-center')}>
                   <p style={{ fontSize: '0.85rem', paddingTop: '4%' }}>
                     Nếu đã có tài khoản?{' '}
-                    <Link to="/login" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
+                    <Link to={routes.login} style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
                       Đăng nhập
                     </Link>
                   </p>

@@ -16,7 +16,7 @@ function Profile() {
   const [openPopup, setOpenPopup] = useState(false);
   const [tempName, setTempName] = useState(user.usename);
   const [tempAvatar, setTempAvatar] = useState(user.avatar);
-  const fileInputRef = useRef(null); // dùng để trigger chọn file
+  const fileInputRef = useRef(null);
 
   const handleSave = () => {
     setUser(prev => ({

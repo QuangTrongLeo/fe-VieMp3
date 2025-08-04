@@ -3,6 +3,7 @@ import styles from './Otp.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
+import routes from '~/config/routes';
 
 const cx = classNames.bind(styles);
 
@@ -45,7 +46,7 @@ function Otp() {
                         color="var(--black-color)"
                         backgroundColor="var(--primary-color)"
                         borderColor="var(--primary-color)"
-                        href="/"
+                        href={routes.home}
                       >
                         Xác thực
                       </ShortButton>
