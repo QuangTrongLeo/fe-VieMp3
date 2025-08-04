@@ -15,6 +15,7 @@ const routes = {
   upload: '/upload',
   mySongs: '/my-songs',
   myAlbums: '/my-albums',
+  song: '/song',
 };
 
 export default routes;
