@@ -20,7 +20,7 @@ import {
 } from '~/pages';
 
 // userRoutes
-import { Profile } from '~/pages';
+import { ArtistDetail, SongDetail, Profile } from '~/pages';
 
 // artistRoutes
 import { Upload, MySongs, MyAlbums } from '~/pages';
@@ -41,9 +41,9 @@ const publishRoutes = [
 ];
 
 const userRoutes = [
-  { path: config.routes.library, component: Library },
+  { path: `${config.routes.artist}/:songArtist`, component: ArtistDetail },
+  { path: `${config.routes.song}/:songName`, component: SongDetail },
   { path: config.routes.profile, component: Profile },
-  // { path: '/playlist', component: PlayList },
 ];
 
 const artistRoutes = [
