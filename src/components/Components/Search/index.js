@@ -184,6 +184,7 @@ function Search() {
           ? `${item.artistName}${item.albumName ? ` • Album: ${item.albumName}` : ''}`
           : 'Nghệ sĩ nổi bật'
       }
+      onClick={() => setSearchKeyword('')}
     />
   );
 

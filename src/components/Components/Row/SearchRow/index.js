@@ -5,11 +5,11 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function SearchRow({ type, cover, content, desc }) {
+function SearchRow({ type, cover, content, desc, onClick }) {
   const path = type === 'artist' ? `/artist/${encodeURIComponent(content)}` : `/song/${encodeURIComponent(content)}`;
 
   return (
-    <Link to={path} className={cx('search-row-link')}>
+    <Link to={path} className={cx('search-row-link')} onClick={onClick}>
       <div className={cx('search-row', 'd-flex', 'align-items-center', 'px-3', 'py-1')}>
         <img
           src={cover}
