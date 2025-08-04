@@ -1,7 +1,7 @@
 // Layouts
 import { SecondLayout } from '~/layouts';
 
-import routes from '~/config/routes';
+import config from '~/config';
 
 // publishRoutes
 import {
@@ -26,30 +26,30 @@ import { Profile } from '~/pages';
 import { Upload, MySongs, MyAlbums } from '~/pages';
 
 const publishRoutes = [
-  { path: routes.home, component: Home },
-  { path: routes.library, component: Library },
-  { path: routes.genres, component: Genres },
-  { path: routes.history, component: History },
-  { path: routes.playlist, component: PlayList },
-  { path: routes.favoriteSongs, component: FavoriteSongs },
-  { path: routes.favoriteAlbums, component: FavoriteAlbums },
-  { path: routes.favoriteArtists, component: FavoriteArtists },
-  { path: routes.login, component: Login, layout: SecondLayout },
-  { path: routes.register, component: Register, layout: SecondLayout },
-  { path: routes.otp, component: Otp, layout: SecondLayout },
-  { path: routes.searched, component: Searched },
+  { path: config.routes.home, component: Home },
+  { path: config.routes.library, component: Library },
+  { path: config.routes.genres, component: Genres },
+  { path: config.routes.history, component: History },
+  { path: config.routes.playlist, component: PlayList },
+  { path: config.routes.favoriteSongs, component: FavoriteSongs },
+  { path: config.routes.favoriteAlbums, component: FavoriteAlbums },
+  { path: config.routes.favoriteArtists, component: FavoriteArtists },
+  { path: config.routes.login, component: Login, layout: SecondLayout },
+  { path: config.routes.register, component: Register, layout: SecondLayout },
+  { path: config.routes.otp, component: Otp, layout: SecondLayout },
+  { path: config.routes.searched, component: Searched },
 ];
 
 const userRoutes = [
-  { path: routes.library, component: Library },
-  { path: routes.profile, component: Profile },
+  { path: config.routes.library, component: Library },
+  { path: config.routes.profile, component: Profile },
   // { path: '/playlist', component: PlayList },
 ];
 
 const artistRoutes = [
-  { path: routes.upload, component: Upload },
-  { path: routes.mySongs, component: MySongs },
-  { path: routes.myAlbums, component: MyAlbums },
+  { path: config.routes.upload, component: Upload },
+  { path: config.routes.mySongs, component: MySongs },
+  { path: config.routes.myAlbums, component: MyAlbums },
 ];
 
 const adminRoutes = [];

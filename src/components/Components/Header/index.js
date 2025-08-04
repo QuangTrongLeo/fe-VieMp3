@@ -8,7 +8,7 @@ import { SearchRow } from '../Row';
 import LimitedList from '../LimitedList';
 import { ShortButton, LongButton } from '../Button';
 import { Link } from 'react-router-dom';
-import routes from '~/config/routes';
+import config from '~/config';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 const base64Encode = obj => {
@@ -277,7 +277,7 @@ function Header() {
         {/* Logo + Search */}
         <div className="d-flex align-items-center flex-grow-1 gap-3">
           {/* Logo */}
-          <Link className="navbar-brand mb-0" to={routes.home}>
+          <Link className="navbar-brand mb-0" to={config.routes.home}>
             {/* <i className="fab fa-linkedin fa-2x"></i> */}
             <img className="navbar-logo" src={images.logo} alt="VieMp3" />
           </Link>
@@ -380,7 +380,7 @@ function Header() {
                   </Link>
                   <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
                     <li>
-                      <Link className="dropdown-item" to={routes.profile}>
+                      <Link className="dropdown-item" to={config.routes.profile}>
                         <i className="fas fa-user me-2"></i> Hồ sơ
                       </Link>
                     </li>
@@ -389,12 +389,12 @@ function Header() {
                     {isArtist && (
                       <>
                         <li>
-                          <Link className="dropdown-item" to={routes.mySongs}>
+                          <Link className="dropdown-item" to={config.routes.mySongs}>
                             <i className="fas fa-music me-2"></i> Bài hát của tôi
                           </Link>
                         </li>
                         <li>
-                          <Link className="dropdown-item" to={routes.myAlbums}>
+                          <Link className="dropdown-item" to={config.routes.myAlbums}>
                             <i className="fas fa-compact-disc me-2"></i> Album của tôi
                           </Link>
                         </li>
@@ -421,7 +421,7 @@ function Header() {
                       <hr className="dropdown-divider" />
                     </li>
                     <li>
-                      <Link className="dropdown-item" to={routes.home} onClick={handleLogout}>
+                      <Link className="dropdown-item" to={config.routes.home} onClick={handleLogout}>
                         <i className="fas fa-sign-out-alt me-2"></i> Đăng xuất
                       </Link>
                     </li>
@@ -436,7 +436,7 @@ function Header() {
                     color="var(--white-color)"
                     backgroundColor="var(--black-color-light-2)"
                     borderColor="var(--black-dark-color)"
-                    href={routes.register}
+                    href={config.routes.register}
                   >
                     Đăng ký
                   </ShortButton>
@@ -446,7 +446,7 @@ function Header() {
                     color="var(--white-color)"
                     backgroundColor="var(--primary-color)"
                     borderColor="var(--black-dark-color)"
-                    href={routes.login}
+                    href={config.routes.login}
                   >
                     Đăng nhập
                   </ShortButton>
