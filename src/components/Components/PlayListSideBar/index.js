@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayListSideBar.module.scss';
 import { Link } from 'react-router-dom';
+import icons from '~/assets/icons';
 
 const cx = classNames.bind(styles);
 
@@ -109,7 +110,7 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
               closePlayListSideBar();
             }}
           >
-            <i className="fa-solid fa-xmark"></i>
+            <i className={icons.iconXMark}></i>
           </button>
         </div>
 

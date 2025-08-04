@@ -1,5 +1,6 @@
 import React from 'react';
 import { SquareCard } from '~/components/Components/Card';
+import icons from '~/assets/icons';
 import styles from './FavoriteAlbums.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
@@ -38,7 +39,7 @@ function FavoriteAlbums() {
   return (
     <>
       <h1 className="text-center">
-        <i class="fas fa-compact-disc"></i>
+        <i class={icons.iconCompactDisc}></i>
         <span style={{ paddingLeft: '10px' }}>Album yêu thích của bạn</span>
       </h1>
 
@@ -54,7 +55,7 @@ function FavoriteAlbums() {
                 content={album.albumName}
                 cover={album.cover}
                 href={`/album/${album.albumName}`}
-                icon={<i className="fas fa-list fa-3x"></i>}
+                icon={<i className={`${icons.iconList} fa-3x`}></i>}
               />
             </div>
           )}

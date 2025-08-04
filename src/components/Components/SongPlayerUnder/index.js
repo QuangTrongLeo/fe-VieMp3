@@ -1,6 +1,7 @@
 import { Dropdown, initMDB } from 'mdb-ui-kit';
 import React, { useState, useRef, useEffect } from 'react';
 import { audios } from '~/assets';
+import icons from '~/assets/icons';
 import * as bootstrap from 'bootstrap';
 import './SongPlayerUnder.scss';
 import PlayerControls from '../PlayerControls';
@@ -286,7 +287,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 title="Thích"
                 onClick={() => setLikedVisible(prev => !prev)}
               >
-                <i className="fas fa-heart"></i>
+                <i className={icons.iconHeart}></i>
                 <span className="dot-indicator"></span>
               </button>
 
@@ -297,7 +298,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 title="Lời bài hát"
                 onClick={() => setLyricsVisible(prev => !prev)}
               >
-                <i className="fas fa-microphone"></i>
+                <i className={icons.iconMicrophone}></i>
                 <span className="dot-indicator"></span>
               </button>
 
@@ -328,7 +329,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                   togglePlayListSidebar();
                 }}
               >
-                <i className="fas fa-bars"></i>
+                <i className={icons.iconBars}></i>
                 <span className="dot-indicator"></span>
               </button>
 
@@ -344,7 +345,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                   closePlayListSideBar();
                 }}
               >
-                <i class="fa-solid fa-xmark"></i>
+                <i class={icons.iconXMark}></i>
               </button>
             </div>
           </div>

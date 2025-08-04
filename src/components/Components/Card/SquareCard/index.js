@@ -1,4 +1,5 @@
 import React from 'react';
+import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './SquareCard.module.scss';
 import { Link } from 'react-router-dom';
@@ -12,7 +13,7 @@ function SquareCard({ content, desc, cover, href, icon }) {
         {cover ? (
           <img src={cover} alt={content} />
         ) : (
-          <div className={cx('icon-placeholder')}>{icon || <i className="fas fa-image fa-3x"></i>}</div>
+          <div className={cx('icon-placeholder')}>{icon || <i className={`${icons.iconImage} fa-3x`}></i>}</div>
         )}
       </div>
       <div className={cx('square-content')}>{content}</div>

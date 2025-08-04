@@ -1,5 +1,6 @@
 import React from 'react';
 import { RectangleCard } from '~/components/Components/Card';
+import icons from '~/assets/icons';
 import styles from './Genres.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
@@ -24,7 +25,7 @@ function Genres() {
   return (
     <div className="container">
       <h1 className="text-center mb-4">
-        <i className="fas fa-layer-group"></i>
+        <i className={icons.iconLayerGroup}></i>
         <span className="ps-2">Thể loại nhạc</span>
       </h1>
 
@@ -38,7 +39,7 @@ function Genres() {
                 content={genre.genreName}
                 desc={genre.genreDesc}
                 href={`/genres/${genre.genreName.toLowerCase()}`}
-                icon={<i className="fas fa-music fa-3x"></i>}
+                icon={<i className={`${icons.iconMusic} fa-3x`}></i>}
               />
             </div>
           )}

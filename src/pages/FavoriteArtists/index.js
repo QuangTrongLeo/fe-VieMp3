@@ -1,5 +1,6 @@
 import React from 'react';
 import { CircleCard } from '~/components/Components/Card';
+import icons from '~/assets/icons';
 import styles from './FavoriteArtists.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
@@ -63,7 +64,7 @@ function FavoriteArtists() {
   return (
     <>
       <h1 className="text-center mb-4">
-        <i className="fas fa-star"></i>
+        <i className={icons.iconStar}></i>
         <span style={{ paddingLeft: '10px' }}>Nghệ sĩ yêu thích của bạn</span>
       </h1>
 

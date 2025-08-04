@@ -1,5 +1,6 @@
 import React from 'react';
 import { CreateCard, SquareCard } from '~/components/Components/Card';
+import icons from '~/assets/icons';
 import styles from './PlayList.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
@@ -36,7 +37,7 @@ function PlayList() {
   return (
     <div className={cx('playlist-wrapper')}>
       <h1 className="text-center">
-        <i className="fas fa-list"></i>
+        <i className={icons.iconList}></i>
         <span style={{ paddingLeft: '10px' }}>PlayList</span>
       </h1>
 

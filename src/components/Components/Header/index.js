@@ -7,6 +7,7 @@ import Search from '../Search';
 import { ShortButton, LongButton } from '../Button';
 import { Link } from 'react-router-dom';
 import config from '~/config';
+import icons from '~/assets/icons';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
 
 const base64Encode = obj => {
@@ -101,7 +102,7 @@ function Header() {
 
           {/* Voice button */}
           <button className="btn voice-btn">
-            <i className="fas fa-microphone"></i>
+            <i className={icons.iconMicrophone}></i>
           </button>
         </div>
 
@@ -165,7 +166,7 @@ function Header() {
                   <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
                     <li>
                       <Link className="dropdown-item" to={config.routes.profile}>
-                        <i className="fas fa-user me-2"></i> Hồ sơ
+                        <i className={`${icons.iconUser} me-2`}></i> Hồ sơ
                       </Link>
                     </li>
 
@@ -174,12 +175,12 @@ function Header() {
                       <>
                         <li>
                           <Link className="dropdown-item" to={config.routes.mySongs}>
-                            <i className="fas fa-music me-2"></i> Bài hát của tôi
+                            <i className={`${icons.iconMusic} me-2`}></i> Bài hát của tôi
                           </Link>
                         </li>
                         <li>
                           <Link className="dropdown-item" to={config.routes.myAlbums}>
-                            <i className="fas fa-compact-disc me-2"></i> Album của tôi
+                            <i className={`${icons.iconCompactDisc} me-2`}></i> Album của tôi
                           </Link>
                         </li>
                       </>
@@ -206,7 +207,7 @@ function Header() {
                     </li>
                     <li>
                       <Link className="dropdown-item" to={config.routes.home} onClick={handleLogout}>
-                        <i className="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                        <i className={`${icons.iconSignOut} me-2`}></i> Đăng xuất
                       </Link>
                     </li>
                   </ul>

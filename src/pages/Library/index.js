@@ -3,6 +3,7 @@ import { CreateCard, SquareCard } from '~/components/Components/Card';
 import { SongRow } from '~/components/Components/Row';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Library.module.scss';
+import icons from '~/assets/icons';
 import audios from '~/assets/audios';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
@@ -113,7 +114,7 @@ function Library() {
   return (
     <>
       <h1 className="text-center">
-        <i class="fas fa-book"></i>
+        <i class={icons.iconBook}></i>
         <span style={{ paddingLeft: '10px' }}>Thư viện</span>
       </h1>
 
@@ -153,15 +154,15 @@ function Library() {
             {/* Header danh sách bài hát */}
             <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
               <div className="col-6 d-flex align-items-center gap-2">
-                <i className={cx('song-row-icon-header', 'fas fa-music')}></i>
+                <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
                 <span>Bài hát</span>
               </div>
               <div className="col-4 d-flex align-items-center">
-                <i className={cx('song-row-icon-header', 'fas fa-compact-disc', 'me-2')}></i>
+                <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
                 <span>Album</span>
               </div>
               <div className="col-2 d-flex justify-content-end align-items-center">
-                <i className={cx('song-row-icon-header', 'fas fa-clock', 'me-2')}></i>
+                <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
                 <span>Thời gian</span>
               </div>
             </div>

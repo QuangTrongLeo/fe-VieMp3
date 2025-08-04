@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
+import icons from '~/assets/icons';
 import { SearchRow } from '../Row';
 import LimitedList from '../LimitedList';
 import classNames from 'classnames/bind';
@@ -217,7 +218,7 @@ function Search() {
           onChange={handleInputSearch}
         />
         <button className={cx('btn', 'btn-outline-custom')} type="button">
-          <i className="fas fa-search"></i>
+          <i className={icons.iconSearch}></i>
         </button>
       </form>
     </Tippy>

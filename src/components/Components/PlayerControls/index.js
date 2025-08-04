@@ -2,6 +2,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayerControls.module.scss';
+import icons from '~/assets/icons';
 
 const cx = classNames.bind(styles);
 
@@ -52,7 +53,7 @@ function PlayerControls({
               title="Phát ngẫu nhiên"
               onClick={toggleShuffle}
             >
-              <i className="fa-solid fa-shuffle"></i>
+              <i className={icons.iconShuffle}></i>
             </button>
           </li>
 
@@ -64,7 +65,7 @@ function PlayerControls({
               title="Bài trước"
               onClick={() => flashButton(setFlashPrev)}
             >
-              <i className="fa-solid fa-backward-step"></i>
+              <i className={icons.iconBackwardStep}></i>
             </button>
           </li>
 
@@ -76,7 +77,7 @@ function PlayerControls({
               title={isPaused ? 'Phát' : 'Tạm dừng'}
               onClick={togglePlayPause}
             >
-              <i className={`fa-solid ${isPaused ? 'fa-play' : 'fa-pause'}`}></i>
+              <i className={`${isPaused ? icons.iconPlay : icons.iconPause}`}></i>
             </button>
           </li>
 
@@ -88,7 +89,7 @@ function PlayerControls({
               title="Bài tiếp theo"
               onClick={() => flashButton(setFlashNext)}
             >
-              <i className="fa-solid fa-forward-step"></i>
+              <i className={icons.iconForwardStep}></i>
             </button>
           </li>
 
@@ -100,7 +101,7 @@ function PlayerControls({
               onClick={toggleRepeat}
               style={{ position: 'relative' }}
             >
-              <i className="fa-solid fa-repeat"></i>
+              <i className={icons.iconRepeat}></i>
               {mode === 'repeat' && <span className={cx('repeat-badge')}>1</span>}
             </button>
           </li>

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styles from './Profile.module.scss';
+import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import { images } from '~/assets';
 import { ShortButton } from '~/components/Components/Button';
@@ -80,7 +81,7 @@ function Profile() {
             <div className={cx('popup-header')}>
               <h3>Chi tiết hồ sơ</h3>
               <span className={cx('close-icon')} onClick={() => setOpenPopup(false)}>
-                &times;
+                <i className={icons.iconXMark}></i>
               </span>
             </div>
 

@@ -1,0 +1,28 @@
+const icons = {
+  iconCompass: 'fas fa-compass',
+  iconLayerGroup: 'fas fa-layer-group',
+  iconHistory: 'fas fa-history',
+  iconBook: 'fas fa-book',
+  iconList: 'fas fa-list',
+  iconHeart: 'fas fa-heart',
+  iconCompactDisc: 'fas fa-compact-disc',
+  iconStar: 'fas fa-star',
+  iconSearch: 'fas fa-search',
+  iconMicrophone: 'fas fa-microphone',
+  iconUser: 'fas fa-user',
+  iconMusic: 'fas fa-music',
+  iconSignOut: 'fas fa-sign-out-alt',
+  iconShuffle: 'fa-solid fa-shuffle',
+  iconBackwardStep: 'fa-solid fa-backward-step',
+  iconForwardStep: 'fa-solid fa-forward-step',
+  iconPlay: 'fa-solid fa-play',
+  iconPause: 'fa-solid fa-pause',
+  iconRepeat: 'fa-solid fa-repeat',
+  iconBars: 'fas fa-bars',
+  iconXMark: 'fa-solid fa-xmark',
+  iconCirclePlus: 'fa-solid fa-circle-plus',
+  iconImage: 'fas fa-image',
+  iconClock: 'fas fa-clock',
+};
+
+export default icons;
