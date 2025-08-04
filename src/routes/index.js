@@ -4,36 +4,29 @@ import { SecondLayout } from '~/layouts';
 import config from '~/config';
 
 // publishRoutes
+import { Home, Genres, History, Login, Register, Otp, Searched, GenreDetail } from '~/pages';
+
+// userRoutes
 import {
-  Home,
-  Library,
-  Genres,
-  History,
-  PlayList,
+  ArtistDetail,
+  SongDetail,
+  LyrisDetail,
+  Profile,
   FavoriteSongs,
   FavoriteAlbums,
   FavoriteArtists,
-  Login,
-  Register,
-  Otp,
-  Searched,
+  Library,
+  PlayList,
 } from '~/pages';
-
-// userRoutes
-import { ArtistDetail, SongDetail, Profile } from '~/pages';
 
 // artistRoutes
 import { Upload, MySongs, MyAlbums } from '~/pages';
 
 const publishRoutes = [
   { path: config.routes.home, component: Home },
-  { path: config.routes.library, component: Library },
+  { path: `${config.routes.genre}/:genreName`, component: GenreDetail },
   { path: config.routes.genres, component: Genres },
   { path: config.routes.history, component: History },
-  { path: config.routes.playlist, component: PlayList },
-  { path: config.routes.favoriteSongs, component: FavoriteSongs },
-  { path: config.routes.favoriteAlbums, component: FavoriteAlbums },
-  { path: config.routes.favoriteArtists, component: FavoriteArtists },
   { path: config.routes.login, component: Login, layout: SecondLayout },
   { path: config.routes.register, component: Register, layout: SecondLayout },
   { path: config.routes.otp, component: Otp, layout: SecondLayout },
@@ -41,9 +34,15 @@ const publishRoutes = [
 ];
 
 const userRoutes = [
-  { path: `${config.routes.artist}/:songArtist`, component: ArtistDetail },
+  { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
   { path: `${config.routes.song}/:songName`, component: SongDetail },
+  { path: `${config.routes.lyris}/:lyrisName`, component: LyrisDetail },
+  { path: config.routes.library, component: Library },
   { path: config.routes.profile, component: Profile },
+  { path: config.routes.playlist, component: PlayList },
+  { path: config.routes.favoriteSongs, component: FavoriteSongs },
+  { path: config.routes.favoriteAlbums, component: FavoriteAlbums },
+  { path: config.routes.favoriteArtists, component: FavoriteArtists },
 ];
 
 const artistRoutes = [
