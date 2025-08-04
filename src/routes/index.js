@@ -1,5 +1,5 @@
 // Layouts
-import { SecondLayout } from '~/components/Layouts';
+import { SecondLayout } from '~/layouts';
 
 import routes from '~/config/routes';
 

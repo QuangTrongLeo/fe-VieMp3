@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publishRoutes, userRoutes, artistRoutes, adminRoutes } from '~/routes';
-import { MainLayout } from './components/Layouts';
+import { MainLayout } from './layouts';
 import { Fragment } from 'react';
 
 function App() {
