@@ -10,6 +10,7 @@
 
 .song-row {
   border-bottom: 1px solid var(--black-color-light-2);
+  cursor: pointer;
 
   .song-row-cover {
     width: 54px;
@@ -17,18 +18,38 @@
     border-radius: 4px;
     border: 1px solid var(--black-color-light-1);
     object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .song-row-info {
+    overflow: hidden;
+    padding-right: 10%;
   }
 
   .song-row-title {
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   .song-row-artists {
     color: var(--white-darker-color);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   .song-row-album {
     color: var(--white-darker-color);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   .song-row-favorite-icon {
@@ -39,6 +60,4 @@
       color: var(--primary-color);
     }
   }
-
-  cursor: pointer;
 }

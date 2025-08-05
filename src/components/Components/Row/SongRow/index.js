@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function SongRow({ cover, song, artist, album, mp3 }) {
+function SongRow({ cover, song, artist, album, audio }) {
   const [liked, setLiked] = useState(false);
   const [duration, setDuration] = useState('');
   const audioRef = useRef(null);
@@ -29,9 +29,13 @@ function SongRow({ cover, song, artist, album, mp3 }) {
         {/* Cột: Bài hát */}
         <div className="col-6 d-flex align-items-center">
           <img src={cover} alt={song} className={cx('song-row-cover', 'me-3')} />
-          <div>
-            <div className={cx('song-row-title')}>{song}</div>
-            <div className={cx('song-row-artists', 'small')}>{artist}</div>
+          <div className={cx('song-row-info')}>
+            <div className={cx('song-row-title')} title={song}>
+              {song}
+            </div>
+            <div className={cx('song-row-artists')} title={artist}>
+              {artist}
+            </div>
           </div>
         </div>
 
@@ -51,7 +55,9 @@ function SongRow({ cover, song, artist, album, mp3 }) {
         </div>
 
         {/* Audio ẩn để lấy duration */}
-        {mp3 && <audio ref={audioRef} src={mp3} onLoadedMetadata={handleLoadedMetadata} style={{ display: 'none' }} />}
+        {audio && (
+          <audio ref={audioRef} src={audio} onLoadedMetadata={handleLoadedMetadata} style={{ display: 'none' }} />
+        )}
       </div>
     </Link>
   );

@@ -48,7 +48,7 @@ const renderItem = (song, index) => (
     song={song.songName}
     artist={song.artistName}
     album={song.albumName}
-    mp3={song.audio}
+    audio={song.audio}
   />
 );
 
