@@ -9,11 +9,16 @@
     background-color: var(--black-color-light-2);
   }
 
+  &:hover .song-name {
+    color: var(--primary-color);
+  }
+
   .song-cover {
     width: 48px;
     height: 48px;
     border-radius: 6px;
     object-fit: cover;
+    border: 1px solid var(--grey-color);
   }
 
   .song-name {

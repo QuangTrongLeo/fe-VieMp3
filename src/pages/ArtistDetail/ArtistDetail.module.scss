@@ -20,8 +20,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block; // cần có để ellipsis hoạt động
-    max-width: 100%; // hoặc giá trị cụ thể như 300px nếu cần
+    display: block;
+    max-width: 100%;
   }
 
   .followers {
@@ -61,7 +61,7 @@
     text-align: center;
 
     img.release-cover {
-      width: 100%;
+      width: 83%;
       border-radius: 8px;
     }
   }
