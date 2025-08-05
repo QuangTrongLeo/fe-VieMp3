@@ -244,7 +244,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 </Link>
 
                 <Link className="link-artist-hover-color" to={`/artist/${song.artistName}`}>
-                  <p className="text-ellipsis" style={{ fontSize: '14px' }}>
+                  <p className="text-ellipsis" style={{ fontSize: '14px', marginTop: '2%' }}>
                     {song.artistName}
                   </p>
                 </Link>

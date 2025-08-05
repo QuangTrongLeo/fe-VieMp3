@@ -23,6 +23,8 @@ const icons = {
   iconCirclePlus: 'fa-solid fa-circle-plus',
   iconImage: 'fas fa-image',
   iconClock: 'fas fa-clock',
+  iconUserPlus: 'fas fa-user-plus',
+  iconCheck: 'fas fa-check',
 };
 
 export default icons;
