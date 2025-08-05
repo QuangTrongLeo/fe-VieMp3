@@ -3,17 +3,22 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './ArtistDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
+import { audios } from '~/assets';
 
 const cx = classNames.bind(styles);
 
 function ArtistDetail() {
   const hotSongs = [
-    { name: 'Phía Sau Một Cô Gái', duration: '04:30', cover: '', artist: 'SOOBIN' },
-    { name: 'Yêu Thương Ngày Đó', duration: '04:23', cover: '', artist: 'SOOBIN' },
-    { name: 'Anh Đã Quen Với Cô Đơn', duration: '03:56', cover: '', artist: 'SOOBIN' },
-    { name: 'Giá Như', duration: '02:24', cover: '', artist: 'SOOBIN' },
-    { name: 'Tháng Năm', duration: '03:45', cover: '', artist: 'SOOBIN' },
-    { name: 'Sunset in the City', duration: '03:44', cover: '', artist: 'SOOBIN' },
+    { songName: 'Phía Sau Một Cô Gái', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Yêu Thương Ngày Đó', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Anh Đã Quen Với Cô Đơn', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Giá Như', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Tháng Năm', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
   ];
 
   const [isFollowed, setIsFollowed] = useState(false);
