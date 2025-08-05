@@ -1,84 +1,30 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayListSideBar.module.scss';
-import { Link } from 'react-router-dom';
 import icons from '~/assets/icons';
+import { audios } from '~/assets';
+import { Link } from 'react-router-dom';
+import SongItem from '~/components/Components/SongItem';
 
 const cx = classNames.bind(styles);
 
 const songs = [
+  { songId: '1', songName: 'Phía Sau Một Cô Gái', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '2', songName: 'Yêu Thương Ngày Đó', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
   {
-    songId: 1,
-    thumb: 'https://i.imgur.com/x1eX5xP.png',
-    songName: 'Vương Vấn (BLUE REMIX)',
-    artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
+    songId: '3',
+    songName: 'Anh Đã Quen Với Cô Đơn',
+    audio: audios.audioTungNgayYeuEm,
+    cover: '',
+    artistName: 'SOOBIN',
   },
-  {
-    songId: 2,
-    thumb: 'https://i.imgur.com/PeWajqF.png',
-    songName: 'Yêu Từ Đâu Mà Ra?',
-    artist: 'Lil Zpoet',
-  },
-  {
-    songId: 3,
-    thumb: 'https://i.imgur.com/bvOl6Fw.png',
-    songName: 'Mah Boo',
-    artist: 'Phạm Việt Thắng',
-  },
-  {
-    songId: 4,
-    thumb: 'https://i.imgur.com/Jg04IG2.png',
-    songName: 'Em Không Sai Chúng Ta Sai',
-    artist: 'ERIK',
-  },
-  {
-    songId: 5,
-    thumb: 'https://i.imgur.com/WczTHAx.png',
-    songName: 'Thích Thì Đến',
-    artist: 'Lê Bảo Bình',
-  },
-  {
-    songId: 6,
-    thumb: 'https://i.imgur.com/ZRUzKGo.png',
-    songName: 'Chạy Khỏi Thế Giới Này',
-    artist: 'Da LAB, Phương Ly',
-  },
-  {
-    songId: 7,
-    thumb: 'https://i.imgur.com/x1eX5xP.png',
-    songName: 'Vương Vấn (BLUE REMIX)',
-    artist: 'ZIN MEDIA, TVk, Hana Cẩm Tiên',
-  },
-  {
-    songId: 8,
-    thumb: 'https://i.imgur.com/PeWajqF.png',
-    songName: 'Yêu Từ Đâu Mà Ra?',
-    artist: 'Lil Zpoet',
-  },
-  {
-    songId: 9,
-    thumb: 'https://i.imgur.com/bvOl6Fw.png',
-    songName: 'Mah Boo',
-    artist: 'Phạm Việt Thắng',
-  },
-  {
-    songId: 10,
-    thumb: 'https://i.imgur.com/Jg04IG2.png',
-    songName: 'Em Không Sai Chúng Ta Sai',
-    artist: 'ERIK',
-  },
-  {
-    songId: 11,
-    thumb: 'https://i.imgur.com/WczTHAx.png',
-    songName: 'Thích Thì Đến',
-    artist: 'Lê Bảo Bình',
-  },
-  {
-    songId: 12,
-    thumb: 'https://i.imgur.com/ZRUzKGo.png',
-    songName: 'Chạy Khỏi Thế Giới Này',
-    artist: 'Da LAB, Phương Ly',
-  },
+  { songId: '4', songName: 'Giá Như', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '5', songName: 'Tháng Năm', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '6', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '7', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '8', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '9', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '10', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
 ];
 
 function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
@@ -115,17 +61,7 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
         </div>
 
         {/* Bài đang phát */}
-        <Link
-          className="p-2 sidebar-item d-flex align-items-center text-decoration-none text-white"
-          to="/"
-          style={{ borderRadius: '6px', backgroundColor: 'var(--primary-color)' }}
-        >
-          <img className={cx('playlist-sidebar-img')} src={songs[0].thumb} alt={songs[0].songName} />
-          <div className="d-flex flex-column align-items-start" style={{ minWidth: 0 }}>
-            <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{songs[0].songName}</span>
-            <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{songs[0].artist}</span>
-          </div>
-        </Link>
+        <SongItem song={songs[0]} />
 
         <h6 className="text-white mt-3 mb-2" style={{ margin: '0 0.5%' }}>
           Bài tiếp theo
@@ -135,18 +71,9 @@ function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar }) {
       {/* Danh sách tiếp theo */}
       <div className={cx('playlist-sidebar-scrollable')}>
         {songs.slice(1).map(song => (
-          <Link
-            key={song.songId}
-            className="p-2 sidebar-item d-flex align-items-center text-decoration-none text-white"
-            to="/"
-            style={{ borderRadius: '6px', transition: 'background 0.2s' }}
-          >
-            <img className={cx('playlist-sidebar-img')} src={song.thumb} alt={song.songName} />
-            <div className="d-flex flex-column align-items-start" style={{ minWidth: 0 }}>
-              <span className={cx('playlist-sidebar-song', 'fw-semibold', 'text-truncate')}>{song.songName}</span>
-              <span className={cx('playlist-sidebar-artist', 'text-truncate')}>{song.artist}</span>
-            </div>
-          </Link>
+          <div key={song.songId} className="mb-2">
+            <SongItem song={song} />
+          </div>
         ))}
       </div>
     </div>

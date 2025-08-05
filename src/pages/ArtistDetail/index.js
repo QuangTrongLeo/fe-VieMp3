@@ -10,16 +10,22 @@ const cx = classNames.bind(styles);
 
 function ArtistDetail() {
   const hotSongs = [
-    { songName: 'Phía Sau Một Cô Gái', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Yêu Thương Ngày Đó', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Anh Đã Quen Với Cô Đơn', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Giá Như', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Tháng Năm', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
-    { songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '1', songName: 'Phía Sau Một Cô Gái', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '2', songName: 'Yêu Thương Ngày Đó', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    {
+      songId: '3',
+      songName: 'Anh Đã Quen Với Cô Đơn',
+      audio: audios.audioTungNgayYeuEm,
+      cover: '',
+      artistName: 'SOOBIN',
+    },
+    { songId: '4', songName: 'Giá Như', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '5', songName: 'Tháng Năm', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '6', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '7', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '8', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '9', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+    { songId: '10', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
   ];
 
   const [isFollowed, setIsFollowed] = useState(false);
