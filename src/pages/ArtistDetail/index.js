@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './ArtistDetail.module.scss';
+import SongItem from '~/components/Components/SongItem';
 
 const cx = classNames.bind(styles);
 
@@ -63,29 +64,11 @@ function ArtistDetail() {
         <div className="col-md-8">
           <div className="d-flex justify-content-between align-items-center mb-2">
             <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
-            <a href="/" className={cx('see-all')}>
-              TẤT CẢ &gt;
-            </a>
           </div>
           <div className="row">
             {hotSongs.map((song, idx) => (
               <div className="col-md-6 mb-3" key={idx}>
-                <div className={cx('song-row', 'd-flex justify-content-between align-items-center')}>
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={song.cover || 'https://via.placeholder.com/40'}
-                      alt={song.name}
-                      className={cx('song-thumb', 'me-2')}
-                    />
-                    <div>
-                      <div className={cx('song-name')} title={song.name}>
-                        {song.name}
-                      </div>
-                      <div className={cx('song-artist')}>{song.artist}</div>
-                    </div>
-                  </div>
-                  <span className={cx('song-duration')}>{song.duration}</span>
-                </div>
+                <SongItem song={song} />
               </div>
             ))}
           </div>

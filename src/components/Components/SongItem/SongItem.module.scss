@@ -1,0 +1,50 @@
+.song-row {
+  background-color: #2a2a2a;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--black-color-light-2);
+  }
+
+  .song-cover {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+
+  .song-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .song-artist {
+    font-size: 0.75rem;
+    color: var(--grey-color);
+  }
+
+  .song-heart-icon {
+    color: var(--grey-color);
+    font-size: 1rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--white-color);
+    }
+
+    &.liked {
+      color: var(--primary-color); // màu khi được like
+    }
+  }
+
+  .song-duration {
+    font-size: 0.875rem;
+    color: var(--grey-color);
+  }
+}
