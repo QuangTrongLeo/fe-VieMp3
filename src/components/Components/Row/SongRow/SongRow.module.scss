@@ -35,7 +35,7 @@
   }
 
   .song-row-artists {
-    color: var(--white-darker-color);
+    color: var(--grey-color);
     font-size: 0.875rem;
     white-space: nowrap;
     overflow: hidden;
@@ -44,7 +44,7 @@
   }
 
   .song-row-album {
-    color: var(--white-darker-color);
+    color: var(--grey-color);
     font-size: 0.875rem;
     white-space: nowrap;
     overflow: hidden;
@@ -53,8 +53,12 @@
   }
 
   .song-row-favorite-icon {
-    color: var(--white-color);
+    color: var(--grey-color);
     transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--white-color);
+    }
 
     &.active {
       color: var(--primary-color);
