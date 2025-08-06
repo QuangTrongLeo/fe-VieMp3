@@ -1,45 +1,14 @@
 import React from 'react';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
-import audios from '~/assets/audios';
 import classNames from 'classnames/bind';
 import styles from './History.module.scss';
 import { SongRow } from '~/components/Components/Row';
+import { apiHistorySongs } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-const apiHistoryOfListenedSongs = [
-  {
-    songId: '1',
-    cover: 'https://link-image.com/song1.jpg',
-    songName: 'QUERRY',
-    artistName: 'QNT x TRUNG TRẦN ft RPT MCK',
-    albumName: 'QNT',
-    audio: audios.mp3Querry,
-    listenedAt: new Date('2025-07-30T19:58:00+07:00').getTime(),
-  },
-  {
-    songId: '2',
-    cover: 'https://link-image.com/song1.jpg',
-    songName: 'QUERRY',
-    artistName: 'QNT x TRUNG TRẦN ft RPT MCK',
-    albumName: 'Nà ná na na',
-    audio: audios.mp3Querry,
-    listenedAt: new Date('2025-07-30T19:56:20+07:00').getTime(),
-  },
-  {
-    songId: '3',
-    cover: 'https://link-image.com/song1.jpg',
-    songName: 'QUERRY',
-    artistName: 'QNT x TRUNG TRẦN ft RPT MCK',
-    albumName: 'Skibidi',
-    audio: audios.mp3Querry,
-    listenedAt: new Date('2025-07-30T19:59:30+07:00').getTime(),
-  },
-  // ... có thể thêm nhiều bài hơn
-];
-
-const sortedSongs = [...apiHistoryOfListenedSongs].sort((a, b) => b.listenedAt - a.listenedAt);
+const sortedSongs = [...apiHistorySongs].sort((a, b) => b.listenedAt - a.listenedAt);
 
 const renderItem = (song, index) => (
   <SongRow

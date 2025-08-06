@@ -4,7 +4,7 @@ import styles from './Genres.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { RectangleCard } from '~/components/Components/Card';
-import { apiGenres } from '~/api/apiURL';
+import apiGenres from '~/api/apiURL/apiGenres';
 
 const cx = classNames.bind(styles);
 
