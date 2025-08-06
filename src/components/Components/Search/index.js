@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Tippy from '@tippyjs/react/headless';
 import icons from '~/assets/icons';
 import { SearchRow } from '../Row';
+import { useNavigate } from 'react-router-dom';
 import LimitedList from '../LimitedList';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
@@ -13,6 +14,7 @@ const cx = classNames.bind(styles);
 function Search() {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
 
   // Ký tự trong form search
   const handleInputSearch = e => {
@@ -41,6 +43,37 @@ function Search() {
 
       setSearchResults(resultSearchs);
     }
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    const keyword = searchKeyword.trim().toLowerCase();
+
+    if (!keyword) return;
+
+    const matchedArtists = apiArtists.filter(artist => artist.artistName.toLowerCase().includes(keyword));
+
+    if (matchedArtists.length > 0) {
+      const artistName = matchedArtists[0].artistName;
+      navigate(`/artist/${encodeURIComponent(artistName)}`);
+      setSearchKeyword('');
+      return;
+    }
+
+    const matchedSongs = apiSongs.filter(
+      song => song.songName.toLowerCase().includes(keyword) || song.artistName.toLowerCase().includes(keyword)
+    );
+
+    if (matchedSongs.length > 0) {
+      const songName = matchedSongs[0].songName;
+      navigate(`/song/${encodeURIComponent(songName)}`);
+      setSearchKeyword('');
+      return;
+    }
+
+    // Nếu không khớp gì cũng reset
+    setSearchKeyword('');
   };
 
   // Render ra các dòng của Tippy Search
@@ -78,7 +111,7 @@ function Search() {
         </div>
       )}
     >
-      <form className={cx('input-group', 'search-form', 'w-50')}>
+      <form onSubmit={handleSubmit} className={cx('input-group', 'search-form', 'w-50')}>
         <input
           type="search"
           className="form-control"
@@ -87,7 +120,7 @@ function Search() {
           value={searchKeyword}
           onChange={handleInputSearch}
         />
-        <button className={cx('btn', 'btn-outline-custom')} type="button">
+        <button onClick={handleSubmit} className={cx('btn', 'btn-outline-custom')} type="button">
           <i className={icons.iconSearch}></i>
         </button>
       </form>
