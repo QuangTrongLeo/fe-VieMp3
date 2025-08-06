@@ -151,6 +151,26 @@ const apiNewSongs = [
   },
 ];
 
+// HOT SONGS OF ARRTIST
+const apiHotSongsOfArtist = [
+  { songId: '1', songName: 'Phía Sau Một Cô Gái', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '2', songName: 'Yêu Thương Ngày Đó', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  {
+    songId: '3',
+    songName: 'Anh Đã Quen Với Cô Đơn Trinhf là gì mà rình ai tắm',
+    audio: audios.audioTungNgayYeuEm,
+    cover: '',
+    artistName: 'SOOBIN',
+  },
+  { songId: '4', songName: 'Giá Như', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '5', songName: 'Tháng Năm', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '6', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '7', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '8', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '9', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+  { songId: '10', songName: 'Sunset in the City', audio: audios.audioTungNgayYeuEm, cover: '', artistName: 'SOOBIN' },
+];
+
 // FAVORITE SONGS
 const apiFavoriteSongs = [
   {
@@ -364,4 +384,12 @@ const apiHistorySongs = [
   // ... có thể thêm nhiều bài hơn
 ];
 
-export { apiSongs, apiNewSongs, apiFavoriteSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs, apiHistorySongs };
+export {
+  apiSongs,
+  apiNewSongs,
+  apiHotSongsOfArtist,
+  apiFavoriteSongs,
+  apiFavoriteSongsOfTheWeek,
+  apiSuitableSongs,
+  apiHistorySongs,
+};

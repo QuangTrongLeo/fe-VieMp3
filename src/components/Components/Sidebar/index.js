@@ -11,7 +11,7 @@ const items = [
   { label: 'Thể loại nhạc', iconClass: icons.iconLayerGroup, href: '/genres' },
   { label: 'Nghe gần đây', iconClass: icons.iconHistory, href: '/history' },
   { label: 'Thư viện', iconClass: icons.iconBook, href: '/library' },
-  { label: 'PlayList', iconClass: icons.iconList, href: '/playlist' },
+  { label: 'PlayList', iconClass: icons.iconList, href: '/playlists' },
   { label: 'Bài hát yêu thích', iconClass: icons.iconHeart, href: '/favorite-songs' },
   { label: 'Album yêu thích', iconClass: icons.iconCompactDisc, href: '/favorite-albums' },
   { label: 'Nghệ sĩ yêu thích', iconClass: icons.iconStar, href: '/favorite-artists' },

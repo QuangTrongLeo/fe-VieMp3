@@ -29,4 +29,11 @@ const apiPlayLists = [
   },
 ];
 
-export default apiPlayLists;
+const apiPlayListInfo = {
+  playlistId: '5',
+  playlistName: 'QNT',
+  cover: 'https://i.scdn.co/image/ab6761610000e5ebc29f15a5b9b46fed41a0f2af',
+  totalSongs: 10,
+};
+
+export { apiPlayLists, apiPlayListInfo };

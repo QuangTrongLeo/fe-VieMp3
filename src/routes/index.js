@@ -21,6 +21,7 @@ import {
 
 // artistRoutes
 import { Upload, MySongs, MyAlbums } from '~/pages';
+import PlayListDetail from '~/pages/PlayListDetail';
 
 const publishRoutes = [
   { path: config.routes.home, component: Home },
@@ -37,9 +38,10 @@ const userRoutes = [
   { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
   { path: `${config.routes.song}/:songName`, component: SongDetail },
   { path: `${config.routes.lyris}/:lyrisName`, component: LyrisDetail },
+  { path: `${config.routes.playlist}/:playlistName`, component: PlayListDetail },
   { path: config.routes.library, component: Library },
   { path: config.routes.profile, component: Profile },
-  { path: config.routes.playlist, component: PlayList },
+  { path: config.routes.playlists, component: PlayList },
   { path: config.routes.favoriteSongs, component: FavoriteSongs },
   { path: config.routes.favoriteAlbums, component: FavoriteAlbums },
   { path: config.routes.favoriteArtists, component: FavoriteArtists },

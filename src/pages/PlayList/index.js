@@ -4,7 +4,7 @@ import icons from '~/assets/icons';
 import styles from './PlayList.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import apiPlayLists from '~/api/apiURL/apiPlayLists';
+import { apiPlayLists } from '~/api/apiURL/apiPlayLists';
 
 const cx = classNames.bind(styles);
 

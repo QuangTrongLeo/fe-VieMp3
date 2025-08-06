@@ -8,7 +8,7 @@ import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiFavoriteSongs } from '~/api/apiURL/apiSongs';
 import { apiFavoriteAlbums } from '~/api/apiURL/apiAlbums';
-import apiPlayLists from '~/api/apiURL/apiPlayLists';
+import { apiPlayLists } from '~/api/apiURL/apiPlayLists';
 
 const cx = classNames.bind(styles);
 
