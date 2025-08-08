@@ -84,14 +84,8 @@ function Login() {
                   {/* LOGIN BY GG */}
                   <div className={cx('text-center')}>
                     <p>hoặc đăng nhập với</p>
-
-                    <button
-                      type="button"
-                      data-mdb-button-init
-                      data-mdb-ripple-init
-                      className={cx('btn', 'btn-link', 'btn-floating', 'mx-1')}
-                    >
-                      <i className={cx('fab', 'fa-google')} style={{ fontSize: '0.9rem' }}></i>
+                    <button className={cx('google-btn')}>
+                      <i className={cx('fab', 'fa-google')}></i>
                     </button>
                   </div>
                 </div>
