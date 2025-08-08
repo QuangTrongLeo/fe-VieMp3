@@ -1,5 +1,6 @@
 const routes = {
-  album: 'album',
+  album: '/album',
+  alnums: '/albums',
   artist: '/artist',
   favoriteAlbums: '/favorite-albums',
   favoriteArtists: '/favorite-artists',
@@ -14,7 +15,7 @@ const routes = {
   myAlbums: '/my-albums',
   mySongs: '/my-songs',
   otp: '/otp',
-  playlist: 'playlist',
+  playlist: '/playlist',
   playlists: '/playlists',
   profile: '/profile',
   register: '/register',

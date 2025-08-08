@@ -4,7 +4,7 @@ import { SecondLayout } from '~/layouts';
 import config from '~/config';
 
 // publishRoutes
-import { Home, Genres, History, Login, Register, Otp, Searched, GenreDetail } from '~/pages';
+import { Home, Genres, History, Login, Register, Otp, Searched, GenreDetail, AlbumDetail } from '~/pages';
 
 // userRoutes
 import {
@@ -26,6 +26,7 @@ import PlayListDetail from '~/pages/PlayListDetail';
 const publishRoutes = [
   { path: config.routes.home, component: Home },
   { path: `${config.routes.genre}/:genreName`, component: GenreDetail },
+  { path: `${config.routes.album}/:albumName`, component: AlbumDetail },
   { path: config.routes.genres, component: Genres },
   { path: config.routes.history, component: History },
   { path: config.routes.login, component: Login, layout: SecondLayout },
