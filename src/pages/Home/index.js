@@ -26,7 +26,7 @@ function sortDesc(arr, field, isDate = false) {
 
 function Home() {
   const sortedNewSongs = sortDesc(apiSongs, 'songId');
-  const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'likesOfWeek');
+  const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
   const sortedTrendingArtists = sortDesc(apiArtists, 'followers');
   const sortedHotAlbums = sortDesc(apiAlbums, 'favorites');
   const sortedFavoriteArtists = sortDesc(apiFavoriteArtists, 'followedAt', true);

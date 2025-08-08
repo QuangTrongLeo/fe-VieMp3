@@ -8,7 +8,7 @@ import { apiFavoriteSongs } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-const sortedSongs = [...apiFavoriteSongs].sort((a, b) => b.listenedAt - a.listenedAt);
+const sortedFavoriteSongs = [...apiFavoriteSongs].sort((a, b) => new Date(b.favotitedAt) - new Date(a.favotitedAt));
 
 const renderItem = (song, index) => (
   <SongRow
@@ -47,7 +47,7 @@ function FavoriteSongs() {
 
       {/* Danh sách bài hát giới hạn */}
       <LimitedList
-        items={sortedSongs}
+        items={sortedFavoriteSongs}
         renderItem={renderItem}
         limit={8}
         showAllText="Hiện tất cả bài hát"

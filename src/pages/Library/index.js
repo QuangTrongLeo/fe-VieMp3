@@ -12,8 +12,8 @@ import { apiPlayLists } from '~/api/apiURL/apiPlayLists';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => b.playlistId - a.playlistId);
-const sortedSongs = [...apiFavoriteSongs].sort((a, b) => b.listenedAt - a.listenedAt);
+const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
+const sortedFavoriteSongs = [...apiFavoriteSongs].sort((a, b) => new Date(b.favotitedAt) - new Date(a.favotitedAt));
 
 const renderItem = (song, index) => (
   <SongRow
@@ -149,7 +149,7 @@ function Library() {
             </div>
 
             <LimitedList
-              items={sortedSongs}
+              items={sortedFavoriteSongs}
               renderItem={renderItem}
               limit={8}
               showAllText="Hiện tất cả bài hát"
