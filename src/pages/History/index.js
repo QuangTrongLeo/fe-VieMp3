@@ -4,11 +4,11 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './History.module.scss';
 import { SongRow } from '~/components/Components/Row';
-import { apiHistorySongs } from '~/api/apiURL/apiSongs';
+import { apiListendSongs } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-const sortedSongs = [...apiHistorySongs].sort((a, b) => b.listenedAt - a.listenedAt);
+const sortedSongs = [...apiListendSongs].sort((a, b) => new Date(b.listenedAt) - new Date(a.listenedAt));
 
 const renderItem = (song, index) => (
   <SongRow
