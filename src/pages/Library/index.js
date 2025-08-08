@@ -28,6 +28,30 @@ const renderItem = (song, index) => (
 
 function Library() {
   const [activeTab, setActiveTab] = useState('songs');
+  const [isOpen, setIsOpen] = useState(false);
+  const [playlistName, setPlaylistName] = useState('');
+  const [coverPreview, setCoverPreview] = useState('');
+  const [coverFile, setCoverFile] = useState(null);
+
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverFile(file);
+      setCoverPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log({ playlistName, coverFile });
+    setIsOpen(false);
+    setPlaylistName('');
+    setCoverFile(null);
+    setCoverPreview('');
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -40,7 +64,7 @@ function Library() {
       <section className={cx('section-block')}>
         <h3>Playlist của bạn</h3>
         <div className="mb-3">
-          <CreateCard content="Tạo playlist mới" />
+          <CreateCard content="Tạo playlist mới" onClick={() => setIsOpen(true)} />
         </div>
         <HorizontalScroll>
           {apiPlayLists.map(playlist => (
@@ -52,6 +76,45 @@ function Library() {
             />
           ))}
         </HorizontalScroll>
+        {isOpen && (
+          <div className={cx('modal-overlay')}>
+            <div className={cx('modal')}>
+              <h4 className="text-center mb-3">Tạo Playlist mới</h4>
+
+              <div className="text-center mb-3">
+                <label htmlFor="coverInput" style={{ cursor: 'pointer' }}>
+                  {coverPreview ? (
+                    <img src={coverPreview} alt="Preview" className={cx('preview-img')} />
+                  ) : (
+                    <div className={cx('preview-placeholder')}>
+                      <i className="fas fa-image fa-2x"></i>
+                      <p>Chọn ảnh bìa</p>
+                    </div>
+                  )}
+                </label>
+
+                <input type="file" id="coverInput" accept="image/*" hidden onChange={handleImageChange} />
+              </div>
+
+              <input
+                type="text"
+                className="form-control mb-3"
+                placeholder="Nhập tên playlist"
+                value={playlistName}
+                onChange={e => setPlaylistName(e.target.value)}
+              />
+
+              <div className="d-flex justify-content-end gap-2">
+                <button className="btn btn-secondary" onClick={handleCloseModal}>
+                  Hủy
+                </button>
+                <button className={cx('custom-btn')} onClick={handleSubmit}>
+                  Lưu
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* SONGS & ALBUMS FAVORITE */}

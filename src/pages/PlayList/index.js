@@ -23,7 +23,7 @@ function PlayList() {
   };
 
   const handleSubmit = () => {
-    console.log({ playlistName, coverFile }); // 👈 Bạn có thể xử lý API tại đây
+    console.log({ playlistName, coverFile });
     setIsOpen(false);
     setPlaylistName('');
     setCoverFile(null);
