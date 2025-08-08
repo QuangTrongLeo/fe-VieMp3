@@ -10,7 +10,7 @@ import { apiHotSongsOfArtist } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteAlbums = [...apiAlbumsOfArtist].sort((a, b) => b.playlistId - a.playlistId);
+const sortedAlbumsOfArtist = [...apiAlbumsOfArtist].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
 function ArtistDetail() {
   const [isFollowed, setIsFollowed] = useState(false);
@@ -93,7 +93,7 @@ function ArtistDetail() {
             {/* ALBUMS */}
             <h5 className={cx('section-title', 'mb-4')}>Albums của buitruonglinh</h5>
             <LimitedList
-              items={sortedFavoriteAlbums}
+              items={sortedAlbumsOfArtist}
               limit={8}
               renderItem={album => (
                 <div key={album.albumId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">

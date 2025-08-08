@@ -83,23 +83,28 @@ const apiAlbumsOfArtist = [
     albumName: 'Sơn Tùng - MTP',
     cover:
       'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSStpZEMzpTrUEK0QZHAG48NV3sMuoCO0ReV2JEIY7ot7KnICpz7shfmmJFKmNF3Og1tN9JWWJqD6m3vKg4LB_U_Sqy0TTpQdKmMO67ehT1JQ',
+    createdAt: '2025-08-08T22:30:00+07:00',
   },
   {
     albumId: '2',
     albumName: 'Mono',
+    createdAt: '2025-08-08T22:31:00+07:00',
   },
   {
     albumId: '3',
     albumName: 'Hiếu Thứ 2',
+    createdAt: '2025-08-08T22:32:00+07:00',
   },
   {
     albumId: '4',
     albumName: 'Bình Gold',
+    createdAt: '2025-08-08T22:33:00+07:00',
   },
   {
     albumId: '5',
     albumName: 'QNT',
     cover: 'https://i.scdn.co/image/ab6761610000e5ebc29f15a5b9b46fed41a0f2af',
+    createdAt: '2025-08-08T22:34:00+07:00',
   },
 ];
 

@@ -25,7 +25,7 @@ function PlayListDetail() {
       {/* Danh sách bài hát */}
       <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
       <LimitedList
-        items={apiHotSongsOfArtist}
+        items={apiHotSongsOfArtist.sort((a, b) => b.songId - a.songId)}
         limit={8}
         wrapInRow={true}
         renderItem={(song, idx) => (

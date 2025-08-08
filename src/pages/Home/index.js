@@ -100,14 +100,16 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Nghệ sĩ yêu thích của bạn</h3>
         <HorizontalScroll>
-          {apiYourFavoriteArtists.map(artist => (
-            <CircleCard
-              key={artist.artistId}
-              content={artist.artistName}
-              cover={artist.avatar}
-              href={`/artist/${artist.artistName}`}
-            />
-          ))}
+          {apiYourFavoriteArtists
+            .sort((a, b) => b.songId - a.songId)
+            .map(artist => (
+              <CircleCard
+                key={artist.artistId}
+                content={artist.artistName}
+                cover={artist.avatar}
+                href={`/artist/${artist.artistName}`}
+              />
+            ))}
         </HorizontalScroll>
       </section>
     </div>
