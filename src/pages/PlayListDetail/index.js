@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayListDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';

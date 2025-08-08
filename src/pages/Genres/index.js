@@ -25,7 +25,7 @@ function Genres() {
               <RectangleCard
                 content={genre.genreName}
                 desc={genre.genreDesc}
-                href={`/genres/${genre.genreName.toLowerCase()}`}
+                href={`/genre/${genre.genreName.toLowerCase()}`}
                 icon={<i className={`${icons.iconMusic} fa-3x`}></i>}
               />
             </div>

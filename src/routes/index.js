@@ -25,6 +25,7 @@ import PlayListDetail from '~/pages/PlayListDetail';
 
 const publishRoutes = [
   { path: config.routes.home, component: Home },
+  { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
   { path: `${config.routes.genre}/:genreName`, component: GenreDetail },
   { path: `${config.routes.album}/:albumName`, component: AlbumDetail },
   { path: config.routes.genres, component: Genres },
@@ -36,7 +37,6 @@ const publishRoutes = [
 ];
 
 const userRoutes = [
-  { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
   { path: `${config.routes.song}/:songName`, component: SongDetail },
   { path: `${config.routes.lyris}/:lyrisName`, component: LyrisDetail },
   { path: `${config.routes.playlist}/:playlistName`, component: PlayListDetail },
