@@ -4,7 +4,7 @@ import icons from '~/assets/icons';
 import styles from './FavoriteArtists.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiYourFavoriteArtists } from '~/api/apiURL/apiArtists';
+import { apiFavoriteArtists } from '~/api/apiURL/apiArtists';
 
 const cx = classNames.bind(styles);
 
@@ -18,7 +18,7 @@ function FavoriteArtists() {
 
       <section className={cx('section-block')}>
         <LimitedList
-          items={apiYourFavoriteArtists}
+          items={apiFavoriteArtists}
           limit={8}
           renderItem={artist => (
             <div key={artist.artistId} className="col-6 col-sm-4 col-md-3 mb-3 d-flex justify-content-center">

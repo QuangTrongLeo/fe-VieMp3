@@ -8,7 +8,7 @@ import { apiFavoriteAlbums } from '~/api/apiURL/apiAlbums';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => b.playlistId - a.playlistId);
+const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
 
 function FavoriteAlbums() {
   return (

@@ -3,13 +3,34 @@ import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
-import { apiNewSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/apiURL/apiSongs';
-import { apiFavoriteArtists, apiYourFavoriteArtists } from '~/api/apiURL/apiArtists';
-import { apiHotAlbums } from '~/api/apiURL/apiAlbums';
+import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/apiURL/apiSongs';
+import { apiArtists, apiFavoriteArtists } from '~/api/apiURL/apiArtists';
+import { apiAlbums } from '~/api/apiURL/apiAlbums';
 
 const cx = classNames.bind(styles);
 
+// const sortedNewSongs = [...apiSongs].sort((a, b) => b.songId - a.songId);
+// const sortedFavoriteSongsOfTheWeek = [...apiFavoriteSongsOfTheWeek].sort((a, b) => b.likesOfWeek - a.likesOfWeek);
+// const sortedTrendingArtists = [...apiArtists].sort((a, b) => b.followers - a.followers);
+// const sortedHotAlbums = [...apiAlbums].sort((a, b) => b.favorites - a.favorites);
+// const sortedFavoriteArtists = [...apiFavoriteArtists].sort((a, b) => new Date(b.followedAt) - new Date(a.followedAt));
+
+function sortDesc(arr, field, isDate = false) {
+  return [...arr].sort((a, b) => {
+    if (isDate) {
+      return new Date(b[field]) - new Date(a[field]);
+    }
+    return b[field] - a[field];
+  });
+}
+
 function Home() {
+  const sortedNewSongs = sortDesc(apiSongs, 'songId');
+  const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'likesOfWeek');
+  const sortedTrendingArtists = sortDesc(apiArtists, 'followers');
+  const sortedHotAlbums = sortDesc(apiAlbums, 'favorites');
+  const sortedFavoriteArtists = sortDesc(apiFavoriteArtists, 'followedAt', true);
+
   return (
     <div className={cx('home-wrapper')}>
       <h1 className="text-center">VieMp3 - Nhạc dành cho người Việt</h1>
@@ -18,18 +39,15 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Bài hát mới ra</h3>
         <HorizontalScroll>
-          {apiNewSongs
-            .sort((a, b) => b.songId - a.songId)
-            .slice(0, 10)
-            .map(song => (
-              <RectangleCard
-                key={song.songId}
-                content={song.songName}
-                desc={song.artistName}
-                cover={song.cover}
-                href={`/song/${song.songName}`}
-              />
-            ))}
+          {sortedNewSongs.slice(0, 10).map(song => (
+            <RectangleCard
+              key={song.songId}
+              content={song.songName}
+              desc={song.artistName}
+              cover={song.cover}
+              href={`/song/${song.songName}`}
+            />
+          ))}
         </HorizontalScroll>
       </section>
 
@@ -37,7 +55,7 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Top bài hát yêu thích của tuần</h3>
         <HorizontalScroll>
-          {apiFavoriteSongsOfTheWeek.map(song => (
+          {sortedFavoriteSongsOfTheWeek.map(song => (
             <SquareCard
               key={song.songId}
               content={song.songName}
@@ -49,11 +67,11 @@ function Home() {
         </HorizontalScroll>
       </section>
 
-      {/* FAVORITE ARTISTS */}
+      {/* TRENDING ARTISTS */}
       <section className={cx('section-block')}>
         <h3>Nghệ sĩ phổ biến</h3>
         <HorizontalScroll>
-          {apiFavoriteArtists.map(artist => (
+          {sortedTrendingArtists.map(artist => (
             <CircleCard
               key={artist.artistId}
               content={artist.artistName}
@@ -68,13 +86,13 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Album hot</h3>
         <HorizontalScroll>
-          {apiHotAlbums.map(album => (
+          {sortedHotAlbums.map(album => (
             <SquareCard
               key={album.albumId}
               content={album.albumName}
               desc={album.artistName}
               cover={album.cover}
-              href={`/song/${album.albumName}`}
+              href={`/album/${album.albumName}`}
             />
           ))}
         </HorizontalScroll>
@@ -100,16 +118,14 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Nghệ sĩ yêu thích của bạn</h3>
         <HorizontalScroll>
-          {apiYourFavoriteArtists
-            .sort((a, b) => b.songId - a.songId)
-            .map(artist => (
-              <CircleCard
-                key={artist.artistId}
-                content={artist.artistName}
-                cover={artist.avatar}
-                href={`/artist/${artist.artistName}`}
-              />
-            ))}
+          {sortedFavoriteArtists.map(artist => (
+            <CircleCard
+              key={artist.artistId}
+              content={artist.artistName}
+              cover={artist.avatar}
+              href={`/artist/${artist.artistName}`}
+            />
+          ))}
         </HorizontalScroll>
       </section>
     </div>
