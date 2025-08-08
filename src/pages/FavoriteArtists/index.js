@@ -8,6 +8,8 @@ import { apiFavoriteArtists } from '~/api/apiURL/apiArtists';
 
 const cx = classNames.bind(styles);
 
+const sortedFavoriteArtists = [...apiFavoriteArtists].sort((a, b) => new Date(b.followedAt) - new Date(a.followedAt));
+
 function FavoriteArtists() {
   return (
     <>
@@ -18,7 +20,7 @@ function FavoriteArtists() {
 
       <section className={cx('section-block')}>
         <LimitedList
-          items={apiFavoriteArtists}
+          items={sortedFavoriteArtists}
           limit={8}
           renderItem={artist => (
             <div key={artist.artistId} className="col-6 col-sm-4 col-md-3 mb-3 d-flex justify-content-center">
