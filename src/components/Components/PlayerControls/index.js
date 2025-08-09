@@ -26,6 +26,8 @@ function PlayerControls({
   formatTimeBar,
   handleClickTimeBar,
   setDurationAudio,
+  setCurrentTime,
+  setProgressTime,
   onEndedAudio,
 }) {
   const handleLoadedMetadata = () => {
@@ -40,7 +42,17 @@ function PlayerControls({
   return (
     <>
       {/* Audio element */}
-      <audio ref={audioRef} src={song.audio} onLoadedMetadata={handleLoadedMetadata} onEnded={onEndedAudio} />
+      <audio
+        ref={audioRef}
+        src={song.audio}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={onEndedAudio}
+        onTimeUpdate={e => {
+          const audio = e.target;
+          setCurrentTime(audio.currentTime);
+          setProgressTime((audio.currentTime / audio.duration) * 100);
+        }}
+      />
 
       {/* Control buttons */}
       <div className="d-flex" style={{ height: '100%' }}>

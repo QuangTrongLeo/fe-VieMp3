@@ -1,6 +1,6 @@
 import { Dropdown, initMDB } from 'mdb-ui-kit';
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import icons from '~/assets/icons';
 import * as bootstrap from 'bootstrap';
 import './SongPlayerUnder.scss';
@@ -11,7 +11,6 @@ initMDB({ Dropdown });
 
 function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePlayListSideBar }) {
   const { songName } = useParams();
-  const location = useLocation();
 
   const timeRef = useRef(null);
 
@@ -25,7 +24,6 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
   const [mode, setMode] = useState(null);
   const [flashPrev, setFlashPrev] = useState(false);
   const [flashNext, setFlashNext] = useState(false);
-  // const [flashVolume, setFlashVolume] = useState(false);
   const [flashClose, setFlashClose] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [likedVisible, setLikedVisible] = useState(false);
@@ -61,29 +59,22 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
 
   ////////// USEEFFECT //////////
   // Tooltip init (chỉ chạy 1 lần khi component mount)
+  // Init tooltip (chạy 1 lần)
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-
     const tooltipList = [...tooltipTriggerList].map(el => {
       const tooltip = new bootstrap.Tooltip(el, {
         placement: 'top',
         fallbackPlacements: [],
         delay: { show: 0, hide: 0 },
       });
-
-      // Khi rời chuột khỏi button, ép tooltip ẩn
-      el.addEventListener('mouseleave', () => {
-        tooltip.hide();
-      });
-
+      el.addEventListener('mouseleave', () => tooltip.hide());
       return tooltip;
     });
-
-    return () => {
-      tooltipList.forEach(t => t.dispose());
-    };
+    return () => tooltipList.forEach(t => t.dispose());
   }, []);
 
+  // Cập nhật nội dung tooltip khi play/pause thay đổi
   useEffect(() => {
     const el = document.querySelector('.play-pause-btn');
     if (!el) return;
@@ -94,74 +85,38 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
     }
   }, [isPaused]);
 
-  // CẬP NHẬT THỜI GIAN HIỆN TẠI CỦA BÀI HÁT
+  // Cập nhật progress khi currentTime thay đổi
   useEffect(() => {
-    let interval = null;
-
-    if (!isPaused) {
-      interval = setInterval(() => {
-        setCurrentTime(prev => {
-          if (prev >= durationAudio) {
-            clearInterval(interval);
-            return durationAudio;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
-  //THỜI GIAN THANH FILL CỦA NHẠC
-  useEffect(() => {
-    setProgressTime((currentTime / durationAudio) * 100);
+    setProgressTime((currentTime / durationAudio) * 100 || 0);
   }, [currentTime, durationAudio]);
 
-  // PHÁT NHẠC
+  // Lấy bài hát từ URL
+  useEffect(() => {
+    if (!songName) return;
+    const foundSong = apiSongs.find(song => song.songName.toLowerCase() === decodeURIComponent(songName).toLowerCase());
+    setCurrentSong(foundSong || null);
+  }, [songName]);
+
+  // Xử lý khi đổi bài hoặc trạng thái phát thay đổi
   useEffect(() => {
     if (!audioRef.current) return;
 
-    if (isPaused) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch(err => {
-        console.warn('Audio play failed:', err);
-      });
-    }
-  }, [isPaused]);
-
-  // BÀI HÁT HIỆN TẠI
-  useEffect(() => {
-    if (songName) {
-      // Tìm bài khớp với songName trong URL
-      const foundSong = apiSongs.find(
-        song => song.songName.toLowerCase() === decodeURIComponent(songName).toLowerCase()
-      );
-      if (foundSong) {
-        setCurrentSong(foundSong);
-      } else {
-        setCurrentSong(null);
-      }
-    } else {
-      // Không có songName param → không đổi bài, hoặc bạn có thể set null nếu muốn
-      // setCurrentSong(null);
-    }
-  }, [songName]);
-
-  useEffect(() => {
-    if (currentSong) {
-      setClosedSongPlayerUnder(false);
-    } else {
+    if (!currentSong) {
       setClosedSongPlayerUnder(true);
+      return;
     }
-  }, [currentSong]);
 
-  useEffect(() => {
-    if (songName) {
-      setClosedSongPlayerUnder(false);
-    }
-  }, [songName]);
+    setClosedSongPlayerUnder(false);
+
+    // Khi đổi bài -> auto play
+    setIsPaused(false); // <-- đặt lại trạng thái
+    const playAfterLoad = () => {
+      audioRef.current.currentTime = 0; // reset thời gian về 0
+      audioRef.current.play().catch(err => console.warn('Audio auto-play failed:', err));
+      audioRef.current.removeEventListener('loadedmetadata', playAfterLoad);
+    };
+    audioRef.current.addEventListener('loadedmetadata', playAfterLoad);
+  }, [currentSong]);
 
   if (!currentSong) {
     // Không render player khi chưa có bài
@@ -279,6 +234,8 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
                 formatTimeBar={formatTimeBar}
                 handleClickTimeBar={handleClickTimeBar}
                 setDurationAudio={setDurationAudio}
+                setCurrentTime={setCurrentTime}
+                setProgressTime={setProgressTime}
                 onEndedAudio={handleAudioEnded}
               />
             </div>
