@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function RectangleCard({ content, desc, cover, href, icon }) {
+function RectangleCard({ content, desc, createdAt, cover, href, icon }) {
   return (
     <Link to={href} className={cx('rectangle-card')}>
       <div className={cx('rectangle-cover-container')}>
@@ -19,6 +19,12 @@ function RectangleCard({ content, desc, cover, href, icon }) {
       <div className={cx('rectangle-info')}>
         <span className={cx('rectangle-content')}>{content}</span>
         <span className={cx('rectangle-desc')}>{desc}</span>
+
+        {createdAt && (
+          <span className={cx('rectangle-createdAt')}>
+            Phát hành: {new Date(createdAt).toLocaleDateString('vi-VN')}
+          </span>
+        )}
       </div>
     </Link>
   );

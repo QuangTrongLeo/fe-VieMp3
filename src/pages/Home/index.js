@@ -25,7 +25,7 @@ function sortDesc(arr, field, isDate = false) {
 }
 
 function Home() {
-  const sortedNewSongs = sortDesc(apiSongs, 'songId');
+  const sortedNewSongs = sortDesc(apiSongs, 'createdAt');
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
   const sortedTrendingArtists = sortDesc(apiArtists, 'followers');
   const sortedHotAlbums = sortDesc(apiAlbums, 'favorites');
@@ -39,11 +39,12 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Bài hát mới ra</h3>
         <HorizontalScroll>
-          {sortedNewSongs.slice(0, 10).map(song => (
+          {sortedNewSongs.slice(0, 18).map(song => (
             <RectangleCard
               key={song.songId}
               content={song.songName}
               desc={song.artistName}
+              createdAt={song.createdAt}
               cover={song.cover}
               href={`/song/${song.songName}`}
             />

@@ -50,8 +50,8 @@ function SongDetail() {
           />
           <h4 className={cx('song-name', 'mt-3')}>{currentSong.songName}</h4>
           <p className={cx('artist')}>{currentSong.artistName}</p>
-          <p className={cx('update')}>Cập nhật: {new Date(currentSong.createAt).toLocaleDateString('vi-VN')}</p>
-          <p className={cx('liked')}>{currentSong.favorites || 0} người yêu thích</p>
+          <p className={cx('createdAt')}>Phát hành: {new Date(currentSong.createdAt).toLocaleDateString('vi-VN')}</p>
+          <p className={cx('favorited')}>{(currentSong.favorites || 0).toLocaleString('vi-VN')} người yêu thích</p>
         </div>
 
         {/* Danh sách bài hát liên quan */}
