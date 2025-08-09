@@ -3,21 +3,16 @@ import classNames from 'classnames/bind';
 import styles from './PlayListSideBar.module.scss';
 import icons from '~/assets/icons';
 import SongItem from '~/components/Components/SongItem';
-import { apiSongs } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar, currentSong }) {
+function PlayListSideBar({ isShowPlayListSideBar, closePlayListSideBar, currentSong, nextSongs }) {
   const [flashClose, setFlashClose] = useState(false);
 
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 200);
   };
-
-  const nextSongs = apiSongs
-    .filter(song => song.artistName === currentSong?.artistName && song.songName !== currentSong?.songName)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <div

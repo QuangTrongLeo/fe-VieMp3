@@ -15,6 +15,7 @@ function SongPlayerUnder({
   closePlayListSideBar,
   currentSong,
   setCurrentSong,
+  onEndedAudio,
 }) {
   const { songName } = useParams();
 
@@ -159,7 +160,9 @@ function SongPlayerUnder({
       setCurrentTime(0);
       setProgressTime(0);
     } else {
-      setIsPaused(true); // Dừng nhạc nếu không repeat
+      if (typeof onEndedAudio === 'function') {
+        onEndedAudio(); // Nhảy sang bài tiếp theo
+      }
     }
   };
 
