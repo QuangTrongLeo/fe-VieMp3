@@ -48,7 +48,7 @@ function SongDetail() {
             alt={currentSong.artistName}
             className={cx('img', 'img-fluid', 'rounded', 'shadow', 'song-cover')}
           />
-          <h4 className={cx('song-name', 'mt-3')}>{currentSong.songName}</h4>
+          <h3 className={cx('song-name', 'mt-3')}>{currentSong.songName}</h3>
           <p className={cx('artist')}>{currentSong.artistName}</p>
           <p className={cx('createdAt')}>Phát hành: {new Date(currentSong.createdAt).toLocaleDateString('vi-VN')}</p>
           <p className={cx('favorited')}>{(currentSong.favorites || 0).toLocaleString('vi-VN')} người yêu thích</p>
@@ -56,7 +56,7 @@ function SongDetail() {
 
         {/* Danh sách bài hát liên quan */}
         <div className="col-12 col-md-8">
-          <h4 className={cx('subtitle', 'mb-3')}>Bài hát khác của {currentSong.artistName}</h4>
+          <h5 className={cx('subtitle', 'mb-3', 'text-center')}>Bài hát khác của "{currentSong.artistName}"</h5>
 
           {relatedSongs.length > 0 ? (
             <>

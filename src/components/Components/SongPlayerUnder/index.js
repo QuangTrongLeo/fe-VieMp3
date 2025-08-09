@@ -95,6 +95,20 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
     if (!songName) return;
     const foundSong = apiSongs.find(song => song.songName.toLowerCase() === decodeURIComponent(songName).toLowerCase());
     setCurrentSong(foundSong || null);
+    if (foundSong) {
+      setCurrentSong(foundSong);
+      setClosedSongPlayerUnder(false);
+
+      // Nếu audio đã sẵn sàng thì play
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(err => console.warn('Không thể tự phát:', err));
+        }
+      }, 0);
+
+      setIsPaused(false);
+    }
   }, [songName]);
 
   // Xử lý khi đổi bài hoặc trạng thái phát thay đổi
@@ -159,7 +173,14 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
 
   const handleClosePlayerUnder = () => {
     flashButton(setFlashClose);
-    if (!isPaused) setIsPaused(true);
+
+    // Dừng audio thực sự
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    setIsPaused(true); // cập nhật state
     setClosedSongPlayerUnder(true);
     closePlayListSideBar();
   };
