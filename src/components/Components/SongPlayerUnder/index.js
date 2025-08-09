@@ -9,7 +9,13 @@ import { Link } from 'react-router-dom';
 import { apiSongs } from '~/api/apiURL/apiSongs';
 initMDB({ Dropdown });
 
-function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePlayListSideBar }) {
+function SongPlayerUnder({
+  isShowPlayListSideBar,
+  togglePlayListSidebar,
+  closePlayListSideBar,
+  currentSong,
+  setCurrentSong,
+}) {
   const { songName } = useParams();
 
   const timeRef = useRef(null);
@@ -17,7 +23,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
   // audio
   const audioRef = useRef(null);
   const [durationAudio, setDurationAudio] = useState(0);
-  const [currentSong, setCurrentSong] = useState(null);
+  // const [currentSong, setCurrentSong] = useState(null);
 
   const [isPaused, setIsPaused] = useState(true);
   const [progressTime, setProgressTime] = useState(0);
@@ -109,7 +115,7 @@ function SongPlayerUnder({ isShowPlayListSideBar, togglePlayListSidebar, closePl
 
       setIsPaused(false);
     }
-  }, [songName]);
+  }, [songName, setCurrentSong]);
 
   // Xử lý khi đổi bài hoặc trạng thái phát thay đổi
   useEffect(() => {

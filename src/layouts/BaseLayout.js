@@ -6,6 +6,8 @@ import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 
 function BaseLayout({ children, renderMainContent }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
+  const [currentSong, setCurrentSong] = useState(null);
+
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
 
@@ -19,12 +21,18 @@ function BaseLayout({ children, renderMainContent }) {
         </div>
       )}
 
-      <PlayListSideBar isShowPlayListSideBar={isShowPlayListSideBar} closePlayListSideBar={closePlayListSideBar} />
+      <PlayListSideBar
+        isShowPlayListSideBar={isShowPlayListSideBar}
+        closePlayListSideBar={closePlayListSideBar}
+        currentSong={currentSong}
+      />
 
       <SongPlayerUnder
         isShowPlayListSideBar={isShowPlayListSideBar}
         togglePlayListSidebar={togglePlayListSideBar}
         closePlayListSideBar={closePlayListSideBar}
+        currentSong={currentSong}
+        setCurrentSong={setCurrentSong}
       />
     </div>
   );
