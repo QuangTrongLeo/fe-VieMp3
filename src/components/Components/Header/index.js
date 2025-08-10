@@ -9,49 +9,17 @@ import { Link } from 'react-router-dom';
 import config from '~/config';
 import icons from '~/assets/icons';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
-import { apiJwtTokenUser, apiJwtTokenArtist, apiJwtTokenAdmin } from '~/api/apiURL/apiJwtToken';
+import { useAuth } from '../AuthProvider';
 
 function Header() {
-  // Mặc định đổi ở đây để test role
-  const [currentToken, setCurrentToken] = useState(apiJwtTokenUser);
-  const [roles, setRoles] = useState([]);
+  const { currentToken, setCurrentToken, roles } = useAuth();
 
-  useEffect(() => {
-    if (!currentToken) {
-      localStorage.removeItem('token');
-      setRoles([]);
-      return;
-    }
-
-    // Ghi token vào localStorage
-    localStorage.setItem('token', currentToken);
-
-    try {
-      const decoded = jwtDecode(currentToken);
-      let userRoles = decoded.roles || [];
-
-      if (typeof userRoles === 'string') {
-        userRoles = userRoles.split(',').map(r => r.trim().toUpperCase());
-      }
-
-      setRoles(userRoles);
-    } catch (error) {
-      console.error('Invalid token', error);
-      setRoles([]);
-    }
-  }, [currentToken]);
-
-  // kiểm tra token
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
-
+  const isLoggedIn = !!currentToken;
   const isArtist = roles.includes('ARTIST');
   const isAdmin = roles.includes('ADMIN');
 
   const handleLogout = () => {
     setCurrentToken('');
-    localStorage.removeItem('token');
-    setRoles([]);
   };
 
   return (
