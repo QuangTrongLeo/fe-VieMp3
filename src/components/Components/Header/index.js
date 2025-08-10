@@ -9,66 +9,34 @@ import { Link } from 'react-router-dom';
 import config from '~/config';
 import icons from '~/assets/icons';
 // import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
-
-const base64Encode = obj => {
-  return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
-};
-
-const tokens = {
-  token1: [
-    base64Encode({ alg: 'HS256', typ: 'JWT' }),
-    base64Encode({
-      sub: 'user1',
-      name: 'Người 1',
-      roles: ['USER'],
-    }),
-    'signature',
-  ].join('.'),
-
-  token2: [
-    base64Encode({ alg: 'HS256', typ: 'JWT' }),
-    base64Encode({
-      sub: 'user2',
-      name: 'Người 2',
-      roles: ['USER', 'ARTIST'],
-    }),
-    'signature',
-  ].join('.'),
-
-  token3: [
-    base64Encode({ alg: 'HS256', typ: 'JWT' }),
-    base64Encode({
-      sub: 'user3',
-      name: 'Người 3',
-      roles: ['USER', 'ADMIN'],
-    }),
-    'signature',
-  ].join('.'),
-};
+import { apiJwtTokenUser, apiJwtTokenArtist, apiJwtTokenAdmin } from '~/api/apiURL/apiJwtToken';
 
 function Header() {
-  // USER TOKEN
-  const [currentToken, setCurrentToken] = useState('token1'); // mặc định không có token
+  // Mặc định đổi ở đây để test role
+  const [currentToken, setCurrentToken] = useState(apiJwtTokenUser);
   const [roles, setRoles] = useState([]);
 
-  // Khi currentToken thay đổi => ghi localStorage + decode role
   useEffect(() => {
     if (!currentToken) {
-      localStorage.removeItem('token'); // không có token => xóa
+      localStorage.removeItem('token');
       setRoles([]);
       return;
     }
-    const tokenFake = tokens[currentToken];
-    localStorage.setItem('token', tokenFake);
+
+    // Ghi token vào localStorage
+    localStorage.setItem('token', currentToken);
+
     try {
-      const decoded = jwtDecode(tokenFake);
+      const decoded = jwtDecode(currentToken);
       let userRoles = decoded.roles || [];
+
       if (typeof userRoles === 'string') {
         userRoles = userRoles.split(',').map(r => r.trim().toUpperCase());
       }
+
       setRoles(userRoles);
     } catch (error) {
-      console.log('invalid token', error);
+      console.error('Invalid token', error);
       setRoles([]);
     }
   }, [currentToken]);

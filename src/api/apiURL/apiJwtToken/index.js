@@ -1,5 +1,3 @@
-import { jwtDecode } from 'jwt-decode';
-
 const base64Encode = obj => {
   return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
 };
