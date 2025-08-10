@@ -1,15 +1,12 @@
-import React from 'react';
 import './Header.scss';
+import React from 'react';
 import images from '~/assets/images';
-import { jwtDecode } from 'jwt-decode';
-import { useEffect, useState } from 'react';
-import Search from '../Search';
-import { ShortButton, LongButton } from '../Button';
-import { Link } from 'react-router-dom';
 import config from '~/config';
 import icons from '~/assets/icons';
-// import { userRoutes, artistRoutes, adminRoutes } from '~/routes';
+import { ShortButton, LongButton } from '../Button';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
+import Search from '../Search';
 
 function Header() {
   const { currentToken, setCurrentToken, roles } = useAuth();
