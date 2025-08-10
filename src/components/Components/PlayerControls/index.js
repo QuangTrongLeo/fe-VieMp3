@@ -29,6 +29,8 @@ function PlayerControls({
   setCurrentTime,
   setProgressTime,
   onEndedAudio,
+  onNextSong,
+  onPrevSong,
 }) {
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
@@ -75,7 +77,10 @@ function PlayerControls({
               className={cx('player-btn', { flash: flashPrev })}
               data-bs-toggle="tooltip"
               title="Bài trước"
-              onClick={() => flashButton(setFlashPrev)}
+              onClick={() => {
+                flashButton(setFlashPrev);
+                onPrevSong?.();
+              }}
             >
               <i className={icons.iconBackwardStep}></i>
             </button>
@@ -99,7 +104,10 @@ function PlayerControls({
               className={cx('player-btn', { flash: flashNext })}
               data-bs-toggle="tooltip"
               title="Bài tiếp theo"
-              onClick={() => flashButton(setFlashNext)}
+              onClick={() => {
+                flashButton(setFlashNext);
+                onNextSong?.();
+              }}
             >
               <i className={icons.iconForwardStep}></i>
             </button>

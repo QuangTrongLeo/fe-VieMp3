@@ -15,7 +15,11 @@ function SongPlayerUnder({
   closePlayListSideBar,
   currentSong,
   setCurrentSong,
+  mode,
+  setMode,
   onEndedAudio,
+  onNextSong,
+  onPrevSong,
 }) {
   const { songName } = useParams();
 
@@ -28,7 +32,6 @@ function SongPlayerUnder({
 
   const [isPaused, setIsPaused] = useState(true);
   const [progressTime, setProgressTime] = useState(0);
-  const [mode, setMode] = useState(null);
   const [flashPrev, setFlashPrev] = useState(false);
   const [flashNext, setFlashNext] = useState(false);
   const [flashClose, setFlashClose] = useState(false);
@@ -267,6 +270,8 @@ function SongPlayerUnder({
                 setCurrentTime={setCurrentTime}
                 setProgressTime={setProgressTime}
                 onEndedAudio={handleAudioEnded}
+                onNextSong={onNextSong}
+                onPrevSong={onPrevSong}
               />
             </div>
 
