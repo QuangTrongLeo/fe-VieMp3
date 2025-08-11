@@ -1,7 +1,7 @@
 .notification-wrapper {
   position: fixed;
   top: 80px;
-  right: 0px;
+  right: 0;
   background-color: var(--white-color);
   border-left: 6px solid var(--primary-color);
   border-top-left-radius: 8px;
@@ -12,21 +12,23 @@
   max-width: 400px;
   z-index: 12;
 
-  /* ban đầu ẩn bên ngoài màn hình (phải) */
-  transform: translateX(100%);
+  /* ban đầu ẩn ngoài màn hình */
+  transform: translate3d(100%, 0, 0);
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  will-change: transform, opacity;
+  pointer-events: none; /* không cho tương tác khi ẩn */
 
   &.visible {
-    /* trượt vào từ phải sang trái */
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
+    pointer-events: auto; /* bật tương tác khi hiện */
   }
 
   &.hidden {
-    /* trượt ra sang phải để ẩn */
-    transform: translateX(100%);
+    transform: translate3d(100%, 0, 0);
     opacity: 0;
+    pointer-events: none;
   }
 }
 

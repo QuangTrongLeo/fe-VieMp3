@@ -6,24 +6,29 @@ import icons from '~/assets/icons';
 const cx = classNames.bind(styles);
 
 function NotificationBar({ notification }) {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const [renderNotification, setRenderNotification] = useState(true);
 
   useEffect(() => {
-    if (notification && notification.trim() !== '') {
-      setVisible(true);
-
+    if (visible) {
+      setRenderNotification(true);
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 3500);
-
+      }, 2000);
       return () => clearTimeout(timer);
-    } else {
-      setVisible(false);
     }
-  }, [notification]);
+  }, [visible]);
+
+  if (!renderNotification) return null;
 
   return (
-    <div className={cx('notification-wrapper', { visible, hidden: !visible })} aria-live="polite">
+    <div
+      className={cx('notification-wrapper', {
+        visible,
+        hidden: !visible,
+      })}
+      aria-live="polite"
+    >
       <div className={cx('notification-content')}>
         <span className={cx('notification-icon')}>
           <i className={cx(icons.iconfaExclamationRriangle)}></i>

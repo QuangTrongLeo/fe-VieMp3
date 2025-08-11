@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
-import NotificationBar from '~/components/Components/NotificationBar';
 import { apiSongs } from '~/api/apiURL/apiSongs';
+import NotificationBar from '~/components/Components/NotificationBar';
 
 function BaseLayout({ children, renderMainContent }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
@@ -83,14 +83,14 @@ function BaseLayout({ children, renderMainContent }) {
         </div>
       )}
 
+      <NotificationBar notification='Vui lòng "Đăng nhập"' />
+
       <PlayListSideBar
         isShowPlayListSideBar={isShowPlayListSideBar}
         closePlayListSideBar={closePlayListSideBar}
         currentSong={currentSong}
         nextSongs={nextSongs}
       />
-
-      <NotificationBar notification="Không truy cập được đường dẫn này" />
 
       <SongPlayerUnder
         isShowPlayListSideBar={isShowPlayListSideBar}
