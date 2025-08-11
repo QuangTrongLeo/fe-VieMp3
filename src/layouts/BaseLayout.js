@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
+import NotificationBar from '~/components/Components/NotificationBar';
 import { apiSongs } from '~/api/apiURL/apiSongs';
 
 function BaseLayout({ children, renderMainContent }) {
@@ -88,6 +89,8 @@ function BaseLayout({ children, renderMainContent }) {
         currentSong={currentSong}
         nextSongs={nextSongs}
       />
+
+      <NotificationBar notification="Không truy cập được đường dẫn này" />
 
       <SongPlayerUnder
         isShowPlayListSideBar={isShowPlayListSideBar}
