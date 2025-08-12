@@ -103,7 +103,14 @@ function SongPlayerUnder({
   // Lấy bài hát từ URL
   useEffect(() => {
     if (!songName) return;
-    const foundSong = apiSongs.find(song => song.songName.toLowerCase() === decodeURIComponent(songName).toLowerCase());
+    const decodedName = decodeURIComponent(songName).toLowerCase();
+    const foundSong = apiSongs.find(song => song.songName.toLowerCase() === decodedName);
+    // Nếu là bài hiện tại thì không reset
+    if (currentSong && currentSong.songName.toLowerCase() === decodedName) {
+      setClosedSongPlayerUnder(false);
+      return;
+    }
+
     setCurrentSong(foundSong || null);
     if (foundSong) {
       setCurrentSong(foundSong);
@@ -119,7 +126,7 @@ function SongPlayerUnder({
 
       setIsPaused(false);
     }
-  }, [songName, setCurrentSong]);
+  }, [songName, currentSong, setCurrentSong]);
 
   // Xử lý khi đổi bài hoặc trạng thái phát thay đổi
   useEffect(() => {
