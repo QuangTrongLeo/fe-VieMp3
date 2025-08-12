@@ -1,14 +1,25 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { publishRoutes, userRoutes, artistRoutes, adminRoutes } from '~/routes';
 import { MainLayout } from './layouts';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useAuth } from './components/Components/AuthProvider';
 import ScrollToTop from './components/Components/ScrollToTop';
+import NotificationBar from './components/Components/NotificationBar';
 
 function App() {
   const { roles } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // Hàm lấy tất cả route user được phép truy cập
+  const [notification, setNotification] = useState('');
+  const [visible, setVisible] = useState(false);
+
+  const showNotification = message => {
+    setNotification(message);
+    setVisible(true);
+    setTimeout(() => setVisible(false), 2000);
+  };
+
   const getAccessibleRoutes = () => {
     if (!roles || roles.length === 0) return publishRoutes;
     let allowedRoutes = [...publishRoutes];
@@ -20,10 +31,23 @@ function App() {
 
   const accessibleRoutes = getAccessibleRoutes();
 
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const allowedPaths = accessibleRoutes.map(r => r.path);
+
+    if (!allowedPaths.includes(currentPath)) {
+      showNotification('Vui lòng "Đăng Nhập" hoặc không có quyền truy cập');
+      navigate(-1);
+    }
+  }, [location, accessibleRoutes, navigate]);
+
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <div className="App">
+        {/* Notification đặt cố định */}
+        <NotificationBar notification={notification} visible={visible} />
+
         <Routes>
           {accessibleRoutes.map((route, index) => {
             const Page = route.component;
@@ -43,8 +67,14 @@ function App() {
           })}
         </Routes>
       </div>
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
