@@ -1,8 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
 import { publishRoutes, userRoutes, artistRoutes, adminRoutes } from '~/routes';
 import { MainLayout } from './layouts';
 import { Fragment, useEffect, useState } from 'react';
 import { useAuth } from './components/Components/AuthProvider';
+import config from './config';
 import ScrollToTop from './components/Components/ScrollToTop';
 import NotificationBar from './components/Components/NotificationBar';
 
@@ -17,7 +19,7 @@ function App() {
   const showNotification = message => {
     setNotification(message);
     setVisible(true);
-    setTimeout(() => setVisible(false), 2000);
+    setTimeout(() => setVisible(false), 2500);
   };
 
   const getAccessibleRoutes = () => {
@@ -33,13 +35,22 @@ function App() {
 
   useEffect(() => {
     const currentPath = location.pathname;
-    const allowedPaths = accessibleRoutes.map(r => r.path);
 
-    if (!allowedPaths.includes(currentPath)) {
+    // Nếu đã đăng nhập (có roles) thì chặn vào /login và /register
+    if (roles && roles.length > 0 && (currentPath === config.routes.login || currentPath === config.routes.register)) {
+      navigate(config.routes.home, { replace: true });
+      showNotification('Bạn không có quyền truy cập');
+      return;
+    }
+
+    // Kiểm tra xem currentPath có khớp với pattern của bất kỳ route nào không
+    const isAllowed = accessibleRoutes.some(r => matchPath({ path: r.path, end: true }, currentPath));
+
+    if (!isAllowed) {
       showNotification('Vui lòng "Đăng Nhập" hoặc không có quyền truy cập');
       navigate(-1);
     }
-  }, [location, accessibleRoutes, navigate]);
+  }, [location, accessibleRoutes, navigate, roles]);
 
   return (
     <>
