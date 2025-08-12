@@ -1,20 +1,38 @@
 import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './ArtistDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
-import { apiAlbumsOfArtist } from '~/api/apiURL/apiAlbums';
-import { apiHotSongsOfArtist } from '~/api/apiURL/apiSongs';
+import { apiArtists } from '~/api/apiURL/apiArtists';
+import { apiAlbums } from '~/api/apiURL/apiAlbums';
+import { apiSongs } from '~/api/apiURL/apiSongs';
 
 const cx = classNames.bind(styles);
 
-const sortedAlbumsOfArtist = [...apiAlbumsOfArtist].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
 function ArtistDetail() {
+  const { artistName } = useParams();
+  const decodedArtistName = decodeURIComponent(artistName);
+
   const [isFollowed, setIsFollowed] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
+
+  // Lấy thông tin artist từ apiArtists
+  const artist = apiArtists.find(artist => artist.artistName.toLowerCase() === decodedArtistName.toLowerCase());
+
+  // Lọc albums của artist
+  const albumsOfArtist = apiAlbums
+    .filter(album => album.artistName.toLowerCase() === decodedArtistName.toLowerCase())
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Lọc bài hát của artist
+  const songsOfArtist = apiSongs
+    .filter(song => song.artistName.toLowerCase() === decodedArtistName.toLowerCase())
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const latestSong = [...songsOfArtist].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
   const toggleFollow = () => {
     setIsFollowed(prev => !prev);
@@ -24,14 +42,10 @@ function ArtistDetail() {
     <div className={cx('artist-detail', 'py-4')}>
       {/* Header */}
       <div className={cx('artist-detail-header', 'd-flex', 'align-items-center', 'gap-4', 'mb-4')}>
-        <img
-          src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/avatars/6/1/f/8/61f8207e9284695692fddc839e8582ce.jpg"
-          alt="SOOBIN"
-          className={cx('avatar')}
-        />
+        <img src={artist.avatar || ''} alt={artist.artistName} className={cx('avatar')} />
         <div>
-          <h1 className={cx('artist-name')}>buitruonglinh</h1>
-          <p className={cx('followers')}>525.397 người đang theo dõi</p>
+          <h1 className={cx('artist-name')}>{decodedArtistName}</h1>
+          <p className={cx('followers')}>{(artist.followers ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
           <button className={cx('follow-btn')} onClick={toggleFollow}>
             <i className={cx(isFollowed ? icons.iconCheck : icons.iconUserPlus, 'me-1')}></i>
             {isFollowed ? 'Đang theo dõi' : 'Theo dõi'}
@@ -54,28 +68,30 @@ function ArtistDetail() {
           <>
             {/* SONGS */}
             {/* Mới phát hành */}
+
             <div className="col-md-4 mb-4">
               <h5 className={cx('section-title', 'mb-4')}>Mới Phát Hành</h5>
-              <div className={cx('release-card')}>
-                <img
-                  src="https://photo-resize-zmp3.zmdcdn.me/w165_r1x1_webp/cover/8/7/3/7/8737cb85fcd8108109bdb819df8f0d5d.jpg"
-                  alt="Sẽ Quên Em Nhanh Thôi"
-                  className={cx('release-cover')}
-                />
-                <div className="mt-2">
-                  <strong>Sẽ Quên Em Nhanh Thôi (feat. Rhymastic)</strong>
-                  <p className="mb-0">SOOBIN, Rhymastic</p>
-                  <small>24/07/2025</small>
-                </div>
-              </div>
+              <Link to={`/song/${latestSong.songName}`} className={cx('release-card-link')}>
+                {latestSong && (
+                  <div className={cx('release-card')}>
+                    <img src={latestSong.cover} alt={latestSong.songName} className={cx('release-cover')} />
+                    <div className="mt-3">
+                      <strong className={cx('release-song-name')}>{latestSong.songName}</strong>
+                      <p className="mb-0">{latestSong.artistName}</p>
+                      <small>{new Date(latestSong.createdAt).toLocaleDateString('vi-VN')}</small>
+                    </div>
+                  </div>
+                )}
+              </Link>
             </div>
+
             {/* Bài hát nổi bật */}
             <div className="col-md-8">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
               </div>
               <LimitedList
-                items={apiHotSongsOfArtist}
+                items={songsOfArtist}
                 limit={10}
                 wrapInRow={true}
                 renderItem={(song, idx) => (
@@ -93,7 +109,7 @@ function ArtistDetail() {
             {/* ALBUMS */}
             <h5 className={cx('section-title', 'mb-4')}>Albums của buitruonglinh</h5>
             <LimitedList
-              items={sortedAlbumsOfArtist}
+              items={albumsOfArtist}
               limit={8}
               renderItem={album => (
                 <div key={album.albumId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">

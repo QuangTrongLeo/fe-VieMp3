@@ -1,5 +1,5 @@
 .artist-detail {
-  color: white;
+  color: var(--white-color);
 
   .artist-detail-header {
     border-radius: 24px;
@@ -25,7 +25,7 @@
   }
 
   .followers {
-    color: #ccc;
+    color: var(--grey-color);
     margin-bottom: 0.5rem;
   }
 
@@ -34,7 +34,7 @@
     border: none;
     padding: 6px 16px;
     border-radius: 999px;
-    color: white;
+    color: var(--white-color);
     font-weight: 500;
     cursor: pointer;
 
@@ -99,5 +99,23 @@
         background-color: var(--primary-color);
       }
     }
+  }
+}
+
+.release-card-link {
+  color: inherit;
+  text-decoration: none;
+
+  .release-cover {
+    transition: transform 0.3s ease; // Thêm animation mượt
+  }
+
+  &:hover .release-song-name {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+
+  &:hover .release-cover {
+    transform: scale(1.05); // Zoom mượt hơn
   }
 }
