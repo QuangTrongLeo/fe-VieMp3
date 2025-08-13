@@ -8,6 +8,7 @@ import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
 import { apiSongs } from '~/api/apiURL/apiSongs';
 import { apiArtists } from '~/api/apiURL/apiArtists';
+import { apiAlbums } from '~/api/apiURL/apiAlbums';
 
 const cx = classNames.bind(styles);
 
@@ -36,7 +37,11 @@ function Search() {
         )
         .map(song => ({ ...song, type: 'song' }));
 
-      const resultSearchs = [...matchedArtists, ...matchedSongs].sort((a, b) => {
+      const matchedAlbums = apiAlbums
+        .filter(album => album.albumName.toLowerCase().includes(keyword))
+        .map(album => ({ ...album, type: 'album' }));
+
+      const resultSearchs = [...matchedArtists, ...matchedSongs, ...matchedAlbums].sort((a, b) => {
         if (a.type === b.type) return 0;
         return a.type === 'artist' ? -1 : 1;
       });
@@ -72,6 +77,15 @@ function Search() {
       return;
     }
 
+    const matchedAlbums = apiAlbums.filter(album => album.albumName.toLowerCase().includes(keyword));
+
+    if (matchedAlbums.length > 0) {
+      const albumName = matchedAlbums[0].albumName;
+      navigate(`/album/${encodeURIComponent(albumName)}`);
+      setSearchKeyword('');
+      return;
+    }
+
     // Nếu không khớp gì cũng reset
     setSearchKeyword('');
   };
@@ -79,14 +93,16 @@ function Search() {
   // Render ra các dòng của Tippy Search
   const renderSearchRow = (item, index) => (
     <SearchRow
-      key={`${item.type}-${item.songId || item.artistId}`}
+      key={`${item.type}-${item.songId || item.artistId || item.albumId}`}
       type={item.type}
       cover={item.cover || item.avatar}
-      content={item.songName || item.artistName}
+      content={item.type === 'song' ? item.songName : item.type === 'artist' ? item.artistName : item.albumName}
       desc={
         item.type === 'song'
           ? `${item.artistName}${item.albumName ? ` • Album: ${item.albumName}` : ''}`
-          : 'Nghệ sĩ nổi bật'
+          : item.type === 'artist'
+          ? 'Nghệ sĩ nổi bật'
+          : `Album của "${item.artistName}"`
       }
       onClick={() => setSearchKeyword('')}
     />

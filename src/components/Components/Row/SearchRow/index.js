@@ -6,7 +6,15 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function SearchRow({ type, cover, content, desc, onClick }) {
-  const path = type === 'artist' ? `/artist/${encodeURIComponent(content)}` : `/song/${encodeURIComponent(content)}`;
+  let path = '';
+
+  if (type === 'artist') {
+    path = `/artist/${encodeURIComponent(content)}`;
+  } else if (type === 'song') {
+    path = `/song/${encodeURIComponent(content)}`;
+  } else if (type === 'album') {
+    path = `/album/${encodeURIComponent(content)}`;
+  }
 
   return (
     <Link to={path} className={cx('search-row-link')} onClick={onClick}>
