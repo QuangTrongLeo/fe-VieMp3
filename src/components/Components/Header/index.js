@@ -66,8 +66,8 @@ function Header({ onToggleNotificationTablet }) {
             {isLoggedIn ? (
               <>
                 {[
-                  { icon: 'comment-dots', label: 'Messaging', onClick: () => {} },
-                  { icon: 'bell', label: 'Notifications', onClick: onToggleNotificationTablet },
+                  // { icon: 'comment-dots', label: 'Tin nhắn', onClick: () => {} },
+                  { icon: 'bell', label: 'Thông báo', onClick: onToggleNotificationTablet },
                 ].map((item, i) => (
                   <li key={i} className="nav-item position-relative icon-tooltip-wrapper" onClick={item.onClick}>
                     <Link className="nav-link d-flex flex-column text-center" to="#" onClick={e => e.preventDefault()}>

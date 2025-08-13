@@ -1,5 +1,5 @@
 // Layouts/BaseLayout.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
@@ -11,8 +11,11 @@ function BaseLayout({ children, renderMainContent }) {
   const [currentSong, setCurrentSong] = useState(null);
   const [nextSongs, setNextSongs] = useState([]);
   const [playedSongs, setPlayedSongs] = useState([]);
+
+  // Chế độ (lặp lại/ngẫu nhiên) của bài hát
   const [mode, setMode] = useState(null);
   const [showNotificationTablet, setShowNotificationTablet] = useState(false);
+  const notifTabletRef = useRef(null);
 
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
@@ -60,6 +63,7 @@ function BaseLayout({ children, renderMainContent }) {
     }
   };
 
+  // PLAYLIST-SIDEBAR
   useEffect(() => {
     if (currentSong) {
       const filtered = apiSongs
@@ -75,17 +79,33 @@ function BaseLayout({ children, renderMainContent }) {
     }
   }, [currentSong, playedSongs]);
 
+  // NOTIFICATION-TABLE
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (notifTabletRef.current && !notifTabletRef.current.contains(e.target) && showNotificationTablet) {
+        setShowNotificationTablet(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNotificationTablet]);
+
   return (
     <div>
       <Header onToggleNotificationTablet={toggleNotificationTable} />
 
-      <NotificationTablet
-        visible={showNotificationTablet}
-        notifications={[
-          { avatar: '/img/user1.jpg', title: 'Tin nhắn mới từ A', time: '2 phút trước' },
-          { avatar: '/img/user2.jpg', title: 'Bình luận mới', time: '10 phút trước' },
-        ]}
-      />
+      <div ref={notifTabletRef}>
+        <NotificationTablet
+          visible={showNotificationTablet}
+          notifications={[
+            { avatar: '/img/user1.jpg', title: 'Tin nhắn mới từ A', time: '2 phút trước' },
+            { avatar: '/img/user2.jpg', title: 'Bình luận mới', time: '10 phút trước' },
+          ]}
+        />
+      </div>
 
       {renderMainContent?.() || (
         <div className="container-fluid">

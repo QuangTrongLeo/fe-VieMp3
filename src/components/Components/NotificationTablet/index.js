@@ -2,7 +2,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './NotificationTablet.module.scss';
-import icons from '~/assets/icons';
 
 const cx = classNames.bind(styles);
 
