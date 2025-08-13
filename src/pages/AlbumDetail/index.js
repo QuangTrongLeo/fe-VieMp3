@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 import styles from './AlbumDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
+import icons from '~/assets/icons';
 import { useParams } from 'react-router-dom';
 import { apiAlbums } from '~/api/apiURL/apiAlbums';
 import { apiSongs } from '~/api/apiURL/apiSongs';
@@ -11,6 +12,7 @@ import { apiSongs } from '~/api/apiURL/apiSongs';
 const cx = classNames.bind(styles);
 
 function AlbumDetail() {
+  const [isFavorite, setIsFavorite] = useState(false);
   const { albumName } = useParams();
   const decodedAlbumName = decodeURIComponent(albumName);
   const album = apiAlbums.find(a => a.albumName.toLowerCase() === decodedAlbumName.toLowerCase());
@@ -54,6 +56,10 @@ function AlbumDetail() {
     formattedDuration = `${minutes} phút ${seconds} giây`;
   }
 
+  const toggleFavorite = () => {
+    setIsFavorite(prev => !prev);
+  };
+
   return (
     <div className={cx('album-wrapper', 'py-4')}>
       <div className={cx('album-header', 'd-flex', 'align-items-center', 'mb-4')}>
@@ -64,6 +70,12 @@ function AlbumDetail() {
           <p className={cx('album-meta')}>
             {songsInAlbum.length} bài hát - {formattedDuration}
           </p>
+          <div>
+            <button className={cx('favorite-btn')} onClick={toggleFavorite}>
+              <i className={cx(isFavorite ? icons.iconCheck : icons.iconHeart, 'me-1')}></i>
+              {isFavorite ? 'Đã yêu thích' : 'Yêu thích'}
+            </button>
+          </div>
         </div>
       </div>
 

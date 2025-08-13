@@ -57,3 +57,17 @@
   font-weight: 600;
   margin-bottom: 1rem;
 }
+
+.favorite-btn {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  color: var(--white-color);
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
