@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
+import NotificationTablet from '~/components/Components/NotificationTablet';
 import { apiSongs } from '~/api/apiURL/apiSongs';
 
 function BaseLayout({ children, renderMainContent }) {
@@ -11,9 +12,11 @@ function BaseLayout({ children, renderMainContent }) {
   const [nextSongs, setNextSongs] = useState([]);
   const [playedSongs, setPlayedSongs] = useState([]);
   const [mode, setMode] = useState(null);
+  const [showNotificationTablet, setShowNotificationTablet] = useState(false);
 
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
+  const toggleNotificationTable = () => setShowNotificationTablet(prev => !prev);
 
   const handleSongEnd = () => {
     if (nextSongs.length > 0) {
@@ -74,7 +77,15 @@ function BaseLayout({ children, renderMainContent }) {
 
   return (
     <div>
-      <Header />
+      <Header onToggleNotificationTablet={toggleNotificationTable} />
+
+      <NotificationTablet
+        visible={showNotificationTablet}
+        notifications={[
+          { avatar: '/img/user1.jpg', title: 'Tin nhắn mới từ A', time: '2 phút trước' },
+          { avatar: '/img/user2.jpg', title: 'Bình luận mới', time: '10 phút trước' },
+        ]}
+      />
 
       {renderMainContent?.() || (
         <div className="container-fluid">

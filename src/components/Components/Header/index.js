@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
 import Search from '../Search';
 
-function Header() {
+function Header({ onToggleNotificationTablet }) {
   const { currentToken, setCurrentToken, roles } = useAuth();
 
   const isLoggedIn = !!currentToken;
@@ -66,10 +66,10 @@ function Header() {
             {isLoggedIn ? (
               <>
                 {[
-                  { icon: 'comment-dots', label: 'Messaging' },
-                  { icon: 'bell', label: 'Notifications' },
+                  { icon: 'comment-dots', label: 'Messaging', onClick: () => {} },
+                  { icon: 'bell', label: 'Notifications', onClick: onToggleNotificationTablet },
                 ].map((item, i) => (
-                  <li key={i} className="nav-item position-relative icon-tooltip-wrapper">
+                  <li key={i} className="nav-item position-relative icon-tooltip-wrapper" onClick={item.onClick}>
                     <Link className="nav-link d-flex flex-column text-center" to="#" onClick={e => e.preventDefault()}>
                       <i className={`fas fa-${item.icon} fa-lg my-1`}></i>
                       <div className="icon-tooltip">{item.label}</div>
