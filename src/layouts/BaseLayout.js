@@ -16,10 +16,13 @@ function BaseLayout({ children, renderMainContent }) {
   const [mode, setMode] = useState(null);
   const [showNotificationTablet, setShowNotificationTablet] = useState(false);
   const notifTabletRef = useRef(null);
+  const bellButtonRef = useRef(null);
 
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
-  const toggleNotificationTable = () => setShowNotificationTablet(prev => !prev);
+  const toggleNotificationTable = () => {
+    setShowNotificationTablet(prev => !prev);
+  };
 
   const handleSongEnd = () => {
     if (nextSongs.length > 0) {
@@ -82,12 +85,17 @@ function BaseLayout({ children, renderMainContent }) {
   // NOTIFICATION-TABLE
   useEffect(() => {
     function handleClickOutside(e) {
-      if (notifTabletRef.current && !notifTabletRef.current.contains(e.target) && showNotificationTablet) {
+      if (
+        notifTabletRef.current &&
+        !notifTabletRef.current.contains(e.target) &&
+        bellButtonRef.current &&
+        !bellButtonRef.current.contains(e.target) &&
+        showNotificationTablet
+      ) {
         setShowNotificationTablet(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -95,7 +103,7 @@ function BaseLayout({ children, renderMainContent }) {
 
   return (
     <div>
-      <Header onToggleNotificationTablet={toggleNotificationTable} />
+      <Header onToggleNotificationTablet={toggleNotificationTable} bellButtonRef={bellButtonRef} />
 
       <div ref={notifTabletRef}>
         <NotificationTablet

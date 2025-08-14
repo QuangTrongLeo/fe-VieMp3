@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
 import Search from '../Search';
 
-function Header({ onToggleNotificationTablet }) {
+function Header({ onToggleNotificationTablet, bellButtonRef }) {
   const { currentToken, setCurrentToken, roles } = useAuth();
 
   const isLoggedIn = !!currentToken;
@@ -54,7 +54,7 @@ function Header({ onToggleNotificationTablet }) {
 
         {/* Collapsible content */}
         <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-          <ul className="navbar-nav navbar-nav-header d-flex align-items-center flex-row gap-3 mb-0">
+          <ul className="navbar-nav navbar-nav-header d-flex align-items-center justify-content-end flex-row gap-3 mb-0">
             {/* Nút Khám phá Premium */}
             <li>
               <LongButton href="/premium" backgroundColor="var(--white-color)" color="var(--black-color)">
@@ -69,7 +69,12 @@ function Header({ onToggleNotificationTablet }) {
                   // { icon: 'comment-dots', label: 'Tin nhắn', onClick: () => {} },
                   { icon: 'bell', label: 'Thông báo', onClick: onToggleNotificationTablet },
                 ].map((item, i) => (
-                  <li key={i} className="nav-item position-relative icon-tooltip-wrapper" onClick={item.onClick}>
+                  <li
+                    key={i}
+                    ref={bellButtonRef}
+                    className="nav-item position-relative icon-tooltip-wrapper"
+                    onClick={item.onClick}
+                  >
                     <Link className="nav-link d-flex flex-column text-center" to="#" onClick={e => e.preventDefault()}>
                       <i className={`fas fa-${item.icon} fa-lg my-1`}></i>
                       <div className="icon-tooltip">{item.label}</div>
