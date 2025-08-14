@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { apiJwtTokenUser, apiJwtTokenArtist, apiJwtTokenAdmin } from '~/api/apiURL/apiJwtToken';
 
 const AuthContext = createContext();
-const token = apiJwtTokenUser;
+const token = apiJwtTokenArtist;
 
 export function useAuth() {
   return useContext(AuthContext);
