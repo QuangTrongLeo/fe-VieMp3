@@ -1,12 +1,11 @@
 // Layouts/BaseLayout.js
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '~/components/Components/Header';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
-import NotificationTablet from '~/components/Components/NotificationTablet';
 import { apiSongs } from '~/api/apiURL/apiSongs';
 
-function BaseLayout({ children, renderMainContent }) {
+function BaseLayout({ children, renderMainContent, bellButtonRef, onToggleNotificationTablet }) {
   const [isShowPlayListSideBar, setShowPlayListSideBar] = useState(false);
   const [currentSong, setCurrentSong] = useState(null);
   const [nextSongs, setNextSongs] = useState([]);
@@ -14,15 +13,9 @@ function BaseLayout({ children, renderMainContent }) {
 
   // Chế độ (lặp lại/ngẫu nhiên) của bài hát
   const [mode, setMode] = useState(null);
-  const [showNotificationTablet, setShowNotificationTablet] = useState(false);
-  const notifTabletRef = useRef(null);
-  const bellButtonRef = useRef(null);
 
   const togglePlayListSideBar = () => setShowPlayListSideBar(prev => !prev);
   const closePlayListSideBar = () => setShowPlayListSideBar(false);
-  const toggleNotificationTable = () => {
-    setShowNotificationTablet(prev => !prev);
-  };
 
   const handleSongEnd = () => {
     if (nextSongs.length > 0) {
@@ -82,38 +75,9 @@ function BaseLayout({ children, renderMainContent }) {
     }
   }, [currentSong, playedSongs]);
 
-  // NOTIFICATION-TABLE
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (
-        notifTabletRef.current &&
-        !notifTabletRef.current.contains(e.target) &&
-        bellButtonRef.current &&
-        !bellButtonRef.current.contains(e.target) &&
-        showNotificationTablet
-      ) {
-        setShowNotificationTablet(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showNotificationTablet]);
-
   return (
     <div>
-      <Header onToggleNotificationTablet={toggleNotificationTable} bellButtonRef={bellButtonRef} />
-
-      <div ref={notifTabletRef}>
-        <NotificationTablet
-          visible={showNotificationTablet}
-          notifications={[
-            { avatar: '/img/user1.jpg', title: 'Tin nhắn mới từ A', time: '2 phút trước' },
-            { avatar: '/img/user2.jpg', title: 'Bình luận mới', time: '10 phút trước' },
-          ]}
-        />
-      </div>
+      <Header onToggleNotificationTablet={onToggleNotificationTablet} bellButtonRef={bellButtonRef} />
 
       {renderMainContent?.() || (
         <div className="container-fluid">
