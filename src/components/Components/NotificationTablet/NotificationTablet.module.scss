@@ -57,4 +57,9 @@
       background-color: var(--black-color-light-1);
     }
   }
+
+  // Màn hình nhỏ hơn desktop
+  @media (max-width: 1024px) {
+    top: 132px;
+  }
 }

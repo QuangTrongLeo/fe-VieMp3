@@ -105,3 +105,12 @@
     cursor: pointer;
   }
 }
+
+// TOGGLER
+.navbar-toggler {
+  border-color: var(--white-color);
+
+  .fa-bars {
+    color: var(--white-color);
+  }
+}
