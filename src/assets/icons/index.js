@@ -26,6 +26,7 @@ const icons = {
   iconUserPlus: 'fas fa-user-plus',
   iconCheck: 'fas fa-check',
   iconfaExclamationRriangle: 'fa fa-exclamation-triangle',
+  iconChevronDown: 'fas fa-chevron-down',
 };
 
 export default icons;
