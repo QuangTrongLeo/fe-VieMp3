@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
+import config from '~/config';
+import NotificationBar from '~/components/Components/NotificationBar';
+import { useNavigate } from 'react-router-dom';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
-import config from '~/config';
-import apiAuthUrls from '~/api/apiURL/apiAuths';
+import { apiFetchRegister } from '~/api/apiFetchs/apiFetchAuths';
 
 const cx = classNames.bind(styles);
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -21,30 +26,33 @@ function Register() {
     return regex.test(email);
   };
 
-  const handleSubmit = e => {
+  const handleRegisterSubmit = async e => {
     e.preventDefault();
 
     let valid = true;
-
-    // Reset lỗi
     setEmailError('');
     setConfirmPasswordError('');
 
-    // Kiểm tra email
     if (!validateEmail(email)) {
       setEmailError('Email không hợp lệ.');
       valid = false;
     }
 
-    // Kiểm tra confirm password
     if (confirmPassword !== password) {
       setConfirmPasswordError('Mật khẩu nhập lại không khớp.');
       valid = false;
     }
 
     if (valid) {
-      // Gửi dữ liệu lên backend hoặc xử lý logic tiếp
-      alert('Form hợp lệ!');
+      try {
+        await apiFetchRegister(username, email, password);
+
+        // 🚀 chuyển sang trang OTP và truyền email để verify
+        navigate(config.routes.otp, { state: { email } });
+      } catch (error) {
+        // TODO: tuỳ bạn muốn hiển thị error như thế nào (ví dụ error dưới input)
+        setEmailError(error.message || 'Đăng ký thất bại');
+      }
     }
   };
 
@@ -69,13 +77,19 @@ function Register() {
                 <h2 className={cx('fw-bold', 'mb-3')} style={{ fontSize: '1.5rem' }}>
                   Đăng Ký
                 </h2>
-                <span style={{ fontSize: '0.8rem', color: 'gray' }}>API Register URL: {apiAuthUrls.register}</span>
-                <form onSubmit={handleSubmit}>
+
+                <form onSubmit={handleRegisterSubmit}>
                   <div className={cx('form-outline', 'mb-2')}>
                     <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="username">
                       Tên người dùng*:
                     </label>
-                    <input type="text" id="username" className={cx('form-control')} />
+                    <input
+                      type="text"
+                      id="username"
+                      className={cx('form-control')}
+                      value={username}
+                      onChange={e => setUsername(e.target.value)}
+                    />
                   </div>
 
                   <div className={cx('form-outline', 'mb-2')}>
@@ -127,7 +141,7 @@ function Register() {
                       color="var(--black-color)"
                       backgroundColor="var(--primary-color)"
                       borderColor="var(--primary-color)"
-                      href={config.routes.otp}
+                      type="submit"
                     >
                       Đăng ký
                     </ShortButton>

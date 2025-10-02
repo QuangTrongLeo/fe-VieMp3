@@ -31,9 +31,9 @@ function Genres() {
           renderItem={(genre, index) => (
             <div key={genre.id} className="col-12 col-sm-12 col-md-4 mb-3 d-flex justify-content-center">
               <RectangleCard
-                content={genre.name} // dùng name
-                desc={genre.description} // dùng description
-                href={`/genre/${genre.name.toLowerCase()}`} // name chắc chắn có giá trị
+                content={genre.name}
+                desc={genre.description}
+                href={`/genre/${genre.name.toLowerCase()}`}
                 icon={<i className={`${icons.iconMusic} fa-3x`}></i>}
               />
             </div>
