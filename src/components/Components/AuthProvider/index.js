@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { apiJwtTokenUser, apiJwtTokenArtist, apiJwtTokenAdmin } from '~/api/apiURL/apiJwtToken';
 
 const AuthContext = createContext();
 const token = '';
@@ -35,7 +34,15 @@ function AuthProvider({ children }) {
     }
   }, [currentToken]);
 
-  return <AuthContext.Provider value={{ currentToken, setCurrentToken, roles }}>{children}</AuthContext.Provider>;
+  const logout = () => {
+    setCurrentToken(''); // reset token
+    localStorage.removeItem('token');
+    setRoles([]);
+  };
+
+  return (
+    <AuthContext.Provider value={{ currentToken, setCurrentToken, roles, logout }}>{children}</AuthContext.Provider>
+  );
 }
 
 export default AuthProvider;
