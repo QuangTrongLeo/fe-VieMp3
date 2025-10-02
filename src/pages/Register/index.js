@@ -5,6 +5,7 @@ import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
 import config from '~/config';
+import apiAuthUrls from '~/api/apiURL/apiAuths';
 
 const cx = classNames.bind(styles);
 
@@ -68,6 +69,7 @@ function Register() {
                 <h2 className={cx('fw-bold', 'mb-3')} style={{ fontSize: '1.5rem' }}>
                   Đăng Ký
                 </h2>
+                <span style={{ fontSize: '0.8rem', color: 'gray' }}>API Register URL: {apiAuthUrls.register}</span>
                 <form onSubmit={handleSubmit}>
                   <div className={cx('form-outline', 'mb-2')}>
                     <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="username">

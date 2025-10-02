@@ -2,6 +2,8 @@ const base64Encode = obj => {
   return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
 };
 
+// const jwtToken = abc;
+
 const apiJwtTokenUser = [
   base64Encode({ alg: 'HS256', typ: 'JWT' }),
   base64Encode({

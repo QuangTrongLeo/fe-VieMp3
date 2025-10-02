@@ -1,14 +1,48 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '~/components/Components/AuthProvider';
 import styles from './Login.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
 import config from '~/config';
+import apiAuthUrls from '~/api/apiURL/apiAuths';
 
 const cx = classNames.bind(styles);
 
 function Login() {
+  const { setCurrentToken } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async e => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch(apiAuthUrls.login, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
+      });
+
+      if (!res.ok) throw new Error('Login failed');
+
+      const data = await res.json();
+      // data = { accessToken, refreshToken }
+      setCurrentToken(data.accessToken); // cập nhật token vào AuthContext
+      navigate(config.routes.home);
+      console.log('Access Token:', data.accessToken);
+
+      // Redirect hoặc thêm logic nếu muốn
+    } catch (err) {
+      console.error(err);
+      alert('Đăng nhập thất bại!');
+    }
+  };
+
   return (
     <>
       <section className={cx('text-center', 'text-lg-start')} style={{ marginTop: '5%' }}>
@@ -34,38 +68,50 @@ function Login() {
                   <h2 className={cx('fw-bold', 'mb-4')} style={{ fontSize: '1.5rem' }}>
                     Đăng nhập
                   </h2>
-                  <form>
+                  <form onSubmit={handleLogin}>
                     <div data-mdb-input-init className={cx('form-outline', 'mb-3')}>
                       <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
                         Email*:
                       </label>
-                      <input type="email" id="form3Example3" className={cx('form-control')} />
+                      <input
+                        type="email"
+                        id="form3Example3"
+                        className={cx('form-control')}
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                      />
                     </div>
 
                     <div data-mdb-input-init className={cx('form-outline', 'mb-3')}>
                       <label className={cx('form-label', 'text-start', 'w-100')} htmlFor="form3Example3">
                         Mật khẩu*:
                       </label>
-                      <input type="password" id="form3Example4" className={cx('form-control')} />
+                      <input
+                        type="password"
+                        id="form3Example4"
+                        className={cx('form-control')}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                      />
                     </div>
 
                     <div className={cx('text-center')}>
-                      {/* <button
+                      <ShortButton
                         type="submit"
-                        data-mdb-button-init
-                        data-mdb-ripple-init
-                        className={cx('btn', 'btn-block', 'mb-3', 'login-btn')}
+                        color="var(--black-color)"
+                        backgroundColor="var(--primary-color)"
+                        borderColor="var(--primary-color)"
                       >
                         Đăng nhập
-                      </button> */}
-                      <ShortButton
+                      </ShortButton>
+                      {/* <ShortButton
                         color="var(--black-color)"
                         backgroundColor="var(--primary-color)"
                         borderColor="var(--primary-color)"
                         href={config.routes.home}
                       >
                         Đăng nhập
-                      </ShortButton>
+                      </ShortButton> */}
                     </div>
                   </form>
                   {/* REGISTER */}
