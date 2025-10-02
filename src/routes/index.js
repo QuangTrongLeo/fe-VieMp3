@@ -19,7 +19,7 @@ import {
   PlayList,
 } from '~/pages';
 
-// artistRoutes
+// modRoutes
 import { Upload, MySongs, MyAlbums } from '~/pages';
 import PlayListDetail from '~/pages/PlayListDetail';
 
@@ -48,7 +48,7 @@ const userRoutes = [
   { path: config.routes.favoriteArtists, component: FavoriteArtists },
 ];
 
-const artistRoutes = [
+const modRoutes = [
   { path: config.routes.upload, component: Upload },
   { path: config.routes.mySongs, component: MySongs },
   { path: config.routes.myAlbums, component: MyAlbums },
@@ -56,4 +56,4 @@ const artistRoutes = [
 
 const adminRoutes = [];
 
-export { publishRoutes, userRoutes, artistRoutes, adminRoutes };
+export { publishRoutes, userRoutes, modRoutes, adminRoutes };

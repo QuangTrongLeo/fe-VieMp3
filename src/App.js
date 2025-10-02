@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { matchPath, useLocation, useNavigate } from 'react-router-dom';
-import { publishRoutes, userRoutes, artistRoutes, adminRoutes } from '~/routes';
+import { publishRoutes, userRoutes, modRoutes, adminRoutes } from '~/routes';
 import { MainLayout } from './layouts';
 import { Fragment, useEffect, useState } from 'react';
 import { useAuth } from './components/Components/AuthProvider';
@@ -23,11 +23,18 @@ function App() {
   };
 
   const getAccessibleRoutes = () => {
-    if (!roles || roles.length === 0) return publishRoutes;
-    let allowedRoutes = [...publishRoutes];
+    // Nếu chưa đăng nhập thì chỉ cho các route public
+    if (!roles || roles.length === 0) {
+      return publishRoutes;
+    }
+
+    // Nếu đã đăng nhập thì loại bỏ login/register
+    let allowedRoutes = publishRoutes.filter(r => r.path !== config.routes.login && r.path !== config.routes.register);
+
     if (roles.includes('USER')) allowedRoutes.push(...userRoutes);
-    if (roles.includes('ARTIST')) allowedRoutes.push(...artistRoutes);
+    if (roles.includes('MOD')) allowedRoutes.push(...modRoutes);
     if (roles.includes('ADMIN')) allowedRoutes.push(...adminRoutes);
+
     return allowedRoutes;
   };
 
@@ -36,14 +43,14 @@ function App() {
   useEffect(() => {
     const currentPath = location.pathname;
 
-    // Nếu đã đăng nhập (có roles) thì chặn vào /login và /register
+    // Nếu đã login mà cố tình gõ /login hoặc /register thì redirect về home
     if (roles && roles.length > 0 && (currentPath === config.routes.login || currentPath === config.routes.register)) {
-      navigate(config.routes.home, { replace: true });
       showNotification('Bạn không có quyền truy cập');
+      navigate(config.routes.home, { replace: true });
       return;
     }
 
-    // Kiểm tra xem currentPath có khớp với pattern của bất kỳ route nào không
+    // Kiểm tra route có hợp lệ không
     const isAllowed = accessibleRoutes.some(r => matchPath({ path: r.path, end: true }, currentPath));
 
     if (!isAllowed) {

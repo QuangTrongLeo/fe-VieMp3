@@ -3,7 +3,6 @@ import styles from './Register.module.scss';
 import classNames from 'classnames/bind';
 import images from '~/assets/images';
 import config from '~/config';
-import NotificationBar from '~/components/Components/NotificationBar';
 import { useNavigate } from 'react-router-dom';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
