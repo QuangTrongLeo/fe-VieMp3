@@ -8,7 +8,7 @@ import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
 import config from '~/config';
-import apiAuthUrls from '~/api/apiURL/apiAuths';
+import { apiFetchLogin } from '~/api/apiFetchs/apiFetchAuths';
 
 const cx = classNames.bind(styles);
 
@@ -20,23 +20,10 @@ function Login() {
 
   const handleLogin = async e => {
     e.preventDefault();
-
     try {
-      const res = await fetch(apiAuthUrls.login, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), password: password.trim() }),
-      });
-
-      if (!res.ok) throw new Error('Login failed');
-
-      const data = await res.json();
-      // data = { accessToken, refreshToken }
-      setCurrentToken(data.accessToken); // cập nhật token vào AuthContext
+      const data = await apiFetchLogin(email, password);
+      setCurrentToken(data.accessToken);
       navigate(config.routes.home);
-      console.log('Access Token:', data.accessToken);
-
-      // Redirect hoặc thêm logic nếu muốn
     } catch (err) {
       console.error(err);
       alert('Đăng nhập thất bại!');

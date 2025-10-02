@@ -4,8 +4,7 @@ import styles from './Genres.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { RectangleCard } from '~/components/Components/Card';
-// import apiGenres from '~/api/apiURL/apiGenres';
-import apiGenreUrls from '~/api/apiURL/apiGenres';
+import { apiFetchGenres } from '~/api/apiFetchs/apiFetchGenres';
 
 const cx = classNames.bind(styles);
 
@@ -13,19 +12,9 @@ function Genres() {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    fetch(apiGenreUrls.genres) // ví dụ: "http://localhost:8080/vie-mp3/api/genres"
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch genres');
-        }
-        return res.json();
-      })
-      .then(data => {
-        setGenres(data);
-      })
-      .catch(error => {
-        console.error('Error fetching genres:', error);
-      });
+    apiFetchGenres()
+      .then(data => setGenres(data))
+      .catch(error => console.error('Error fetching genres:', error));
   }, []);
 
   return (
