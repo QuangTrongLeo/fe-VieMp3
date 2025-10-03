@@ -12,7 +12,7 @@ import { apiFetchLogin } from '~/api/apiFetchs/apiFetchAuths';
 
 const cx = classNames.bind(styles);
 
-function Login() {
+function Login({ showNotification }) {
   const { setCurrentToken } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -22,11 +22,18 @@ function Login() {
     e.preventDefault();
     try {
       const data = await apiFetchLogin(email, password);
-      setCurrentToken(data.accessToken);
-      navigate(config.routes.home);
+
+      // Điều hướng về home trước
+      navigate(config.routes.home, { replace: true });
+
+      setTimeout(() => {
+        setCurrentToken(data.accessToken);
+        showNotification('Đăng nhập thành công');
+      }, 300); // 300ms thay vì 0ms
     } catch (err) {
       console.error(err);
-      alert('Đăng nhập thất bại!');
+      setPassword('');
+      showNotification('Đăng nhập thất bại. Mật khẩu không chính xác!');
     }
   };
 

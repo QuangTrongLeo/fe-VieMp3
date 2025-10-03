@@ -44,7 +44,13 @@ function App() {
     const currentPath = location.pathname;
 
     // Nếu đã login mà cố tình gõ /login hoặc /register thì redirect về home
-    if (roles && roles.length > 0 && (currentPath === config.routes.login || currentPath === config.routes.register)) {
+    if (
+      roles &&
+      roles.length > 0 &&
+      (currentPath === config.routes.login ||
+        currentPath === config.routes.register ||
+        currentPath === config.routes.otp)
+    ) {
       showNotification('Bạn không có quyền truy cập');
       navigate(config.routes.home, { replace: true });
       return;
@@ -77,7 +83,7 @@ function App() {
                 path={route.path}
                 element={
                   <Layout>
-                    <Page />
+                    <Page showNotification={showNotification} />
                   </Layout>
                 }
               />
