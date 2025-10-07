@@ -29,7 +29,7 @@ function Login({ showNotification }) {
       setTimeout(() => {
         setCurrentToken(data.accessToken);
         showNotification('Đăng nhập thành công');
-      }, 300); // 300ms thay vì 0ms
+      }, 100); // 100ms thay vì 0ms
     } catch (err) {
       console.error(err);
       setPassword('');

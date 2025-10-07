@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
@@ -6,28 +6,43 @@ import styles from './ArtistDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
-import { apiArtists } from '~/api/apiURL/apiArtists';
 import { apiAlbums } from '~/api/apiURL/apiAlbums';
 import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiFetchArtistByName } from '~/api/apiFetchs/apiFetchArtists';
 
 const cx = classNames.bind(styles);
 
 function ArtistDetail() {
   const { artistName } = useParams();
-  const decodedArtistName = decodeURIComponent(artistName);
-
+  const [artist, setArtist] = useState(null);
   const [isFollowed, setIsFollowed] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
 
-  // Lấy thông tin artist từ apiArtists
-  const artist = apiArtists.find(artist => artist.artistName.toLowerCase() === decodedArtistName.toLowerCase());
+  const decodedArtistName = decodeURIComponent(artistName);
 
-  // Lọc albums của artist
+  useEffect(() => {
+    const fetchArtist = async () => {
+      try {
+        const data = await apiFetchArtistByName(artistName);
+        setArtist(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchArtist();
+  }, [artistName]);
+
+  // Nếu artist chưa có dữ liệu => render loading
+  if (!artist) {
+    return <div>Không tìm thấy nghệ sĩ...</div>;
+  }
+
+  // Lọc albums và songs dựa trên artistName (nếu cần)
   const albumsOfArtist = apiAlbums
     .filter(album => album.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  // Lọc bài hát của artist
   const songsOfArtist = apiSongs
     .filter(song => song.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -42,9 +57,9 @@ function ArtistDetail() {
     <div className={cx('artist-detail', 'py-4')}>
       {/* Header */}
       <div className={cx('artist-detail-header', 'd-flex', 'align-items-center', 'gap-4', 'mb-4')}>
-        <img src={artist.avatar || ''} alt={artist.artistName} className={cx('avatar')} />
+        <img src={artist.avatar || ''} alt={artist.name || decodedArtistName} className={cx('avatar')} />
         <div>
-          <h1 className={cx('artist-name')}>{decodedArtistName}</h1>
+          <h1 className={cx('artist-name')}>{artist.name || decodedArtistName}</h1>
           <p className={cx('followers')}>{(artist.followers ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
           <button className={cx('follow-btn')} onClick={toggleFollow}>
             <i className={cx(isFollowed ? icons.iconCheck : icons.iconUserPlus, 'me-1')}></i>
@@ -53,6 +68,7 @@ function ArtistDetail() {
         </div>
       </div>
 
+      {/* Tab header */}
       <div className={cx('tab-header')}>
         <div className={cx('tab-item', { active: activeTab === 'songs' })} onClick={() => setActiveTab('songs')}>
           BÀI HÁT
@@ -66,13 +82,11 @@ function ArtistDetail() {
       <div className="row">
         {activeTab === 'songs' && (
           <>
-            {/* SONGS */}
             {/* Mới phát hành */}
-
             <div className="col-md-4 mb-4">
               <h5 className={cx('section-title', 'mb-4')}>Mới Phát Hành</h5>
-              <Link to={`/song/${latestSong.songName}`} className={cx('release-card-link')}>
-                {latestSong && (
+              {latestSong && (
+                <Link to={`/song/${latestSong.songName}`} className={cx('release-card-link')}>
                   <div className={cx('release-card')}>
                     <img src={latestSong.cover} alt={latestSong.songName} className={cx('release-cover')} />
                     <div className="mt-3">
@@ -81,8 +95,8 @@ function ArtistDetail() {
                       <small>{new Date(latestSong.createdAt).toLocaleDateString('vi-VN')}</small>
                     </div>
                   </div>
-                )}
-              </Link>
+                </Link>
+              )}
             </div>
 
             {/* Bài hát nổi bật */}
@@ -106,8 +120,7 @@ function ArtistDetail() {
 
         {activeTab === 'albums' && (
           <>
-            {/* ALBUMS */}
-            <h5 className={cx('section-title', 'mb-4')}>Albums của buitruonglinh</h5>
+            <h5 className={cx('section-title', 'mb-4')}>Albums của {artist.name}</h5>
             <LimitedList
               items={albumsOfArtist}
               limit={8}
