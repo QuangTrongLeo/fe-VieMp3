@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 function Profile() {
   const [user, setUser] = useState({
-    usename: 'Lil Leo 🐍',
+    usename: 'Lil Leo',
     gmail: 'trongphamtg05@gmail.com',
     avatar: '',
   });

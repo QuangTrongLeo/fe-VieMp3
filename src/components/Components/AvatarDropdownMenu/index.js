@@ -3,7 +3,7 @@ import config from '~/config';
 import icons from '~/assets/icons';
 import { useAuth } from '../AuthProvider';
 
-function AvatarDropdownMenu({ isArtist, isAdmin }) {
+function AvatarDropdownMenu({ isMod, isAdmin }) {
   const { logout } = useAuth();
   return (
     <ul className="dropdown-menu custom-dropdown-left" aria-labelledby="navbarDropdownMenuLink">
@@ -13,8 +13,8 @@ function AvatarDropdownMenu({ isArtist, isAdmin }) {
         </Link>
       </li>
 
-      {/* ARTIST */}
-      {isArtist && (
+      {/* MOD */}
+      {isMod && (
         <>
           <li>
             <Link className="dropdown-item" to={config.routes.mySongs}>

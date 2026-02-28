@@ -6,10 +6,9 @@ export async function apiFetchGenres() {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   });
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch genres');
+  const result = await res.json();
+  if (!res.ok || !result.success) {
+    throw new Error(result.message || 'Failed to fetch genres');
   }
-
-  return res.json();
+  return result.data;
 }

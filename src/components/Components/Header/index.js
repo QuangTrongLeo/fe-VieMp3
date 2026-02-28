@@ -1,5 +1,5 @@
 import './Header.scss';
-import React from 'react';
+import React, { useRef } from 'react';
 import images from '~/assets/images';
 import config from '~/config';
 import icons from '~/assets/icons';
@@ -11,13 +11,60 @@ import Search from '../Search';
 
 function Header({ onToggleNotificationTablet, bellButtonRef }) {
   const { currentToken, setCurrentToken, roles } = useAuth();
+  const recognitionRef = useRef(null);
 
   const isLoggedIn = !!currentToken;
-  const isArtist = roles.includes('ARTIST');
+  const isMod = roles.includes('MOD');
   const isAdmin = roles.includes('ADMIN');
 
   const handleLogout = () => {
     setCurrentToken('');
+  };
+
+  const handleVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert('Trình duyệt không hỗ trợ voice search');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'vi-VN';
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+      console.log('🎤 Đang nghe...');
+    };
+
+    recognition.onresult = async event => {
+      const transcript = event.results[0][0].transcript;
+      console.log('Bạn nói:', transcript);
+
+      // Gửi lên backend
+      const response = await fetch('/api/v1/search/voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentToken}`,
+        },
+        body: JSON.stringify({ text: transcript }),
+      });
+
+      const result = await response.json();
+
+      console.log('Kết quả AI:', result);
+
+      // TODO: điều hướng sang trang search
+      // navigate(`/search?keyword=${transcript}`)
+    };
+
+    recognition.onerror = err => {
+      console.error('Lỗi nhận diện:', err);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
   };
 
   return (
@@ -35,7 +82,7 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
           <Search />
 
           {/* Voice button */}
-          <button className="btn voice-btn">
+          <button className="btn voice-btn" onClick={handleVoiceSearch}>
             <i className={icons.iconMicrophone}></i>
           </button>
         </div>
@@ -102,7 +149,7 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
                       loading="lazy"
                     />
                   </Link>
-                  <AvatarDropdownMenu isArtist={isArtist} isAdmin={isAdmin} handleLogout={handleLogout} />
+                  <AvatarDropdownMenu isMod={isMod} isAdmin={isAdmin} handleLogout={handleLogout} />
                 </li>
               </>
             ) : (

@@ -11,12 +11,13 @@ export async function apiFetchLogin(email, password) {
     }),
   });
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'Login failed');
+  const json = await res.json();
+
+  if (!res.ok || !json.success) {
+    throw new Error(json.message || 'Login failed');
   }
 
-  return res.json(); // login trả về JSON (TokenResponse)
+  return json.data; // { accessToken, refreshToken }
 }
 
 // Hàm gọi API register
@@ -31,12 +32,13 @@ export async function apiFetchRegister(username, email, password) {
     }),
   });
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'Register failed');
+  const json = await res.json();
+
+  if (!res.ok || !json.success) {
+    throw new Error(json.message || 'Đăng ký thất bại');
   }
 
-  return res.text(); // register trả về text ("OTP đã được gửi ...")
+  return json.message;
 }
 
 // Hàm gọi API verify OTP
@@ -50,10 +52,11 @@ export async function apiFetchVerifyOtp(email, otp) {
     }),
   });
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'Verify OTP failed');
+  const json = await res.json();
+
+  if (!res.ok || !json.success) {
+    throw new Error(json.message || 'Xác thực OTP thất bại');
   }
 
-  return res.text(); // verifyOtp trả về text ("Xác thực thành công!")
+  return json.message;
 }

@@ -31,7 +31,7 @@ function Otp() {
     try {
       const res = await apiFetchVerifyOtp(email, otp);
       alert(res); // "Xác thực thành công!"
-      navigate(config.routes.home); // chuyển sang trang home
+      navigate(config.routes.login); // chuyển sang trang login
     } catch (err) {
       setError(err.message);
     }

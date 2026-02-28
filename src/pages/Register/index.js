@@ -46,10 +46,9 @@ function Register() {
       try {
         await apiFetchRegister(username, email, password);
 
-        // 🚀 chuyển sang trang OTP và truyền email để verify
+        // Chuyển sang trang OTP và truyền email để verify
         navigate(config.routes.otp, { state: { email } });
       } catch (error) {
-        // TODO: tuỳ bạn muốn hiển thị error như thế nào (ví dụ error dưới input)
         setEmailError(error.message || 'Đăng ký thất bại');
       }
     }
