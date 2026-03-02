@@ -1,32 +1,66 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './Profile.module.scss';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import { images } from '~/assets';
 import { ShortButton } from '~/components/Components/Button';
+import { apiFetchGetProfile, apiFetchUpdateProfile } from '~/api/apiFetchs/apiFetchUsers';
 
 const cx = classNames.bind(styles);
 
 function Profile() {
   const [user, setUser] = useState({
-    usename: 'Lil Leo',
-    gmail: 'trongphamtg05@gmail.com',
+    username: '',
+    email: '',
     avatar: '',
   });
 
   const [openPopup, setOpenPopup] = useState(false);
-  const [tempName, setTempName] = useState(user.usename);
-  const [tempAvatar, setTempAvatar] = useState(user.avatar);
+  const [tempName, setTempName] = useState('');
+  const [tempAvatar, setTempAvatar] = useState('');
   const fileInputRef = useRef(null);
 
-  const handleSave = () => {
-    setUser(prev => ({
-      ...prev,
-      usename: tempName,
-      avatar: tempAvatar,
-    }));
-    setOpenPopup(false);
+  // ===== GET PROFILE =====
+  const handleGetProfile = async () => {
+    try {
+      console.log('=== FETCH PROFILE ===');
+
+      const res = await apiFetchGetProfile();
+      console.log('Profile response:', res);
+
+      if (res.success) {
+        setUser(res.data);
+      } else {
+        console.error('API trả về success = false');
+      }
+    } catch (error) {
+      console.error('Lỗi lấy profile:', error.message);
+    }
   };
+
+  // ===== UPDATE PROFILE =====
+  const handleUpdateProfile = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('username', tempName);
+      if (fileInputRef.current.files[0]) {
+        formData.append('avatar', fileInputRef.current.files[0]);
+      }
+      const res = await apiFetchUpdateProfile(formData);
+      if (res.success) {
+        setUser(res.data);
+        setOpenPopup(false);
+        console.log('Cập nhật thành công');
+      }
+    } catch (error) {
+      console.error('Lỗi update:', error.message);
+    }
+  };
+
+  // gọi khi component mount
+  useEffect(() => {
+    handleGetProfile();
+  }, []);
 
   const handleImageChange = e => {
     const file = e.target.files[0];
@@ -47,22 +81,23 @@ function Profile() {
           <div className={cx('avatar-placeholder', 'col-12 col-md-4', 'text-center')}>
             <img
               src={user.avatar || images.avatarDefault}
-              alt={user.usename}
+              alt={user.username}
               className={cx('avatar-img', 'img-fluid rounded-circle')}
             />
           </div>
 
           <div className={cx('profile-info', 'col-12 col-md-8', 'text-center', 'text-md-start')}>
             <div className={cx('profile-label')}>Hồ sơ</div>
-            <h1 className={cx('profile-name')}>{user.usename}</h1>
-            <div>Gmail: {user.gmail}</div>
+            <h1 className={cx('profile-name')}>{user.username}</h1>
+            <div>Gmail: {user.email}</div>
+
             <div style={{ marginTop: '2%' }}>
               <ShortButton
                 color="var(--white-color)"
                 backgroundColor="var(--primary-color)"
                 borderColor="var(--black-color-light-2)"
                 onClick={() => {
-                  setTempName(user.usename);
+                  setTempName(user.username);
                   setTempAvatar(user.avatar);
                   setOpenPopup(true);
                 }}
@@ -74,7 +109,7 @@ function Profile() {
         </div>
       </div>
 
-      {/* --- popup update profile --- */}
+      {/* ===== POPUP ===== */}
       {openPopup && (
         <div className={cx('popup-overlay')} onClick={() => setOpenPopup(false)}>
           <div className={cx('popup-box')} onClick={e => e.stopPropagation()}>
@@ -90,7 +125,6 @@ function Profile() {
                 <img src={tempAvatar || images.avatarDefault} alt="avatar" />
               </div>
 
-              {/* input file ẩn */}
               <input
                 type="file"
                 accept="image/*"
@@ -107,7 +141,11 @@ function Profile() {
               />
 
               <div className={cx('popup-footer')}>
-                <ShortButton color="var(--white-color)" backgroundColor="var(--primary-color)" onClick={handleSave}>
+                <ShortButton
+                  color="var(--white-color)"
+                  backgroundColor="var(--primary-color)"
+                  onClick={handleUpdateProfile}
+                >
                   Lưu
                 </ShortButton>
               </div>
