@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
@@ -14,40 +14,54 @@ const cx = classNames.bind(styles);
 
 function ArtistDetail() {
   const { artistName } = useParams();
+
   const [artist, setArtist] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isFollowed, setIsFollowed] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
 
   const decodedArtistName = decodeURIComponent(artistName);
 
+  // ===== GET ARTIST =====
+  const handleGetArtist = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await apiFetchArtistByName(decodedArtistName);
+      setArtist(data);
+    } catch (error) {
+      console.error(error.message);
+      setArtist(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [decodedArtistName]);
+
   useEffect(() => {
-    const fetchArtist = async () => {
-      try {
-        const data = await apiFetchArtistByName(artistName);
-        setArtist(data);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
+    handleGetArtist();
+  }, [handleGetArtist]);
 
-    fetchArtist();
-  }, [artistName]);
+  // Loading state
+  if (loading) {
+    return <div>Đang tải...</div>;
+  }
 
-  // Nếu artist chưa có dữ liệu => render loading
+  // Not found state
   if (!artist) {
     return <div>Không tìm thấy nghệ sĩ...</div>;
   }
 
-  // Lọc albums và songs dựa trên artistName (nếu cần)
+  // Lọc albums theo artist
   const albumsOfArtist = apiAlbums
     .filter(album => album.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
+  // Lọc songs theo artist
   const songsOfArtist = apiSongs
     .filter(song => song.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  const latestSong = [...songsOfArtist].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+  // Vì đã sort rồi nên chỉ cần lấy phần tử đầu
+  const latestSong = songsOfArtist[0];
 
   const toggleFollow = () => {
     setIsFollowed(prev => !prev);
@@ -60,7 +74,7 @@ function ArtistDetail() {
         <img src={artist.avatar || ''} alt={artist.name || decodedArtistName} className={cx('avatar')} />
         <div>
           <h1 className={cx('artist-name')}>{artist.name || decodedArtistName}</h1>
-          <p className={cx('followers')}>{(artist.followers ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
+          <p className={cx('followers')}>{(artist.favorites ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
           <button className={cx('follow-btn')} onClick={toggleFollow}>
             <i className={cx(isFollowed ? icons.iconCheck : icons.iconUserPlus, 'me-1')}></i>
             {isFollowed ? 'Đang theo dõi' : 'Theo dõi'}
@@ -85,6 +99,7 @@ function ArtistDetail() {
             {/* Mới phát hành */}
             <div className="col-md-4 mb-4">
               <h5 className={cx('section-title', 'mb-4')}>Mới Phát Hành</h5>
+
               {latestSong && (
                 <Link to={`/song/${latestSong.songName}`} className={cx('release-card-link')}>
                   <div className={cx('release-card')}>
@@ -104,6 +119,7 @@ function ArtistDetail() {
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
               </div>
+
               <LimitedList
                 items={songsOfArtist}
                 limit={10}
@@ -121,6 +137,7 @@ function ArtistDetail() {
         {activeTab === 'albums' && (
           <>
             <h5 className={cx('section-title', 'mb-4')}>Albums của {artist.name}</h5>
+
             <LimitedList
               items={albumsOfArtist}
               limit={8}
