@@ -1,35 +1,49 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './AlbumDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import { useParams } from 'react-router-dom';
-import { apiAlbums } from '~/api/apiURL/apiAlbums';
-import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiFetchAlbum } from '~/api/apiFetchs/apiFetchAlbums';
 
 const cx = classNames.bind(styles);
 
 function AlbumDetail() {
+  const { albumId } = useParams();
+  const [album, setAlbum] = useState(null);
+  const [songsInAlbum, setSongsInAlbum] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { albumName } = useParams();
-  const decodedAlbumName = decodeURIComponent(albumName);
-  const album = apiAlbums.find(a => a.albumName.toLowerCase() === decodedAlbumName.toLowerCase());
-
-  const songsInAlbum = apiSongs
-    .filter(song => song.albumName && song.albumName.toLowerCase() === decodedAlbumName.toLowerCase())
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
   const [totalDurationSeconds, setTotalDurationSeconds] = useState(0);
+  const [loading, setLoading] = useState(true);
 
+  // ===== GET ALBUM =====
+  const handleGetAlbum = async () => {
+    try {
+      setLoading(true);
+      const albumData = await apiFetchAlbum(albumId);
+      setAlbum(albumData);
+    } catch (error) {
+      console.error('Lỗi khi fetch album:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (albumId) {
+      handleGetAlbum();
+    }
+  }, [albumId]);
+
+  // =====TÍNH TỔNG THỜI LƯỢNG =====
   useEffect(() => {
     let total = 0;
     let loadedCount = 0;
 
     if (songsInAlbum.length > 0) {
       songsInAlbum.forEach(song => {
-        const audio = new Audio(song.audio); // song.audio là link file mp3
+        const audio = new Audio(song.audio);
         audio.addEventListener('loadedmetadata', () => {
           total += Math.floor(audio.duration);
           loadedCount++;
@@ -38,13 +52,12 @@ function AlbumDetail() {
           }
         });
       });
+    } else {
+      setTotalDurationSeconds(0);
     }
   }, [songsInAlbum]);
 
-  if (!album) {
-    return <div>Album không tồn tại</div>;
-  }
-
+  // ===== FORMAT DURATION =====
   const hours = Math.floor(totalDurationSeconds / 3600);
   const minutes = Math.floor((totalDurationSeconds % 3600) / 60);
   const seconds = totalDurationSeconds % 60;
@@ -60,16 +73,26 @@ function AlbumDetail() {
     setIsFavorite(prev => !prev);
   };
 
+  if (loading) {
+    return <div>Đang tải album...</div>;
+  }
+  if (!album) {
+    return <div>Album không tồn tại</div>;
+  }
   return (
     <div className={cx('album-wrapper', 'py-4')}>
       <div className={cx('album-header', 'd-flex', 'align-items-center', 'mb-4')}>
         <img src={album.cover} alt="album-cover" className={cx('album-cover')} />
+
         <div className="ms-4">
-          <h2 className={cx('album-title')}>{album.albumName}</h2>
-          <p className={cx('album-description')}>Tuyển tập các bài hát trong Album của "{album.artistName}"</p>
+          <h2 className={cx('album-title')}>{album.title}</h2>
+
+          <p className={cx('album-description')}>Tuyển tập các bài hát trong Album</p>
+
           <p className={cx('album-meta')}>
             {songsInAlbum.length} bài hát - {formattedDuration}
           </p>
+
           <div>
             <button className={cx('favorite-btn')} onClick={toggleFavorite}>
               <i className={cx(isFavorite ? icons.iconCheck : icons.iconHeart, 'me-1')}></i>
@@ -80,6 +103,7 @@ function AlbumDetail() {
       </div>
 
       <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
+
       {songsInAlbum.length > 0 ? (
         <LimitedList
           items={songsInAlbum}

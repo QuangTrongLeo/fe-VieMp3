@@ -1,6 +1,15 @@
-// import baseURL from '~/utils/httpBaseURL';
+import apiBaseURL from '~/utils/httpBaseURL';
 
-// const apiFavoriteArtists = `${baseURL}favorite-artists`;
+const ALBUM_PATH = '/albums';
+
+const apiAlbumUrls = {
+  // GET
+  getAlbum: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}`,
+  getAlbums: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}/all`,
+  getAlbumsByArtist: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}`,
+};
+
+export default apiAlbumUrls;
 
 // HOT ALBUMS
 const apiAlbums = [

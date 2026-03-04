@@ -6,8 +6,8 @@ import styles from './ArtistDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
-import { apiAlbums } from '~/api/apiURL/apiAlbums';
 import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiFetchAlbumsByArtist } from '~/api/apiFetchs/apiFetchAlbums';
 import { apiFetchArtistByName } from '~/api/apiFetchs/apiFetchArtists';
 
 const cx = classNames.bind(styles);
@@ -16,23 +16,25 @@ function ArtistDetail() {
   const { artistName } = useParams();
 
   const [artist, setArtist] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [albumsByArtist, setAlbumsByArtist] = useState([]);
+  const [artistLoading, setArtistLoading] = useState(true);
+  const [albumsLoading, setAlbumsLoading] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
 
   const decodedArtistName = decodeURIComponent(artistName);
 
-  // ===== GET ARTIST =====
+  // ===== FETCH ARTIST =====
   const handleGetArtist = useCallback(async () => {
     try {
-      setLoading(true);
+      setArtistLoading(true);
       const data = await apiFetchArtistByName(decodedArtistName);
       setArtist(data);
     } catch (error) {
       console.error(error.message);
       setArtist(null);
     } finally {
-      setLoading(false);
+      setArtistLoading(false);
     }
   }, [decodedArtistName]);
 
@@ -40,27 +42,40 @@ function ArtistDetail() {
     handleGetArtist();
   }, [handleGetArtist]);
 
-  // Loading state
-  if (loading) {
+  // ===== FETCH ALBUMS BY ARTIST =====
+  const handleAlbumsByArtist = useCallback(async () => {
+    if (!artist?.id) return;
+
+    try {
+      setAlbumsLoading(true);
+      const data = await apiFetchAlbumsByArtist(artist.id);
+      setAlbumsByArtist(data);
+    } catch (error) {
+      console.error(error.message);
+      setAlbumsByArtist([]);
+    } finally {
+      setAlbumsLoading(false);
+    }
+  }, [artist]);
+
+  useEffect(() => {
+    handleAlbumsByArtist();
+  }, [handleAlbumsByArtist]);
+
+  // ===== LOADING =====
+  if (artistLoading) {
     return <div>Đang tải...</div>;
   }
 
-  // Not found state
   if (!artist) {
     return <div>Không tìm thấy nghệ sĩ...</div>;
   }
 
-  // Lọc albums theo artist
-  const albumsOfArtist = apiAlbums
-    .filter(album => album.artistName.toLowerCase() === decodedArtistName.toLowerCase())
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-  // Lọc songs theo artist
+  // ===== SONGS (tạm thời vẫn dùng local) =====
   const songsOfArtist = apiSongs
     .filter(song => song.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  // Vì đã sort rồi nên chỉ cần lấy phần tử đầu
   const latestSong = songsOfArtist[0];
 
   const toggleFollow = () => {
@@ -69,11 +84,11 @@ function ArtistDetail() {
 
   return (
     <div className={cx('artist-detail', 'py-4')}>
-      {/* Header */}
+      {/* ===== HEADER ===== */}
       <div className={cx('artist-detail-header', 'd-flex', 'align-items-center', 'gap-4', 'mb-4')}>
-        <img src={artist.avatar || ''} alt={artist.name || decodedArtistName} className={cx('avatar')} />
+        <img src={artist.avatar || ''} alt={artist.name} className={cx('avatar')} />
         <div>
-          <h1 className={cx('artist-name')}>{artist.name || decodedArtistName}</h1>
+          <h1 className={cx('artist-name')}>{artist.name}</h1>
           <p className={cx('followers')}>{(artist.favorites ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
           <button className={cx('follow-btn')} onClick={toggleFollow}>
             <i className={cx(isFollowed ? icons.iconCheck : icons.iconUserPlus, 'me-1')}></i>
@@ -82,7 +97,7 @@ function ArtistDetail() {
         </div>
       </div>
 
-      {/* Tab header */}
+      {/* ===== TAB ===== */}
       <div className={cx('tab-header')}>
         <div className={cx('tab-item', { active: activeTab === 'songs' })} onClick={() => setActiveTab('songs')}>
           BÀI HÁT
@@ -92,11 +107,11 @@ function ArtistDetail() {
         </div>
       </div>
 
-      {/* CONTENT */}
+      {/* ===== CONTENT ===== */}
       <div className="row">
+        {/* ===== SONG TAB ===== */}
         {activeTab === 'songs' && (
           <>
-            {/* Mới phát hành */}
             <div className="col-md-4 mb-4">
               <h5 className={cx('section-title', 'mb-4')}>Mới Phát Hành</h5>
 
@@ -105,7 +120,7 @@ function ArtistDetail() {
                   <div className={cx('release-card')}>
                     <img src={latestSong.cover} alt={latestSong.songName} className={cx('release-cover')} />
                     <div className="mt-3">
-                      <strong className={cx('release-song-name')}>{latestSong.songName}</strong>
+                      <strong>{latestSong.songName}</strong>
                       <p className="mb-0">{latestSong.artistName}</p>
                       <small>{new Date(latestSong.createdAt).toLocaleDateString('vi-VN')}</small>
                     </div>
@@ -114,16 +129,13 @@ function ArtistDetail() {
               )}
             </div>
 
-            {/* Bài hát nổi bật */}
             <div className="col-md-8">
-              <div className="d-flex justify-content-between align-items-center mb-2">
-                <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
-              </div>
+              <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
 
               <LimitedList
                 items={songsOfArtist}
                 limit={10}
-                wrapInRow={true}
+                wrapInRow
                 renderItem={(song, idx) => (
                   <div className="col-md-6 mb-3" key={idx}>
                     <SongItem song={song} />
@@ -134,24 +146,29 @@ function ArtistDetail() {
           </>
         )}
 
+        {/* ===== ALBUM TAB ===== */}
         {activeTab === 'albums' && (
           <>
             <h5 className={cx('section-title', 'mb-4')}>Albums của {artist.name}</h5>
 
-            <LimitedList
-              items={albumsOfArtist}
-              limit={8}
-              renderItem={album => (
-                <div key={album.albumId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
-                  <SquareCard
-                    content={album.albumName}
-                    cover={album.cover}
-                    href={`/album/${album.albumName}`}
-                    icon={<i className="fas fa-list fa-3x"></i>}
-                  />
-                </div>
-              )}
-            />
+            {albumsLoading ? (
+              <div>Đang tải album...</div>
+            ) : (
+              <LimitedList
+                items={albumsByArtist}
+                limit={8}
+                renderItem={album => (
+                  <div key={album.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+                    <SquareCard
+                      content={album.title}
+                      cover={album.cover}
+                      href={`/album/${album.id}`}
+                      icon={<i className="fas fa-list fa-3x"></i>}
+                    />
+                  </div>
+                )}
+              />
+            )}
           </>
         )}
       </div>

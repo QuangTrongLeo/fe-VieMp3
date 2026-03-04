@@ -27,7 +27,7 @@ const publishRoutes = [
   { path: config.routes.home, component: Home },
   { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
   { path: `${config.routes.genre}/:genreName`, component: GenreDetail },
-  { path: `${config.routes.album}/:albumName`, component: AlbumDetail },
+  { path: `${config.routes.album}/:albumId`, component: AlbumDetail },
   { path: config.routes.genres, component: Genres },
   { path: config.routes.login, component: Login, layout: SecondLayout },
   { path: config.routes.register, component: Register, layout: SecondLayout },

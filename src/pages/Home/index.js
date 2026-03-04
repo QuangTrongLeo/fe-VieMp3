@@ -1,19 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
 import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/apiURL/apiSongs';
-import { apiArtists, apiFavoriteArtists } from '~/api/apiURL/apiArtists';
+import { apiFavoriteArtists } from '~/api/apiURL/apiArtists';
+import { apiFetchArtists } from '~/api/apiFetchs/apiFetchArtists';
+import { apiFetchAlbums } from '~/api/apiFetchs/apiFetchAlbums';
 import { apiAlbums } from '~/api/apiURL/apiAlbums';
 
 const cx = classNames.bind(styles);
-
-// const sortedNewSongs = [...apiSongs].sort((a, b) => b.songId - a.songId);
-// const sortedFavoriteSongsOfTheWeek = [...apiFavoriteSongsOfTheWeek].sort((a, b) => b.likesOfWeek - a.likesOfWeek);
-// const sortedTrendingArtists = [...apiArtists].sort((a, b) => b.followers - a.followers);
-// const sortedHotAlbums = [...apiAlbums].sort((a, b) => b.favorites - a.favorites);
-// const sortedFavoriteArtists = [...apiFavoriteArtists].sort((a, b) => new Date(b.followedAt) - new Date(a.followedAt));
 
 function sortDesc(arr, field, isDate = false) {
   return [...arr].sort((a, b) => {
@@ -25,9 +21,37 @@ function sortDesc(arr, field, isDate = false) {
 }
 
 function Home() {
+  const [trendingArtists, setTrendingArtists] = useState([]);
+  const [hotAlbums, setHotAlbums] = useState([]);
+
+  const handleTrendingArtists = async () => {
+    try {
+      const data = await apiFetchArtists();
+      // sort theo favorites giảm dần
+      const sorted = sortDesc(data, 'favorites');
+      setTrendingArtists(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy nghệ sĩ phổ biến:', error);
+    }
+  };
+
+  const handleHotAlbums = async () => {
+    try {
+      const data = await apiFetchAlbums();
+      const sorted = sortDesc(data, 'favorites');
+      setHotAlbums(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy album hot:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleTrendingArtists();
+    handleHotAlbums();
+  }, []);
+
   const sortedNewSongs = sortDesc(apiSongs, 'createdAt', true);
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
-  const sortedTrendingArtists = sortDesc(apiArtists, 'followers');
   const sortedHotAlbums = sortDesc(apiAlbums, 'favorites');
   const sortedFavoriteArtists = sortDesc(apiFavoriteArtists, 'followedAt', true);
 
@@ -72,13 +96,8 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Nghệ sĩ phổ biến</h3>
         <HorizontalScroll>
-          {sortedTrendingArtists.map(artist => (
-            <CircleCard
-              key={artist.artistId}
-              content={artist.artistName}
-              cover={artist.avatar}
-              href={`/artist/${artist.artistName}`}
-            />
+          {trendingArtists.map(artist => (
+            <CircleCard key={artist.id} content={artist.name} cover={artist.avatar} href={`/artist/${artist.name}`} />
           ))}
         </HorizontalScroll>
       </section>
@@ -87,13 +106,13 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Album hot</h3>
         <HorizontalScroll>
-          {sortedHotAlbums.map(album => (
+          {hotAlbums.map(album => (
             <SquareCard
-              key={album.albumId}
-              content={album.albumName}
+              key={album.id}
+              content={album.title}
               desc={album.artistName}
               cover={album.cover}
-              href={`/album/${album.albumName}`}
+              href={`/album/${album.id}`}
             />
           ))}
         </HorizontalScroll>
