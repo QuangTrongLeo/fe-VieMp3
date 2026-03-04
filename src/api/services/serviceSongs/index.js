@@ -1,0 +1,68 @@
+import apiSongUrls from '~/api/urls/apiSongs';
+import axios from 'axios';
+
+// ===== GET ALL SONGS =====
+export async function apiGetSongs() {
+  try {
+    const response = await axios.get(apiSongUrls.getSongs);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy danh sách bài hát';
+    throw new Error(message);
+  }
+}
+
+// ===== GET SONG =====
+export async function apiGetSong(songId) {
+  try {
+    const response = await axios.get(`${apiSongUrls.getSong}/${songId}`);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy thông tin bài hát';
+    throw new Error(message);
+  }
+}
+
+// ===== GET SONGS BY ALBUM =====
+export async function apiGetSongsByAlbum(albumId) {
+  try {
+    const response = await axios.get(`${apiSongUrls.getSongsByAlbum}/${albumId}`);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo album';
+    throw new Error(message);
+  }
+}
+
+// ===== GET SONGS BY ARTIST =====
+export async function apiGetSongsByArtist(artistId) {
+  try {
+    const response = await axios.get(`${apiSongUrls.getSongsByArtist}/${artistId}`);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo nghệ sĩ';
+    throw new Error(message);
+  }
+}
+
+// ===== GET SONGS BY GENRE =====
+export async function apiGetSongsByGenre(genreId) {
+  try {
+    const response = await axios.get(`${apiSongUrls.getSongsByGenre}/${genreId}`);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo thể loại';
+    throw new Error(message);
+  }
+}
+
+// ===== GET SONGS BY PLAYLIST =====
+export async function apiGetSongsByPlaylist(playlistId) {
+  try {
+    const response = await axios.get(`${apiSongUrls.getSongsByPlaylist}/${playlistId}`);
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo playlist';
+    throw new Error(message);
+  }
+}

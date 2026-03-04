@@ -1,41 +1,97 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import icons from '~/assets/icons';
 import styles from './GenreDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiHotSongsOfArtist } from '~/api/apiURL/apiSongs';
-import { apiPlayListInfo } from '~/api/apiURL/apiPlayLists';
+import { apiGetGenre } from '~/api/services/serviceGenres';
+import { apiGetSongsByGenre } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-function PlayListDetail() {
+function GenreDetail() {
+  const { genreId } = useParams();
+
+  const [genre, setGenre] = useState(null);
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ===== GET GENRE =====
+  const handleGetGenre = async () => {
+    try {
+      const data = await apiGetGenre(genreId);
+      setGenre(data);
+    } catch (error) {
+      console.error('Lỗi khi lấy genre:', error);
+    }
+  };
+
+  // ===== GET SONGS BY GENRE =====
+  const handleGetSongsByGenre = async () => {
+    try {
+      const data = await apiGetSongsByGenre(genreId);
+      setSongs(data || []);
+    } catch (error) {
+      console.error('Lỗi khi lấy bài hát theo thể loại:', error);
+      setSongs([]);
+    }
+  };
+
+  // ===== FETCH DATA =====
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!genreId) return;
+      setLoading(true);
+      await Promise.all([handleGetGenre(), handleGetSongsByGenre()]);
+      setLoading(false);
+    };
+    fetchData();
+  }, [genreId]);
+
+  // ===== SORT SONGS (NEWEST FIRST) =====
+  const sortedSongs = [...songs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  if (loading) {
+    return <div>Đang tải thể loại...</div>;
+  }
+
+  if (!genre) {
+    return <div>Không tìm thấy thể loại</div>;
+  }
+
   return (
     <div className={cx('genre-wrapper', 'py-4')}>
       {/* Header */}
       <div className={cx('genre-header', 'd-flex', 'align-items-center', 'mb-4')}>
-        <img src={apiPlayListInfo.cover} alt="genre-cover" className={cx('genre-cover')} />
-
+        <div className={cx('genre-cover')}>
+          <i className={icons.iconMusic}></i>
+        </div>
         <div className="ms-4">
-          <h2 className={cx('genre-title')}>{apiPlayListInfo.playlistName}</h2>
-          <p className={cx('genre-description')}>Tuyển tập các bài hát trong playlist {apiPlayListInfo.playlistName}</p>
-          <p className={cx('genre-meta')}>{apiPlayListInfo.totalSongs} bài hát</p>
+          <h2 className={cx('genre-title')}>{genre.name}</h2>
+          <p className={cx('genre-description')}>Tuyển tập các bài hát trong thể loại {genre.description}</p>
+          <p className={cx('genre-meta')}>{songs.length} bài hát</p>
         </div>
       </div>
 
       {/* Danh sách bài hát */}
-      <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
-      <LimitedList
-        items={apiHotSongsOfArtist.sort((a, b) => b.songId - a.songId)}
-        limit={8}
-        wrapInRow={true}
-        renderItem={(song, idx) => (
-          <div className="col-md-6 mb-3" key={idx}>
-            <SongItem song={song} />
-          </div>
-        )}
-      />
+      <h5 className={cx('section-title')}>Danh sách bài hát</h5>
+      {sortedSongs.length > 0 ? (
+        <LimitedList
+          items={sortedSongs}
+          limit={8}
+          wrapInRow={true}
+          renderItem={song => (
+            <div className="col-md-6 mb-3" key={song.id}>
+              <SongItem song={song} />
+            </div>
+          )}
+        />
+      ) : (
+        <p>Chưa có bài hát trong thể loại này</p>
+      )}
     </div>
   );
 }
 
-export default PlayListDetail;
+export default GenreDetail;

@@ -3,11 +3,10 @@ import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
-import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/apiURL/apiSongs';
-import { apiFavoriteArtists } from '~/api/apiURL/apiArtists';
-import { apiFetchArtists } from '~/api/apiFetchs/apiFetchArtists';
-import { apiFetchAlbums } from '~/api/apiFetchs/apiFetchAlbums';
-import { apiAlbums } from '~/api/apiURL/apiAlbums';
+import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/urls/apiSongs';
+import { apiFavoriteArtists } from '~/api/urls/apiArtists';
+import { apiGetArtists } from '~/api/services/serviceArtists';
+import { apiGetAlbums } from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
 
@@ -26,7 +25,7 @@ function Home() {
 
   const handleTrendingArtists = async () => {
     try {
-      const data = await apiFetchArtists();
+      const data = await apiGetArtists();
       // sort theo favorites giảm dần
       const sorted = sortDesc(data, 'favorites');
       setTrendingArtists(sorted);
@@ -37,7 +36,7 @@ function Home() {
 
   const handleHotAlbums = async () => {
     try {
-      const data = await apiFetchAlbums();
+      const data = await apiGetAlbums();
       const sorted = sortDesc(data, 'favorites');
       setHotAlbums(sorted);
     } catch (error) {
@@ -52,7 +51,6 @@ function Home() {
 
   const sortedNewSongs = sortDesc(apiSongs, 'createdAt', true);
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
-  const sortedHotAlbums = sortDesc(apiAlbums, 'favorites');
   const sortedFavoriteArtists = sortDesc(apiFavoriteArtists, 'followedAt', true);
 
   return (

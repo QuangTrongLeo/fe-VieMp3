@@ -6,7 +6,7 @@ import config from '~/config';
 import { useNavigate } from 'react-router-dom';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
-import { apiFetchRegister } from '~/api/apiFetchs/apiFetchAuths';
+import { apiRegister } from '~/api/services/serviceAuths';
 
 const cx = classNames.bind(styles);
 
@@ -44,7 +44,7 @@ function Register() {
 
     if (valid) {
       try {
-        await apiFetchRegister(username, email, password);
+        await apiRegister(username, email, password);
 
         // Chuyển sang trang OTP và truyền email để verify
         navigate(config.routes.otp, { state: { email } });

@@ -26,7 +26,7 @@ import PlayListDetail from '~/pages/PlayListDetail';
 const publishRoutes = [
   { path: config.routes.home, component: Home },
   { path: `${config.routes.artist}/:artistName`, component: ArtistDetail },
-  { path: `${config.routes.genre}/:genreName`, component: GenreDetail },
+  { path: `${config.routes.genre}/:genreId`, component: GenreDetail },
   { path: `${config.routes.album}/:albumId`, component: AlbumDetail },
   { path: config.routes.genres, component: Genres },
   { path: config.routes.login, component: Login, layout: SecondLayout },

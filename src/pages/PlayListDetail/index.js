@@ -3,8 +3,8 @@ import classNames from 'classnames/bind';
 import styles from './PlayListDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiHotSongsOfArtist } from '~/api/apiURL/apiSongs';
-import { apiPlayListInfo } from '~/api/apiURL/apiPlayLists';
+import { apiHotSongsOfArtist } from '~/api/urls/apiSongs';
+import { apiPlayListInfo } from '~/api/urls/apiPlayLists';
 
 const cx = classNames.bind(styles);
 

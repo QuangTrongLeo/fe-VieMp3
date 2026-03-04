@@ -4,7 +4,7 @@ import styles from './Genres.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { RectangleCard } from '~/components/Components/Card';
-import { apiFetchGenres } from '~/api/apiFetchs/apiFetchGenres';
+import { apiGetGenres } from '~/api/services/serviceGenres';
 
 const cx = classNames.bind(styles);
 
@@ -12,7 +12,7 @@ function Genres() {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    apiFetchGenres()
+    apiGetGenres()
       .then(data => setGenres(data))
       .catch(error => console.error('Error fetching genres:', error));
   }, []);
@@ -33,7 +33,7 @@ function Genres() {
               <RectangleCard
                 content={genre.name}
                 desc={genre.description}
-                href={`/genre/${genre.name.toLowerCase()}`}
+                href={`/genre/${genre.id}`}
                 icon={<i className={`${icons.iconMusic} fa-3x`}></i>}
               />
             </div>

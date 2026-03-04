@@ -1,7 +1,18 @@
-// import baseURL from '~/utils/httpBaseURL';
 import { audios } from '~/assets';
+import apiBaseURL from '~/utils/httpBaseURL';
 
-// const apiNewSongs = `${baseURL}songs`;
+const SONGS_PATH = '/songs';
+
+const apiSongUrls = {
+  getSong: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}`,
+  getSongs: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/all`,
+  getSongsByAlbum: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/album`,
+  getSongsByArtist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/artist`,
+  getSongsByGenre: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/genre`,
+  getSongsByPlaylist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/playlist`,
+};
+
+export default apiSongUrls;
 
 // CURRENT SONG
 const apiCurrentSong = {

@@ -1,7 +1,7 @@
-import apiArtistUrls from '~/api/apiURL/apiArtists';
+import apiArtistUrls from '~/api/urls/apiArtists';
 import axios from 'axios';
 
-export async function apiFetchArtists() {
+export async function apiGetArtists() {
   try {
     const response = await axios.get(apiArtistUrls.getArtists);
     return response.data.data;
@@ -11,7 +11,7 @@ export async function apiFetchArtists() {
   }
 }
 
-export async function apiFetchArtistByName(artistName) {
+export async function apiGetArtistByName(artistName) {
   try {
     const response = await axios.get(apiArtistUrls.getArtistByName, {
       params: { name: artistName },

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateCard, SquareCard } from '~/components/Components/Card';
 import icons from '~/assets/icons';
 import styles from './PlayList.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiPlayLists } from '~/api/apiURL/apiPlayLists';
+import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +14,35 @@ function PlayList() {
   const [coverPreview, setCoverPreview] = useState('');
   const [coverFile, setCoverFile] = useState(null);
 
+  const [playlists, setPlaylists] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ===== GET MY PLAYLISTS =====
+  const handleGetMyPlaylists = async () => {
+    try {
+      const data = await apiGetMyPlaylists();
+      setPlaylists(data || []);
+    } catch (error) {
+      console.error('Lỗi khi lấy playlist:', error);
+      setPlaylists([]);
+    }
+  };
+
+  // ===== FETCH DATA =====
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await handleGetMyPlaylists();
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  // ===== SORT PLAYLISTS (NEWEST FIRST) =====
+  const sortedPlaylists = [...playlists].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // ===== HANDLE IMAGE CHANGE =====
   const handleImageChange = e => {
     const file = e.target.files[0];
     if (file) {
@@ -24,6 +53,7 @@ function PlayList() {
 
   const handleSubmit = () => {
     console.log({ playlistName, coverFile });
+
     setIsOpen(false);
     setPlaylistName('');
     setCoverFile(null);
@@ -47,20 +77,26 @@ function PlayList() {
         <section className={cx('section-block')}>
           <h3>Playlist của bạn</h3>
 
-          <LimitedList
-            items={apiPlayLists.sort((a, b) => b.playlistId - a.playlistId)}
-            limit={8}
-            renderItem={playlist => (
-              <div key={playlist.playlistId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
-                <SquareCard
-                  content={playlist.playlistName}
-                  cover={playlist.cover}
-                  href={`/playlist/${playlist.playlistName}`}
-                  icon={<i className="fas fa-list fa-3x"></i>}
-                />
-              </div>
-            )}
-          />
+          {loading ? (
+            <p>Đang tải playlist...</p>
+          ) : sortedPlaylists.length > 0 ? (
+            <LimitedList
+              items={sortedPlaylists}
+              limit={8}
+              renderItem={playlist => (
+                <div key={playlist.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+                  <SquareCard
+                    content={playlist.playlistName}
+                    cover={playlist.cover}
+                    href={`/playlist/${playlist.id}`}
+                    icon={<i className="fas fa-list fa-3x"></i>}
+                  />
+                </div>
+              )}
+            />
+          ) : (
+            <p>Bạn chưa có playlist nào</p>
+          )}
         </section>
       </div>
 

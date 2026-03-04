@@ -1,6 +1,6 @@
-import apiUsersUrls from '~/api/apiURL/apiUsers';
+import apiUsersUrls from '~/api/urls/apiUsers';
 
-export async function apiFetchGetProfile() {
+export async function apiGetProfile() {
   const token = localStorage.getItem('token');
   const res = await fetch(apiUsersUrls.getProfile, {
     method: 'GET',
@@ -16,7 +16,7 @@ export async function apiFetchGetProfile() {
   return data;
 }
 
-export async function apiFetchUpdateProfile(formData) {
+export async function apiUpdateProfile(formData) {
   const token = localStorage.getItem('token');
   const res = await fetch(apiUsersUrls.updateProfile, {
     method: 'PUT',

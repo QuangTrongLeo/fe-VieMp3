@@ -6,9 +6,9 @@ import styles from './ArtistDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
-import { apiSongs } from '~/api/apiURL/apiSongs';
-import { apiFetchAlbumsByArtist } from '~/api/apiFetchs/apiFetchAlbums';
-import { apiFetchArtistByName } from '~/api/apiFetchs/apiFetchArtists';
+import { apiSongs } from '~/api/urls/apiSongs';
+import { apiGetAlbumsByArtist } from '~/api/services/serviceAlbums';
+import { apiGetArtistByName } from '~/api/services/serviceArtists';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +28,7 @@ function ArtistDetail() {
   const handleGetArtist = useCallback(async () => {
     try {
       setArtistLoading(true);
-      const data = await apiFetchArtistByName(decodedArtistName);
+      const data = await apiGetArtistByName(decodedArtistName);
       setArtist(data);
     } catch (error) {
       console.error(error.message);
@@ -48,7 +48,7 @@ function ArtistDetail() {
 
     try {
       setAlbumsLoading(true);
-      const data = await apiFetchAlbumsByArtist(artist.id);
+      const data = await apiGetAlbumsByArtist(artist.id);
       setAlbumsByArtist(data);
     } catch (error) {
       console.error(error.message);

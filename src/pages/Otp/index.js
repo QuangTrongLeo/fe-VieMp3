@@ -5,7 +5,7 @@ import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import config from '~/config';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { apiFetchVerifyOtp } from '~/api/apiFetchs/apiFetchAuths';
+import { apiVerifyOtp } from '~/api/services/serviceAuths';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +29,7 @@ function Otp() {
     }
 
     try {
-      const res = await apiFetchVerifyOtp(email, otp);
+      const res = await apiVerifyOtp(email, otp);
       alert(res); // "Xác thực thành công!"
       navigate(config.routes.login); // chuyển sang trang login
     } catch (err) {

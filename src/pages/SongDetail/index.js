@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import icons from '~/assets/icons';
 import { SongRow } from '~/components/Components/Row';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiSongs } from '~/api/urls/apiSongs';
 
 const cx = classNames.bind(styles);
 

@@ -6,7 +6,7 @@ import NotificationTablet from '~/components/Components/NotificationTablet';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 import BaseLayout from '../BaseLayout';
-import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiSongs } from '~/api/urls/apiSongs';
 
 function MainLayout({ children }) {
   const [showNotificationTablet, setShowNotificationTablet] = useState(false);

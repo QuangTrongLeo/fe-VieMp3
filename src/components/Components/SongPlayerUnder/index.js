@@ -6,7 +6,7 @@ import * as bootstrap from 'bootstrap';
 import './SongPlayerUnder.scss';
 import PlayerControls from '../PlayerControls';
 import { Link } from 'react-router-dom';
-import { apiSongs } from '~/api/apiURL/apiSongs';
+import { apiSongs } from '~/api/urls/apiSongs';
 initMDB({ Dropdown });
 
 function SongPlayerUnder({

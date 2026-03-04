@@ -8,7 +8,7 @@ import images from '~/assets/images';
 import { ShortButton } from '~/components/Components/Button';
 import { Link } from 'react-router-dom';
 import config from '~/config';
-import { apiFetchLogin } from '~/api/apiFetchs/apiFetchAuths';
+import { apiLogin } from '~/api/services/serviceAuths';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +21,7 @@ function Login({ showNotification }) {
   const handleLogin = async e => {
     e.preventDefault();
     try {
-      const data = await apiFetchLogin(email, password);
+      const data = await apiLogin(email, password);
 
       // Điều hướng về home trước
       navigate(config.routes.home, { replace: true });

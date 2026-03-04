@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreateCard, SquareCard } from '~/components/Components/Card';
 import { SongRow } from '~/components/Components/Row';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
@@ -6,9 +6,9 @@ import styles from './Library.module.scss';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiFavoriteSongs } from '~/api/apiURL/apiSongs';
-import { apiFavoriteAlbums } from '~/api/apiURL/apiAlbums';
-import { apiPlayLists } from '~/api/apiURL/apiPlayLists';
+import { apiFavoriteSongs } from '~/api/urls/apiSongs';
+import { apiFavoriteAlbums } from '~/api/urls/apiAlbums';
+import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
@@ -30,8 +30,23 @@ function Library() {
   const [activeTab, setActiveTab] = useState('songs');
   const [isOpen, setIsOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState('');
+  const [playlists, setPlaylists] = useState([]);
+  const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const [coverPreview, setCoverPreview] = useState('');
   const [coverFile, setCoverFile] = useState(null);
+
+  // ===== GET MY PLAYLISTS =====
+  const handleGetMyPlaylists = async () => {
+    try {
+      const data = await apiGetMyPlaylists();
+      setPlaylists(data || []);
+    } catch (error) {
+      console.error('Lỗi khi lấy playlist:', error);
+      setPlaylists([]);
+    } finally {
+      setLoadingPlaylists(false);
+    }
+  };
 
   const handleImageChange = e => {
     const file = e.target.files[0];
@@ -53,6 +68,12 @@ function Library() {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    handleGetMyPlaylists();
+  }, []);
+
+  const sortedPlaylists = [...playlists].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   return (
     <>
       <h1 className="text-center">
@@ -66,16 +87,23 @@ function Library() {
         <div className="mb-3">
           <CreateCard content="Tạo playlist mới" onClick={() => setIsOpen(true)} />
         </div>
-        <HorizontalScroll>
-          {apiPlayLists.map(playlist => (
-            <SquareCard
-              content={playlist.playlistName}
-              cover={playlist.cover}
-              href={`/playlist/${playlist.playlistName}`}
-              icon={<i className="fas fa-list fa-3x"></i>}
-            />
-          ))}
-        </HorizontalScroll>
+        {loadingPlaylists ? (
+          <p>Đang tải playlist...</p>
+        ) : sortedPlaylists.length > 0 ? (
+          <HorizontalScroll>
+            {sortedPlaylists.map(playlist => (
+              <SquareCard
+                key={playlist.id}
+                content={playlist.playlistName}
+                cover={playlist.cover}
+                href={`/playlist/${playlist.id}`}
+                icon={<i className="fas fa-list fa-3x"></i>}
+              />
+            ))}
+          </HorizontalScroll>
+        ) : (
+          <p>Bạn chưa có playlist nào</p>
+        )}
         {isOpen && (
           <div className={cx('modal-overlay')}>
             <div className={cx('modal')}>

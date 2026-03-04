@@ -1,8 +1,8 @@
-import apiAlbumUrls from '~/api/apiURL/apiAlbums';
+import apiAlbumUrls from '~/api/urls/apiAlbums';
 import axios from 'axios';
 
 // ===== GET ALBUM =====
-export async function apiFetchAlbum(albumId) {
+export async function apiGetAlbum(albumId) {
   try {
     const response = await axios.get(`${apiAlbumUrls.getAlbum}/${albumId}`);
     return response.data.data;
@@ -13,7 +13,7 @@ export async function apiFetchAlbum(albumId) {
 }
 
 // ===== GET ALL ALBUMS =====
-export async function apiFetchAlbums() {
+export async function apiGetAlbums() {
   try {
     const response = await axios.get(apiAlbumUrls.getAlbums);
     return response.data.data;
@@ -24,7 +24,7 @@ export async function apiFetchAlbums() {
 }
 
 // ===== GET ALBUMS BY ARTIST =====
-export async function apiFetchAlbumsByArtist(artistId) {
+export async function apiGetAlbumsByArtist(artistId) {
   try {
     const response = await axios.get(`${apiAlbumUrls.getAlbumsByArtist}/artist/${artistId}`);
     return response.data.data;

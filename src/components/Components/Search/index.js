@@ -6,9 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import LimitedList from '../LimitedList';
 import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
-import { apiSongs } from '~/api/apiURL/apiSongs';
-import { apiArtists } from '~/api/apiURL/apiArtists';
-import { apiAlbums } from '~/api/apiURL/apiAlbums';
+import { apiSongs } from '~/api/urls/apiSongs';
+import { apiArtists } from '~/api/urls/apiArtists';
+import { apiAlbums } from '~/api/urls/apiAlbums';
 
 const cx = classNames.bind(styles);
 
@@ -101,8 +101,8 @@ function Search() {
         item.type === 'song'
           ? `${item.artistName}${item.albumName ? ` • Album: ${item.albumName}` : ''}`
           : item.type === 'artist'
-          ? 'Nghệ sĩ nổi bật'
-          : `Album của "${item.artistName}"`
+            ? 'Nghệ sĩ nổi bật'
+            : `Album của "${item.artistName}"`
       }
       onClick={() => setSearchKeyword('')}
     />

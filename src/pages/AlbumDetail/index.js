@@ -5,7 +5,7 @@ import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import { useParams } from 'react-router-dom';
-import { apiFetchAlbum } from '~/api/apiFetchs/apiFetchAlbums';
+import { apiGetAlbum } from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +21,7 @@ function AlbumDetail() {
   const handleGetAlbum = async () => {
     try {
       setLoading(true);
-      const albumData = await apiFetchAlbum(albumId);
+      const albumData = await apiGetAlbum(albumId);
       setAlbum(albumData);
     } catch (error) {
       console.error('Lỗi khi fetch album:', error);

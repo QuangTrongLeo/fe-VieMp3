@@ -4,7 +4,7 @@ import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './FavoriteSongs.module.scss';
-import { apiFavoriteSongs } from '~/api/apiURL/apiSongs';
+import { apiFavoriteSongs } from '~/api/urls/apiSongs';
 
 const cx = classNames.bind(styles);
 

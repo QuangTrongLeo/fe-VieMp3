@@ -4,7 +4,7 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import { images } from '~/assets';
 import { ShortButton } from '~/components/Components/Button';
-import { apiFetchGetProfile, apiFetchUpdateProfile } from '~/api/apiFetchs/apiFetchUsers';
+import { apiGetProfile, apiUpdateProfile } from '~/api/services/serviceUsers';
 
 const cx = classNames.bind(styles);
 
@@ -25,7 +25,7 @@ function Profile() {
     try {
       console.log('=== FETCH PROFILE ===');
 
-      const res = await apiFetchGetProfile();
+      const res = await apiGetProfile();
       console.log('Profile response:', res);
 
       if (res.success) {
@@ -46,7 +46,7 @@ function Profile() {
       if (fileInputRef.current.files[0]) {
         formData.append('avatar', fileInputRef.current.files[0]);
       }
-      const res = await apiFetchUpdateProfile(formData);
+      const res = await apiUpdateProfile(formData);
       if (res.success) {
         setUser(res.data);
         setOpenPopup(false);

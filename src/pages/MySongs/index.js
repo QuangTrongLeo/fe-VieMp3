@@ -5,8 +5,8 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './MySongs.module.scss';
 import { CreateCard } from '~/components/Components/Card';
-import { apiFavoriteSongs } from '~/api/apiURL/apiSongs';
-import apiGenres from '~/api/apiURL/apiGenres';
+import { apiFavoriteSongs } from '~/api/urls/apiSongs';
+import apiGenres from '~/api/urls/apiGenres';
 
 const cx = classNames.bind(styles);
 

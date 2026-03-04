@@ -1,6 +1,14 @@
-// import baseURL from '~/utils/httpBaseURL';
+import apiBaseURL from '~/utils/httpBaseURL';
 
-// const apiFavoriteArtists = `${baseURL}favorite-artists`;
+const PLAYLIST_PATH = '/playlist';
+
+const apiPlaylistUrls = {
+  getPlaylist: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}`,
+  getPlaylists: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}/all`,
+  getMyPlaylists: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}/me`,
+};
+
+export default apiPlaylistUrls;
 
 // PLAYLISTS
 const apiPlayLists = [

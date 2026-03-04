@@ -4,7 +4,7 @@ import icons from '~/assets/icons';
 import styles from './FavoriteArtists.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiFavoriteArtists } from '~/api/apiURL/apiArtists';
+import { apiFavoriteArtists } from '~/api/urls/apiArtists';
 
 const cx = classNames.bind(styles);
 

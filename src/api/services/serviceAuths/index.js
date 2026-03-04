@@ -1,7 +1,7 @@
-import apiAuthUrls from '~/api/apiURL/apiAuths';
+import apiAuthUrls from '~/api/urls/apiAuths';
 
 // Hàm gọi API login
-export async function apiFetchLogin(email, password) {
+export async function apiLogin(email, password) {
   const res = await fetch(apiAuthUrls.login, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -21,7 +21,7 @@ export async function apiFetchLogin(email, password) {
 }
 
 // Hàm gọi API register
-export async function apiFetchRegister(username, email, password) {
+export async function apiRegister(username, email, password) {
   const res = await fetch(apiAuthUrls.register, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -42,7 +42,7 @@ export async function apiFetchRegister(username, email, password) {
 }
 
 // Hàm gọi API verify OTP
-export async function apiFetchVerifyOtp(email, otp) {
+export async function apiVerifyOtp(email, otp) {
   const res = await fetch(apiAuthUrls.verifyOtp, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
