@@ -1,10 +1,12 @@
 import apiBaseURL from '~/utils/httpBaseURL';
 
 const ARTIST_PATH = '/artists';
+const FAVORITE_ARTIST_PATH = '/favorite-artists';
 
 const apiArtistUrls = {
   // POST
   createArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
+  addArtistToFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
 
   // PUT
   updateArtistName: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/name`,
@@ -12,10 +14,12 @@ const apiArtistUrls = {
 
   // DELETE
   deleteArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
+  removeArtistFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
 
   // GET
   getArtists: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/all`,
   getArtistByName: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
+  getMyFavoriteArtists: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
 };
 
 export default apiArtistUrls;

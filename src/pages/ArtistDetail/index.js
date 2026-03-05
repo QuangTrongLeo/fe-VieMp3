@@ -8,23 +8,28 @@ import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
 import { apiSongs } from '~/api/urls/apiSongs';
 import { apiGetAlbumsByArtist } from '~/api/services/serviceAlbums';
-import { apiGetArtistByName } from '~/api/services/serviceArtists';
+import {
+  apiGetArtistByName,
+  apiGetMyFavoriteArtists,
+  apiAddArtistToFavorite,
+  apiRemoveArtistFromFavorite,
+} from '~/api/services/serviceArtists';
 
 const cx = classNames.bind(styles);
 
 function ArtistDetail() {
   const { artistName } = useParams();
+  const decodedArtistName = decodeURIComponent(artistName);
 
   const [artist, setArtist] = useState(null);
   const [albumsByArtist, setAlbumsByArtist] = useState([]);
   const [artistLoading, setArtistLoading] = useState(true);
   const [albumsLoading, setAlbumsLoading] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
 
-  const decodedArtistName = decodeURIComponent(artistName);
-
-  // ===== FETCH ARTIST =====
+  // ================= FETCH ARTIST =================
   const handleGetArtist = useCallback(async () => {
     try {
       setArtistLoading(true);
@@ -42,10 +47,29 @@ function ArtistDetail() {
     handleGetArtist();
   }, [handleGetArtist]);
 
-  // ===== FETCH ALBUMS BY ARTIST =====
-  const handleAlbumsByArtist = useCallback(async () => {
+  // ================= CHECK FOLLOW STATUS =================
+  const checkIsFollowed = useCallback(async () => {
     if (!artist?.id) return;
 
+    try {
+      const favoriteList = await apiGetMyFavoriteArtists();
+      const isExist = favoriteList.some(fav => String(fav.artist.id) === String(artist.id));
+      setIsFollowed(isExist);
+    } catch (error) {
+      console.error(error.message);
+      setIsFollowed(false);
+    }
+  }, [artist]);
+
+  useEffect(() => {
+    if (artist?.id) {
+      checkIsFollowed();
+    }
+  }, [artist, checkIsFollowed]);
+
+  // ================= FETCH ALBUMS =================
+  const handleAlbumsByArtist = useCallback(async () => {
+    if (!artist?.id) return;
     try {
       setAlbumsLoading(true);
       const data = await apiGetAlbumsByArtist(artist.id);
@@ -62,7 +86,32 @@ function ArtistDetail() {
     handleAlbumsByArtist();
   }, [handleAlbumsByArtist]);
 
-  // ===== LOADING =====
+  // ================= TOGGLE FOLLOW =================
+  const toggleFollow = async () => {
+    if (!artist?.id || followLoading) return;
+    try {
+      setFollowLoading(true);
+      let success = false;
+      if (!isFollowed) {
+        success = await apiAddArtistToFavorite(artist.id);
+      } else {
+        success = await apiRemoveArtistFromFavorite(artist.id);
+      }
+      if (success) {
+        setIsFollowed(prev => !prev);
+        setArtist(prev => ({
+          ...prev,
+          favorites: isFollowed ? Math.max((prev.favorites ?? 1) - 1, 0) : (prev.favorites ?? 0) + 1,
+        }));
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setFollowLoading(false);
+    }
+  };
+
+  // ================= LOADING =================
   if (artistLoading) {
     return <div>Đang tải...</div>;
   }
@@ -71,16 +120,12 @@ function ArtistDetail() {
     return <div>Không tìm thấy nghệ sĩ...</div>;
   }
 
-  // ===== SONGS (tạm thời vẫn dùng local) =====
+  // ================= LOCAL SONG DATA =================
   const songsOfArtist = apiSongs
     .filter(song => song.artistName.toLowerCase() === decodedArtistName.toLowerCase())
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   const latestSong = songsOfArtist[0];
-
-  const toggleFollow = () => {
-    setIsFollowed(prev => !prev);
-  };
 
   return (
     <div className={cx('artist-detail', 'py-4')}>
@@ -90,9 +135,9 @@ function ArtistDetail() {
         <div>
           <h1 className={cx('artist-name')}>{artist.name}</h1>
           <p className={cx('followers')}>{(artist.favorites ?? 0).toLocaleString('vi-VN')} người đang theo dõi</p>
-          <button className={cx('follow-btn')} onClick={toggleFollow}>
+          <button className={cx('follow-btn')} onClick={toggleFollow} disabled={followLoading}>
             <i className={cx(isFollowed ? icons.iconCheck : icons.iconUserPlus, 'me-1')}></i>
-            {isFollowed ? 'Đang theo dõi' : 'Theo dõi'}
+            {followLoading ? 'Đang xử lý...' : isFollowed ? 'Đang theo dõi' : 'Theo dõi'}
           </button>
         </div>
       </div>
@@ -109,12 +154,10 @@ function ArtistDetail() {
 
       {/* ===== CONTENT ===== */}
       <div className="row">
-        {/* ===== SONG TAB ===== */}
         {activeTab === 'songs' && (
           <>
             <div className="col-md-4 mb-4">
               <h5 className={cx('section-title', 'mb-4')}>Mới Phát Hành</h5>
-
               {latestSong && (
                 <Link to={`/song/${latestSong.songName}`} className={cx('release-card-link')}>
                   <div className={cx('release-card')}>
@@ -131,7 +174,6 @@ function ArtistDetail() {
 
             <div className="col-md-8">
               <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
-
               <LimitedList
                 items={songsOfArtist}
                 limit={10}
@@ -146,11 +188,9 @@ function ArtistDetail() {
           </>
         )}
 
-        {/* ===== ALBUM TAB ===== */}
         {activeTab === 'albums' && (
           <>
             <h5 className={cx('section-title', 'mb-4')}>Albums của {artist.name}</h5>
-
             {albumsLoading ? (
               <div>Đang tải album...</div>
             ) : (
