@@ -62,6 +62,8 @@
 
     img.release-cover {
       width: 83%;
+      height: 300px;
+      object-fit: cover;
       border-radius: 8px;
     }
   }

@@ -3,12 +3,15 @@ import classNames from 'classnames/bind';
 import styles from './SongItem.module.scss';
 import icons from '~/assets/icons';
 import { useNavigate } from 'react-router-dom';
+import { apiGetArtist } from '~/api/services/serviceArtists';
 
 const cx = classNames.bind(styles);
 
 function SongItem({ song }) {
   const [liked, setLiked] = useState(false);
   const [duration, setDuration] = useState('00:00');
+  const [artist, setArtist] = useState(null);
+
   const audioRef = useRef(null);
   const navigate = useNavigate();
 
@@ -18,7 +21,7 @@ function SongItem({ song }) {
   };
 
   const handleClick = () => {
-    navigate(`/song/${song.songName}`);
+    navigate(`/song/${song.id}`);
   };
 
   const formatTime = seconds => {
@@ -28,13 +31,33 @@ function SongItem({ song }) {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
+  // ===== GET ARTIST =====
+  const handleGetArtist = async () => {
+    try {
+      if (!song.artistId) return;
+
+      const data = await apiGetArtist(song.artistId);
+      setArtist(data);
+    } catch (error) {
+      console.error('Lỗi khi lấy artist:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetArtist();
+  }, [song.artistId]);
+
+  // ===== GET DURATION =====
   useEffect(() => {
     const audio = audioRef.current;
+
     if (audio) {
       const handleLoadedMetadata = () => {
         setDuration(formatTime(audio.duration));
       };
+
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+
       return () => {
         audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };
@@ -46,19 +69,22 @@ function SongItem({ song }) {
       <div className="d-flex align-items-center">
         <img
           src={song.cover || 'https://via.placeholder.com/40'}
-          alt={song.songName}
+          alt={song.title}
           className={cx('song-cover', 'me-2')}
         />
+
         <div>
-          <div className={cx('song-name')} title={song.songName}>
-            {song.songName}
+          <div className={cx('song-name')} title={song.title}>
+            {song.title}
           </div>
-          <div className={cx('song-artist')}>{song.artistName}</div>
+
+          <div className={cx('song-artist')}>{artist ? artist.name : 'Đang tải...'}</div>
         </div>
       </div>
 
       <div className="d-flex align-items-center gap-2">
         <i className={cx(icons.iconHeart, 'song-heart-icon', { liked })} onClick={toggleLike}></i>
+
         <span className={cx('song-duration')}>{duration}</span>
       </div>
 

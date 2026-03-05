@@ -2,6 +2,16 @@ import apiArtistUrls from '~/api/urls/apiArtists';
 import axios from 'axios';
 
 // =============== ARTIST ===============
+export async function apiGetArtist(artistId) {
+  try {
+    const response = await axios.get(`${apiArtistUrls.getArtist}/${artistId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Lỗi khi lấy album:', error);
+    throw error;
+  }
+}
+
 export async function apiGetArtists() {
   try {
     const response = await axios.get(apiArtistUrls.getArtists);

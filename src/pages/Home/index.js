@@ -157,7 +157,7 @@ function Home() {
               const artist = item.artist;
 
               return (
-                <CircleCard key={item.id} content={artist.name} cover={artist.avatar} href={`/artist/${artist.id}`} />
+                <CircleCard key={item.id} content={artist.name} cover={artist.avatar} href={`/artist/${artist.name}`} />
               );
             })}
           </HorizontalScroll>

@@ -15,7 +15,12 @@ export async function apiGetSongs() {
 // ===== GET SONG =====
 export async function apiGetSong(songId) {
   try {
-    const response = await axios.get(`${apiSongUrls.getSong}/${songId}`);
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${apiSongUrls.getSong}/${songId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy thông tin bài hát';

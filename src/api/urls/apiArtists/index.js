@@ -17,6 +17,7 @@ const apiArtistUrls = {
   removeArtistFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
 
   // GET
+  getArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
   getArtists: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/all`,
   getArtistByName: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
   getMyFavoriteArtists: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,

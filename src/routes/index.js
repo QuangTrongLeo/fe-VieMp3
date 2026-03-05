@@ -36,9 +36,9 @@ const publishRoutes = [
 ];
 
 const userRoutes = [
-  { path: `${config.routes.song}/:songName`, component: SongDetail },
+  { path: `${config.routes.song}/:songId`, component: SongDetail },
   { path: `${config.routes.lyris}/:lyrisName`, component: LyrisDetail },
-  { path: `${config.routes.playlist}/:playlistName`, component: PlayListDetail },
+  { path: `${config.routes.playlist}/:playlistId`, component: PlayListDetail },
   { path: config.routes.history, component: History },
   { path: config.routes.library, component: Library },
   { path: config.routes.profile, component: Profile },

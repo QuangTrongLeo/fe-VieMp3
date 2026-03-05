@@ -1,90 +1,142 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './SongDetail.module.scss';
 import classNames from 'classnames/bind';
-import icons from '~/assets/icons';
 import { SongRow } from '~/components/Components/Row';
+import { apiGetArtist } from '~/api/services/serviceArtists';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiSongs } from '~/api/urls/apiSongs';
+import { apiGetSong, apiGetSongsByArtist } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
 function SongDetail() {
-  const { songName } = useParams(); // Lấy tên bài hát từ URL
-  const decodedSongName = decodeURIComponent(songName);
+  const { songId } = useParams();
 
-  // Tìm bài hát đang được chọn
-  const currentSong = apiSongs.find(song => song.songName === decodedSongName);
+  const [artist, setArtist] = useState(null);
+  const [song, setSong] = useState(null);
+  const [relatedSongs, setRelatedSongs] = useState([]);
 
-  // Lọc các bài hát cùng ca sĩ, loại bỏ bài đang xem và sắp xếp theo createdAt giảm dần
-  const relatedSongs = apiSongs
-    .filter(song => song.artistName === currentSong?.artistName && song.songName !== currentSong?.songName)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const [songLoading, setSongLoading] = useState(true);
+  const [artistLoading, setArtistLoading] = useState(false);
+  const [songsLoading, setSongsLoading] = useState(false);
 
-  // Hàm render từng bài hát
-  const renderItem = song => (
+  // Lấy bài hát
+  useEffect(() => {
+    const fetchSong = async () => {
+      try {
+        setSongLoading(true);
+        const data = await apiGetSong(songId);
+        setSong(data);
+      } catch (error) {
+        console.error(error);
+        setSong(null);
+      } finally {
+        setSongLoading(false);
+      }
+    };
+
+    if (songId) {
+      fetchSong();
+    }
+  }, [songId]);
+
+  // Lấy artist
+  useEffect(() => {
+    const fetchArtist = async () => {
+      try {
+        setArtistLoading(true);
+        const data = await apiGetArtist(song.artistId);
+        setArtist(data);
+      } catch (error) {
+        console.error(error);
+        setArtist(null);
+      } finally {
+        setArtistLoading(false);
+      }
+    };
+
+    if (song?.artistId) {
+      fetchArtist();
+    }
+  }, [song]);
+
+  // Lấy bài hát cùng artist
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        setSongsLoading(true);
+
+        const data = await apiGetSongsByArtist(song.artistId);
+
+        const filteredSongs = data
+          .filter(item => item.id !== song.id)
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        setRelatedSongs(filteredSongs);
+      } catch (error) {
+        console.error(error);
+        setRelatedSongs([]);
+      } finally {
+        setSongsLoading(false);
+      }
+    };
+
+    if (song?.artistId) {
+      fetchSongs();
+    }
+  }, [song]);
+
+  const renderItem = item => (
     <SongRow
-      key={song.songId}
-      cover={song.cover}
-      song={song.songName}
-      artist={song.artistName}
-      album={song.albumName}
-      audio={song.audio}
+      key={item.id}
+      cover={item.cover}
+      song={item.title}
+      artist={artist?.name || ''}
+      album=""
+      audio={item.audio}
     />
   );
 
-  // Nếu không tìm thấy bài hát
-  if (!currentSong) {
+  if (songLoading) {
+    return <div className="text-center mt-5">Đang tải bài hát...</div>;
+  }
+
+  if (!song) {
     return <div className="text-center mt-5">Không tìm thấy bài hát</div>;
   }
 
   return (
     <div className={cx('container', 'py-4')}>
       <div className="row">
-        {/* Ảnh + thông tin bài hát */}
         <div className={cx('col-12', 'col-md-4', 'mb-4', 'text-center')}>
           <img
-            src={currentSong.cover}
-            alt={currentSong.artistName}
+            src={song.cover}
+            alt={song.title}
             className={cx('img', 'img-fluid', 'rounded', 'shadow', 'song-cover')}
           />
-          <h3 className={cx('song-name', 'mt-3')}>{currentSong.songName}</h3>
-          <p className={cx('artist')}>{currentSong.artistName}</p>
-          <p className={cx('createdAt')}>Phát hành: {new Date(currentSong.createdAt).toLocaleDateString('vi-VN')}</p>
-          <p className={cx('favorited')}>{(currentSong.favorites || 0).toLocaleString('vi-VN')} người yêu thích</p>
+
+          <h3 className={cx('song-name', 'mt-3')}>{song.title}</h3>
+
+          <p className={cx('artist')}>{artistLoading ? 'Đang tải nghệ sĩ...' : artist?.name}</p>
+
+          <p className={cx('createdAt')}>Phát hành: {new Date(song.createdAt).toLocaleDateString('vi-VN')}</p>
+
+          <p className={cx('favorited')}>{(song.favorites || 0).toLocaleString('vi-VN')} người yêu thích</p>
         </div>
 
-        {/* Danh sách bài hát liên quan */}
         <div className="col-12 col-md-8">
-          <h5 className={cx('subtitle', 'mb-3', 'text-center')}>Bài hát khác của "{currentSong.artistName}"</h5>
+          <h5 className={cx('subtitle', 'mb-3', 'text-center')}>Bài hát khác của "{artist?.name}"</h5>
 
-          {relatedSongs.length > 0 ? (
-            <>
-              {/* Header */}
-              <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
-                <div className="col-6 d-flex align-items-center gap-2">
-                  <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
-                  <span>Bài hát</span>
-                </div>
-                <div className="col-4 d-flex align-items-center">
-                  <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
-                  <span>Album</span>
-                </div>
-                <div className="col-2 d-flex justify-content-end align-items-center">
-                  <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
-                  <span>Thời gian</span>
-                </div>
-              </div>
-
-              {/* Danh sách bài hát */}
-              <LimitedList
-                items={relatedSongs}
-                renderItem={renderItem}
-                limit={8}
-                showAllText="Hiện tất cả bài hát"
-                showLessText="Ẩn bớt"
-              />
-            </>
+          {songsLoading ? (
+            <div className="text-center">Đang tải danh sách bài hát...</div>
+          ) : relatedSongs.length > 0 ? (
+            <LimitedList
+              items={relatedSongs}
+              renderItem={renderItem}
+              limit={8}
+              showAllText="Hiện tất cả bài hát"
+              showLessText="Ẩn bớt"
+            />
           ) : (
             <p className={cx('text-center', 'mt-3', 'fw-bold')}>Không có bài hát liên quan</p>
           )}
