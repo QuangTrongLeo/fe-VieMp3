@@ -30,7 +30,6 @@ export async function apiGetMyFavoriteArtists() {
   try {
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('Vui lòng đăng nhập');
       return [];
     }
     const response = await axios.get(apiArtistUrls.getMyFavoriteArtists, {

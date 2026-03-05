@@ -1,12 +1,20 @@
 import apiBaseURL from '~/utils/httpBaseURL';
 
 const ALBUM_PATH = '/albums';
+const FAVORITE_ALBUM_PATH = '/favorite-albums';
 
 const apiAlbumUrls = {
+  // POST
+  addAlbumToFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ALBUM_PATH}`,
+
+  // DELETE
+  removeAlbumFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ALBUM_PATH}`,
+
   // GET
   getAlbum: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}`,
   getAlbums: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}/all`,
   getAlbumsByArtist: `${apiBaseURL.defaults.baseURL}${ALBUM_PATH}`,
+  getMyFavoriteAlbums: `${apiBaseURL.defaults.baseURL}${FAVORITE_ALBUM_PATH}`,
 };
 
 export default apiAlbumUrls;

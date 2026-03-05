@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
+import { useAuth } from '~/components/Components/AuthProvider';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
 import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/urls/apiSongs';
-import { apiFavoriteArtists } from '~/api/urls/apiArtists';
-import { apiGetArtists } from '~/api/services/serviceArtists';
+import { apiGetArtists, apiGetMyFavoriteArtists } from '~/api/services/serviceArtists';
 import { apiGetAlbums } from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
@@ -20,8 +20,10 @@ function sortDesc(arr, field, isDate = false) {
 }
 
 function Home() {
+  const { currentToken } = useAuth();
   const [trendingArtists, setTrendingArtists] = useState([]);
   const [hotAlbums, setHotAlbums] = useState([]);
+  const [favoriteArtists, setFavoriteArtists] = useState([]);
 
   const handleTrendingArtists = async () => {
     try {
@@ -44,14 +46,28 @@ function Home() {
     }
   };
 
+  const handleMyFavoriteArtists = async () => {
+    try {
+      if (!currentToken) return;
+      const data = await apiGetMyFavoriteArtists();
+      const sorted = sortDesc(data, 'followedAt', true);
+      setFavoriteArtists(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy nghệ sĩ yêu thích:', error);
+    }
+  };
+
   useEffect(() => {
     handleTrendingArtists();
     handleHotAlbums();
-  }, []);
+
+    if (currentToken) {
+      handleMyFavoriteArtists();
+    }
+  }, [currentToken]);
 
   const sortedNewSongs = sortDesc(apiSongs, 'createdAt', true);
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
-  const sortedFavoriteArtists = sortDesc(apiFavoriteArtists, 'followedAt', true);
 
   return (
     <div className={cx('home-wrapper')}>
@@ -133,19 +149,20 @@ function Home() {
       </section>
 
       {/* YOUR FAVORITE ARTISTS */}
-      <section className={cx('section-block')}>
-        <h3>Nghệ sĩ yêu thích của bạn</h3>
-        <HorizontalScroll>
-          {sortedFavoriteArtists.map(artist => (
-            <CircleCard
-              key={artist.artistId}
-              content={artist.artistName}
-              cover={artist.avatar}
-              href={`/artist/${artist.artistName}`}
-            />
-          ))}
-        </HorizontalScroll>
-      </section>
+      {currentToken && favoriteArtists.length > 0 && (
+        <section className={cx('section-block')}>
+          <h3>Nghệ sĩ yêu thích của bạn</h3>
+          <HorizontalScroll>
+            {favoriteArtists.map(item => {
+              const artist = item.artist;
+
+              return (
+                <CircleCard key={item.id} content={artist.name} cover={artist.avatar} href={`/artist/${artist.id}`} />
+              );
+            })}
+          </HorizontalScroll>
+        </section>
+      )}
     </div>
   );
 }

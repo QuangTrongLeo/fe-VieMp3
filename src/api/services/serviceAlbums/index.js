@@ -34,3 +34,73 @@ export async function apiGetAlbumsByArtist(artistId) {
     throw new Error(message);
   }
 }
+
+// =============== FAVORITE ALBUM ===============
+
+export async function apiGetMyFavoriteAlbums() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return [];
+    }
+    const response = await axios.get(apiAlbumUrls.getMyFavoriteAlbums, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      alert('Vui lòng đăng nhập');
+    }
+    return [];
+  }
+}
+
+export async function apiAddAlbumToFavorite(albumId) {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Vui lòng đăng nhập');
+      return false;
+    }
+    const response = await axios.post(
+      `${apiAlbumUrls.addAlbumToFavorite}/${albumId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.success;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      alert('Vui lòng đăng nhập');
+    }
+    const message = error.response?.data?.message || error.response?.data || error.message;
+    throw new Error(message);
+  }
+}
+
+export async function apiRemoveAlbumFromFavorite(albumId) {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Vui lòng đăng nhập');
+      return false;
+    }
+    const response = await axios.delete(`${apiAlbumUrls.removeAlbumFromFavorite}/${albumId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.success;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      alert('Vui lòng đăng nhập');
+    }
+    const message = error.response?.data?.message || error.response?.data || error.message;
+    throw new Error(message);
+  }
+}

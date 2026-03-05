@@ -5,7 +5,12 @@ import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import { useParams } from 'react-router-dom';
-import { apiGetAlbum } from '~/api/services/serviceAlbums';
+import {
+  apiGetAlbum,
+  apiGetMyFavoriteAlbums,
+  apiAddAlbumToFavorite,
+  apiRemoveAlbumFromFavorite,
+} from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +28,11 @@ function AlbumDetail() {
       setLoading(true);
       const albumData = await apiGetAlbum(albumId);
       setAlbum(albumData);
+
+      // nếu API album có trả songs thì set luôn
+      if (albumData?.songs) {
+        setSongsInAlbum(albumData.songs);
+      }
     } catch (error) {
       console.error('Lỗi khi fetch album:', error);
     } finally {
@@ -36,7 +46,27 @@ function AlbumDetail() {
     }
   }, [albumId]);
 
-  // =====TÍNH TỔNG THỜI LƯỢNG =====
+  // ===== CHECK FAVORITE =====
+  useEffect(() => {
+    const checkFavorite = async () => {
+      try {
+        const myFavorites = await apiGetMyFavoriteAlbums();
+
+        // 🔥 FIX QUAN TRỌNG: so sánh album.id
+        const isFav = myFavorites.some(item => item.album.id === albumId);
+
+        setIsFavorite(isFav);
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra favorite:', error);
+      }
+    };
+
+    if (albumId) {
+      checkFavorite();
+    }
+  }, [albumId]);
+
+  // ===== TÍNH TỔNG THỜI LƯỢNG =====
   useEffect(() => {
     let total = 0;
     let loadedCount = 0;
@@ -62,23 +92,33 @@ function AlbumDetail() {
   const minutes = Math.floor((totalDurationSeconds % 3600) / 60);
   const seconds = totalDurationSeconds % 60;
 
-  let formattedDuration;
-  if (hours > 0) {
-    formattedDuration = `${hours} giờ ${minutes} phút ${seconds} giây`;
-  } else {
-    formattedDuration = `${minutes} phút ${seconds} giây`;
-  }
+  const formattedDuration =
+    hours > 0 ? `${hours} giờ ${minutes} phút ${seconds} giây` : `${minutes} phút ${seconds} giây`;
 
-  const toggleFavorite = () => {
-    setIsFavorite(prev => !prev);
+  // ===== TOGGLE FAVORITE =====
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        await apiRemoveAlbumFromFavorite(albumId);
+        setIsFavorite(false);
+      } else {
+        await apiAddAlbumToFavorite(albumId);
+        setIsFavorite(true);
+      }
+    } catch (error) {
+      console.error('Lỗi khi toggle favorite:', error);
+      alert(error.message);
+    }
   };
 
   if (loading) {
     return <div>Đang tải album...</div>;
   }
+
   if (!album) {
     return <div>Album không tồn tại</div>;
   }
+
   return (
     <div className={cx('album-wrapper', 'py-4')}>
       <div className={cx('album-header', 'd-flex', 'align-items-center', 'mb-4')}>
