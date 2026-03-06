@@ -1,27 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SongRow } from '~/components/Components/Row';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './FavoriteSongs.module.scss';
-import { apiFavoriteSongs } from '~/api/urls/apiSongs';
+
+import { apiGetMyFavoriteSongs, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteSongs = [...apiFavoriteSongs].sort((a, b) => new Date(b.favotitedAt) - new Date(a.favotitedAt));
-
-const renderItem = (song, index) => (
-  <SongRow
-    key={song.songId}
-    cover={song.cover}
-    song={song.songName}
-    artist={song.artistName}
-    album={song.albumName}
-    audio={song.audio}
-  />
-);
-
 function FavoriteSongs() {
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
+
+  const handleGetFavoriteSongs = async () => {
+    try {
+      const data = await apiGetMyFavoriteSongs();
+
+      const sorted = [...data].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
+
+      setFavoriteSongs(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy bài hát yêu thích:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetFavoriteSongs();
+  }, []);
+
+  const handleUnfavorite = async songId => {
+    try {
+      await apiRemoveSongFromFavorite(songId);
+
+      setFavoriteSongs(prev => prev.filter(item => item.song.id !== songId));
+    } catch (error) {
+      console.error('Lỗi bỏ thích bài hát:', error);
+    }
+  };
+
+  const renderItem = item => (
+    <SongRow key={item.song.id} song={item.song} liked={true} onToggleFavorite={handleUnfavorite} />
+  );
+
   return (
     <>
       <h1 className="text-center">
@@ -29,25 +49,26 @@ function FavoriteSongs() {
         <span style={{ paddingLeft: '10px' }}>Bài hát yêu thích của bạn</span>
       </h1>
 
-      {/* Header của danh sách */}
+      {/* Header */}
       <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
         <div className="col-6 d-flex align-items-center gap-2">
           <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
           <span>Bài hát</span>
         </div>
+
         <div className="col-4 d-flex align-items-center">
           <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
           <span>Album</span>
         </div>
+
         <div className="col-2 d-flex justify-content-end align-items-center">
           <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
           <span>Thời gian</span>
         </div>
       </div>
 
-      {/* Danh sách bài hát giới hạn */}
       <LimitedList
-        items={sortedFavoriteSongs}
+        items={favoriteSongs}
         renderItem={renderItem}
         limit={8}
         showAllText="Hiện tất cả bài hát"

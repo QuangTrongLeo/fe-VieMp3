@@ -1,62 +1,108 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SongRow.module.scss';
 import { Link } from 'react-router-dom';
+import { apiGetArtist } from '~/api/services/serviceArtists';
+import { apiGetAlbum } from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
 
-function SongRow({ cover, song, artist, album, audio }) {
-  const [liked, setLiked] = useState(false);
+function SongRow({ song, liked = false, onToggleFavorite }) {
+  const [artist, setArtist] = useState(null);
+  const [album, setAlbum] = useState(null);
+  const [isLiked, setIsLiked] = useState(liked);
   const [duration, setDuration] = useState('');
+
   const audioRef = useRef(null);
 
-  const toggleLike = () => {
-    setLiked(!liked);
+  // fetch artist
+  const fetchArtist = async () => {
+    try {
+      if (!song.artistId) return;
+
+      const data = await apiGetArtist(song.artistId);
+      setArtist(data);
+    } catch (error) {
+      console.error('Lỗi khi lấy artist:', error);
+    }
   };
 
-  // Lấy duration khi audio load xong metadata
+  // fetch album
+  const fetchAlbum = async () => {
+    try {
+      if (!song.albumId) return;
+
+      const data = await apiGetAlbum(song.albumId);
+      setAlbum(data);
+    } catch (error) {
+      console.error('Lỗi khi lấy album:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArtist();
+    fetchAlbum();
+  }, [song.artistId, song.albumId]);
+
+  const toggleLike = async e => {
+    e.preventDefault();
+
+    try {
+      if (isLiked) {
+        await onToggleFavorite(song.id);
+      }
+
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error('Favorite error:', error);
+    }
+  };
+
   const handleLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
+
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
+
     const formatted = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
     setDuration(formatted);
   };
 
   return (
-    <Link to={`/song/${song}`} className={cx('song-row-link')}>
+    <Link to={`/song/${song.id}`} className={cx('song-row-link')}>
       <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-2')}>
-        {/* Cột: Bài hát */}
+        {/* Bài hát */}
         <div className="col-6 d-flex align-items-center">
-          <img src={cover} alt={song} className={cx('song-row-cover', 'me-3')} />
+          <img src={song.cover} alt={song.title} className={cx('song-row-cover', 'me-3')} />
+
           <div className={cx('song-row-info')}>
-            <div className={cx('song-row-title')} title={song}>
-              {song}
+            <div className={cx('song-row-title')} title={song.title}>
+              {song.title}
             </div>
-            <div className={cx('song-row-artists')} title={artist}>
-              {artist}
+
+            <div className={cx('song-row-artists')} title={artist?.name || 'Unknown Artist'}>
+              {artist?.name || 'Unknown Artist'}
             </div>
           </div>
         </div>
 
-        {/* Cột: Album */}
-        <div className={cx('song-row-album', 'col-4')}>{album}</div>
+        {/* Album */}
+        <div className={cx('song-row-album', 'col-4')}>{album?.title || ''}</div>
 
-        {/* Cột: Thời gian */}
+        {/* Thời gian + Favorite */}
         <div className="col-2 d-flex justify-content-end align-items-center">
           <i
-            className={cx('song-row-favorite-icon', liked && 'active', 'me-2', 'fas', 'fa-heart')}
-            onClick={e => {
-              e.preventDefault(); // chặn nhảy trang khi bấm vào icon
-              toggleLike();
-            }}
+            className={cx('song-row-favorite-icon', isLiked && 'active', 'me-2', 'fas', 'fa-heart')}
+            onClick={toggleLike}
           ></i>
+
           <span className="small">{duration}</span>
         </div>
 
-        {/* Audio ẩn để lấy duration */}
-        {audio && (
-          <audio ref={audioRef} src={audio} onLoadedMetadata={handleLoadedMetadata} style={{ display: 'none' }} />
+        {/* Audio hidden để lấy duration */}
+        {song.audio && (
+          <audio ref={audioRef} src={song.audio} onLoadedMetadata={handleLoadedMetadata} style={{ display: 'none' }} />
         )}
       </div>
     </Link>
