@@ -71,3 +71,72 @@ export async function apiGetSongsByPlaylist(playlistId) {
     throw new Error(message);
   }
 }
+
+// =============== FAVORITE SONG ===============
+export async function apiGetMyFavoriteSongs() {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return [];
+    }
+    const response = await axios.get(apiSongUrls.getMyFavoriteSongs, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      alert('Vui lòng đăng nhập');
+    }
+    return [];
+  }
+}
+
+export async function apiAddSongToFavorite(songId) {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Vui lòng đăng nhập');
+      return false;
+    }
+    const response = await axios.post(
+      `${apiSongUrls.addSongToFavorite}/${songId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.success;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      alert('Vui lòng đăng nhập');
+    }
+    const message = error.response?.data?.message || error.response?.data || error.message;
+    throw new Error(message);
+  }
+}
+
+export async function apiRemoveSongFromFavorite(songId) {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Vui lòng đăng nhập');
+      return false;
+    }
+    const response = await axios.delete(`${apiSongUrls.removeSongFromFavorite}/${songId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.success;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      alert('Vui lòng đăng nhập');
+    }
+    const message = error.response?.data?.message || error.response?.data || error.message;
+    throw new Error(message);
+  }
+}

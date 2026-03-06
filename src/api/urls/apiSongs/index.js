@@ -2,14 +2,23 @@ import { audios } from '~/assets';
 import apiBaseURL from '~/utils/httpBaseURL';
 
 const SONGS_PATH = '/songs';
+const FAVORITE_SONGS_PATH = '/favorite-songs';
 
 const apiSongUrls = {
+  // POST
+  addSongToFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
+
+  // DELETE
+  removeSongFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
+
+  // GET
   getSong: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}`,
   getSongs: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/all`,
   getSongsByAlbum: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/album`,
   getSongsByArtist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/artist`,
   getSongsByGenre: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/genre`,
   getSongsByPlaylist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/playlist`,
+  getMyFavoriteSongs: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
 };
 
 export default apiSongUrls;

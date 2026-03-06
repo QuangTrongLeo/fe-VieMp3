@@ -7,7 +7,7 @@ import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { SquareCard } from '~/components/Components/Card';
 import { apiGetAlbumsByArtist } from '~/api/services/serviceAlbums';
-import { apiGetSongsByArtist } from '~/api/services/serviceSongs';
+import { apiGetSongsByArtist, apiGetMyFavoriteSongs } from '~/api/services/serviceSongs';
 import {
   apiGetArtistByName,
   apiGetMyFavoriteArtists,
@@ -33,6 +33,21 @@ function ArtistDetail() {
   const [isFollowed, setIsFollowed] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('songs');
+
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
+
+  const loadFavoriteSongs = useCallback(async () => {
+    try {
+      const data = await apiGetMyFavoriteSongs();
+      setFavoriteSongs(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadFavoriteSongs();
+  }, [loadFavoriteSongs]);
 
   // fetch artist
   const handleGetArtist = useCallback(async () => {
@@ -211,7 +226,7 @@ function ArtistDetail() {
                 wrapInRow
                 renderItem={(song, idx) => (
                   <div className="col-md-6 mb-3" key={idx}>
-                    <SongItem song={song} />
+                    <SongItem song={song} favoriteSongs={favoriteSongs} setFavoriteSongs={setFavoriteSongs} />
                   </div>
                 )}
               />

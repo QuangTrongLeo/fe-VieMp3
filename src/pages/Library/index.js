@@ -7,7 +7,6 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiFavoriteSongs } from '~/api/urls/apiSongs';
-import { apiFavoriteAlbums } from '~/api/urls/apiAlbums';
 import { apiGetMyFavoriteAlbums } from '~/api/services/serviceAlbums';
 import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
 
@@ -205,20 +204,26 @@ function Library() {
 
         {activeTab === 'albums' && (
           <div className={cx('session-block-albums')}>
-            <LimitedList
-              items={favoriteAlbums}
-              limit={8}
-              renderItem={item => (
-                <div key={item.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
-                  <SquareCard
-                    content={item.album.title}
-                    cover={item.album.cover}
-                    href={`/album/${item.album.id}`}
-                    icon={<i className="fas fa-list fa-3x"></i>}
-                  />
-                </div>
-              )}
-            />
+            {loadingAlbums ? (
+              <p>Đang tải album...</p>
+            ) : favoriteAlbums.length > 0 ? (
+              <LimitedList
+                items={favoriteAlbums}
+                limit={8}
+                renderItem={item => (
+                  <div key={item.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+                    <SquareCard
+                      content={item.album.title}
+                      cover={item.album.cover}
+                      href={`/album/${item.album.id}`}
+                      icon={<i className="fas fa-list fa-3x"></i>}
+                    />
+                  </div>
+                )}
+              />
+            ) : (
+              <p>Bạn chưa có album yêu thích</p>
+            )}
           </div>
         )}
       </section>

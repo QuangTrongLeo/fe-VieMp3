@@ -4,20 +4,36 @@ import styles from './SongItem.module.scss';
 import icons from '~/assets/icons';
 import { useNavigate } from 'react-router-dom';
 import { apiGetArtist } from '~/api/services/serviceArtists';
+import { apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-function SongItem({ song }) {
-  const [liked, setLiked] = useState(false);
+function SongItem({ song, favoriteSongs, setFavoriteSongs }) {
   const [duration, setDuration] = useState('00:00');
   const [artist, setArtist] = useState(null);
 
   const audioRef = useRef(null);
   const navigate = useNavigate();
+  const liked = favoriteSongs?.some(fav => String(fav.song.id) === String(song.id));
 
-  const toggleLike = e => {
+  const toggleLike = async e => {
     e.stopPropagation();
-    setLiked(prev => !prev);
+    try {
+      let success = false;
+      if (!liked) {
+        success = await apiAddSongToFavorite(song.id);
+        if (success) {
+          setFavoriteSongs(prev => [...prev, { song }]);
+        }
+      } else {
+        success = await apiRemoveSongFromFavorite(song.id);
+        if (success) {
+          setFavoriteSongs(prev => prev.filter(fav => String(fav.song.id) !== String(song.id)));
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   const handleClick = () => {
@@ -35,7 +51,6 @@ function SongItem({ song }) {
   const handleGetArtist = async () => {
     try {
       if (!song.artistId) return;
-
       const data = await apiGetArtist(song.artistId);
       setArtist(data);
     } catch (error) {
@@ -50,14 +65,11 @@ function SongItem({ song }) {
   // ===== GET DURATION =====
   useEffect(() => {
     const audio = audioRef.current;
-
     if (audio) {
       const handleLoadedMetadata = () => {
         setDuration(formatTime(audio.duration));
       };
-
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-
       return () => {
         audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };

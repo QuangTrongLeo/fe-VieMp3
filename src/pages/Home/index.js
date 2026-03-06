@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
 import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
@@ -75,7 +75,7 @@ function Home() {
     }
   };
 
-  const handleMyFavoriteArtists = async () => {
+  const handleMyFavoriteArtists = useCallback(async () => {
     try {
       if (!currentToken) return;
       const data = await apiGetMyFavoriteArtists();
@@ -84,17 +84,14 @@ function Home() {
     } catch (error) {
       console.error('Lỗi khi lấy nghệ sĩ yêu thích:', error);
     }
-  };
+  }, [currentToken]);
 
   useEffect(() => {
     handleTrendingArtists();
     handleHotAlbums();
     handleNewSongs();
-
-    if (currentToken) {
-      handleMyFavoriteArtists();
-    }
-  }, [currentToken]);
+    handleMyFavoriteArtists();
+  }, [currentToken, handleMyFavoriteArtists]);
 
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
 
