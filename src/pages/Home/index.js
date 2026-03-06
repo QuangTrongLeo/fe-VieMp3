@@ -4,9 +4,10 @@ import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import { useAuth } from '~/components/Components/AuthProvider';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
-import { apiSongs, apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/urls/apiSongs';
-import { apiGetArtists, apiGetMyFavoriteArtists } from '~/api/services/serviceArtists';
+import { apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/urls/apiSongs';
+import { apiGetArtist, apiGetArtists, apiGetMyFavoriteArtists } from '~/api/services/serviceArtists';
 import { apiGetAlbums } from '~/api/services/serviceAlbums';
+import { apiGetSongs } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +22,7 @@ function sortDesc(arr, field, isDate = false) {
 
 function Home() {
   const { currentToken } = useAuth();
+  const [newSongs, setNewSongs] = useState([]);
   const [trendingArtists, setTrendingArtists] = useState([]);
   const [hotAlbums, setHotAlbums] = useState([]);
   const [favoriteArtists, setFavoriteArtists] = useState([]);
@@ -46,6 +48,33 @@ function Home() {
     }
   };
 
+  const handleNewSongs = async () => {
+    try {
+      const data = await apiGetSongs();
+      const sortedSongs = sortDesc(data, 'createdAt');
+      const songsWithArtist = await Promise.all(
+        sortedSongs.map(async song => {
+          try {
+            const artist = await apiGetArtist(song.artistId);
+            return {
+              ...song,
+              artistName: artist?.name,
+            };
+          } catch {
+            return {
+              ...song,
+              artistName: 'KHông tìm thấy nghệ sĩ',
+            };
+          }
+        })
+      );
+
+      setNewSongs(songsWithArtist);
+    } catch (error) {
+      console.error('Lỗi khi lấy bài hát mới:', error);
+    }
+  };
+
   const handleMyFavoriteArtists = async () => {
     try {
       if (!currentToken) return;
@@ -60,13 +89,13 @@ function Home() {
   useEffect(() => {
     handleTrendingArtists();
     handleHotAlbums();
+    handleNewSongs();
 
     if (currentToken) {
       handleMyFavoriteArtists();
     }
   }, [currentToken]);
 
-  const sortedNewSongs = sortDesc(apiSongs, 'createdAt', true);
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
 
   return (
@@ -77,14 +106,14 @@ function Home() {
       <section className={cx('section-block')}>
         <h3>Bài hát mới ra</h3>
         <HorizontalScroll>
-          {sortedNewSongs.slice(0, 18).map(song => (
+          {newSongs.slice(0, 18).map(song => (
             <RectangleCard
-              key={song.songId}
-              content={song.songName}
+              key={song.id}
+              content={song.title}
               desc={song.artistName}
               createdAt={song.createdAt}
               cover={song.cover}
-              href={`/song/${song.songName}`}
+              href={`/song/${song.id}`}
             />
           ))}
         </HorizontalScroll>
