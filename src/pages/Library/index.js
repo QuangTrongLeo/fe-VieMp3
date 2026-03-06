@@ -8,11 +8,11 @@ import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiFavoriteSongs } from '~/api/urls/apiSongs';
 import { apiFavoriteAlbums } from '~/api/urls/apiAlbums';
+import { apiGetMyFavoriteAlbums } from '~/api/services/serviceAlbums';
 import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteAlbums = [...apiFavoriteAlbums].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
 const sortedFavoriteSongs = [...apiFavoriteSongs].sort((a, b) => new Date(b.favotitedAt) - new Date(a.favotitedAt));
 
 const renderItem = (song, index) => (
@@ -34,6 +34,8 @@ function Library() {
   const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const [coverPreview, setCoverPreview] = useState('');
   const [coverFile, setCoverFile] = useState(null);
+  const [favoriteAlbums, setFavoriteAlbums] = useState([]);
+  const [loadingAlbums, setLoadingAlbums] = useState(false);
 
   // ===== GET MY PLAYLISTS =====
   const handleGetMyPlaylists = async () => {
@@ -45,6 +47,20 @@ function Library() {
       setPlaylists([]);
     } finally {
       setLoadingPlaylists(false);
+    }
+  };
+
+  // ===== GET MY FAVORITE ALBUMS =====
+  const handleGetMyFavoriteAlbums = async () => {
+    try {
+      setLoadingAlbums(true);
+      const data = await apiGetMyFavoriteAlbums();
+      const sorted = [...data].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
+      setFavoriteAlbums(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy album yêu thích:', error);
+    } finally {
+      setLoadingAlbums(false);
     }
   };
 
@@ -70,6 +86,7 @@ function Library() {
 
   useEffect(() => {
     handleGetMyPlaylists();
+    handleGetMyFavoriteAlbums();
   }, []);
 
   const sortedPlaylists = [...playlists].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -189,14 +206,14 @@ function Library() {
         {activeTab === 'albums' && (
           <div className={cx('session-block-albums')}>
             <LimitedList
-              items={sortedFavoriteAlbums}
+              items={favoriteAlbums}
               limit={8}
-              renderItem={album => (
-                <div key={album.albumId} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+              renderItem={item => (
+                <div key={item.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
                   <SquareCard
-                    content={album.albumName}
-                    cover={album.cover}
-                    href={`/album/${album.albumName}`}
+                    content={item.album.title}
+                    cover={item.album.cover}
+                    href={`/album/${item.album.id}`}
                     icon={<i className="fas fa-list fa-3x"></i>}
                   />
                 </div>
