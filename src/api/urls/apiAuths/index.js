@@ -8,6 +8,7 @@ const apiAuthUrls = {
   register: `${apiAuthBaseUrl}/register`,
   verifyOtp: `${apiAuthBaseUrl}/verify-otp`,
   login: `${apiAuthBaseUrl}/login`,
+  refresh: `${apiAuthBaseUrl}/refresh`,
 };
 
 export default apiAuthUrls;

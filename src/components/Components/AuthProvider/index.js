@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { apiRefreshToken } from '~/api/services/serviceAuths';
 
 const AuthContext = createContext();
 
@@ -33,9 +34,28 @@ function AuthProvider({ children }) {
     }
   }, [currentToken]);
 
+  useEffect(() => {
+    const tryRefreshToken = async () => {
+      const token = localStorage.getItem('token');
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (!token && refreshToken) {
+        try {
+          const data = await apiRefreshToken(refreshToken);
+          setCurrentToken(data.accessToken);
+        } catch (error) {
+          logout();
+        }
+      }
+    };
+
+    tryRefreshToken();
+  }, []);
+
   const logout = () => {
     setCurrentToken('');
     localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
     setRoles([]);
   };
 

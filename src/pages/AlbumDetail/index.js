@@ -125,7 +125,7 @@ function AlbumDetail() {
         <img src={album.cover} alt="album-cover" className={cx('album-cover')} />
 
         <div className="ms-4">
-          <h2 className={cx('album-title')}>{album.title}</h2>
+          <h1 className={cx('album-title')}>{album.title}</h1>
 
           <p className={cx('album-description')}>Tuyển tập các bài hát trong Album</p>
 

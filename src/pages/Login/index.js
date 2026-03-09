@@ -21,15 +21,17 @@ function Login({ showNotification }) {
   const handleLogin = async e => {
     e.preventDefault();
     try {
-      const data = await apiLogin(email, password);
+      const res = await apiLogin(email, password);
+      const { accessToken, refreshToken } = res;
 
-      // Điều hướng về home trước
+      localStorage.setItem('refreshToken', refreshToken);
+
       navigate(config.routes.home, { replace: true });
 
       setTimeout(() => {
-        setCurrentToken(data.accessToken);
+        setCurrentToken(accessToken);
         showNotification('Đăng nhập thành công');
-      }, 100); // 100ms thay vì 0ms
+      }, 100);
     } catch (err) {
       console.error(err);
       setPassword('');
