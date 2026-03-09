@@ -35,6 +35,50 @@ export async function apiGetAlbumsByArtist(artistId) {
   }
 }
 
+export async function apiAddSongToAlbum(albumId, songId) {
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.post(
+      apiAlbumUrls.addSongToAlbum,
+      {
+        albumId,
+        songId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      alert('Vui lòng đăng nhập');
+    }
+    return null;
+  }
+}
+
+export async function apiRemoveSongFromAlbum(songId) {
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.delete(`${apiAlbumUrls.removeSongFromAlbum}/${songId}/remove-song`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      alert('Vui lòng đăng nhập');
+    }
+    return null;
+  }
+}
+
 // =============== FAVORITE ALBUM ===============
 
 export async function apiGetMyFavoriteAlbums() {

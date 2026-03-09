@@ -17,10 +17,24 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+.playlist-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--black-color-light-3);
+  color: #aaa;
+
+  i {
+    font-size: 64px;
+  }
+}
+
 .playlist-title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 10px;
+  color: var(--primary-color);
 }
 
 .playlist-description {

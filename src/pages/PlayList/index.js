@@ -4,7 +4,7 @@ import icons from '~/assets/icons';
 import styles from './PlayList.module.scss';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
+import { apiGetMyPlaylists, apiCreatePlaylist } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
@@ -51,13 +51,27 @@ function PlayList() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log({ playlistName, coverFile });
+  const handleSubmit = async () => {
+    try {
+      if (!playlistName.trim()) {
+        alert('Vui lòng nhập tên playlist');
+        return;
+      }
 
-    setIsOpen(false);
-    setPlaylistName('');
-    setCoverFile(null);
-    setCoverPreview('');
+      const newPlaylist = await apiCreatePlaylist(playlistName, coverFile);
+
+      // thêm playlist mới vào danh sách
+      setPlaylists(prev => [newPlaylist, ...prev]);
+
+      // reset form
+      setIsOpen(false);
+      setPlaylistName('');
+      setCoverFile(null);
+      setCoverPreview('');
+    } catch (error) {
+      console.error('Tạo playlist thất bại:', error);
+      alert(error.message);
+    }
   };
 
   const handleCloseModal = () => {
@@ -86,7 +100,7 @@ function PlayList() {
               renderItem={playlist => (
                 <div key={playlist.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
                   <SquareCard
-                    content={playlist.playlistName}
+                    content={playlist.name}
                     cover={playlist.cover}
                     href={`/playlist/${playlist.id}`}
                     icon={<i className="fas fa-list fa-3x"></i>}

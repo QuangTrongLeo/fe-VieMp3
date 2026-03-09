@@ -2,9 +2,11 @@ import apiBaseURL from '~/utils/httpBaseURL';
 
 const GENRE_PATH = '/genres';
 
+const apiGenreBaseUrl = `${apiBaseURL.defaults.baseURL}${GENRE_PATH}`;
+
 const apiGenreUrls = {
-  getGenre: `${apiBaseURL.defaults.baseURL}${GENRE_PATH}`,
-  getGenres: `${apiBaseURL.defaults.baseURL}${GENRE_PATH}/all`,
+  getGenre: apiGenreBaseUrl,
+  getGenres: `${apiGenreBaseUrl}/all`,
 };
 
 export default apiGenreUrls;

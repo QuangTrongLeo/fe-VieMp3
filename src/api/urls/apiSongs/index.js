@@ -4,21 +4,24 @@ import apiBaseURL from '~/utils/httpBaseURL';
 const SONGS_PATH = '/songs';
 const FAVORITE_SONGS_PATH = '/favorite-songs';
 
+const apiSongBaseUrl = `${apiBaseURL.defaults.baseURL}${SONGS_PATH}`;
+const apiFavoriteSongBaseUrl = `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`;
+
 const apiSongUrls = {
   // POST
-  addSongToFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
+  addSongToFavorite: apiFavoriteSongBaseUrl,
 
   // DELETE
-  removeSongFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
+  removeSongFromFavorite: apiFavoriteSongBaseUrl,
 
   // GET
-  getSong: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}`,
-  getSongs: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/all`,
-  getSongsByAlbum: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/album`,
-  getSongsByArtist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/artist`,
-  getSongsByGenre: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/genre`,
-  getSongsByPlaylist: `${apiBaseURL.defaults.baseURL}${SONGS_PATH}/playlist`,
-  getMyFavoriteSongs: `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`,
+  getSong: apiSongBaseUrl,
+  getSongs: `${apiSongBaseUrl}/all`,
+  getSongsByAlbum: `${apiSongBaseUrl}/album`,
+  getSongsByArtist: `${apiSongBaseUrl}/artist`,
+  getSongsByGenre: `${apiSongBaseUrl}/genre`,
+  getSongsByPlaylist: `${apiSongBaseUrl}/playlist`,
+  getMyFavoriteSongs: apiFavoriteSongBaseUrl,
 };
 
 export default apiSongUrls;

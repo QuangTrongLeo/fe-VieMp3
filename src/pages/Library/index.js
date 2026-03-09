@@ -8,7 +8,7 @@ import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiFavoriteSongs } from '~/api/urls/apiSongs';
 import { apiGetMyFavoriteAlbums } from '~/api/services/serviceAlbums';
-import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
+import { apiGetMyPlaylists, apiCreatePlaylist } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
@@ -71,12 +71,22 @@ function Library() {
     }
   };
 
-  const handleSubmit = () => {
-    console.log({ playlistName, coverFile });
-    setIsOpen(false);
-    setPlaylistName('');
-    setCoverFile(null);
-    setCoverPreview('');
+  const handleSubmit = async () => {
+    try {
+      if (!playlistName.trim()) {
+        alert('Vui lòng nhập tên playlist');
+        return;
+      }
+      const newPlaylist = await apiCreatePlaylist(playlistName, coverFile);
+      setPlaylists(prev => [newPlaylist, ...prev]);
+      setIsOpen(false);
+      setPlaylistName('');
+      setCoverFile(null);
+      setCoverPreview('');
+    } catch (error) {
+      console.error('Tạo playlist thất bại:', error);
+      alert(error.message);
+    }
   };
 
   const handleCloseModal = () => {
@@ -110,7 +120,7 @@ function Library() {
             {sortedPlaylists.map(playlist => (
               <SquareCard
                 key={playlist.id}
-                content={playlist.playlistName}
+                content={playlist.name}
                 cover={playlist.cover}
                 href={`/playlist/${playlist.id}`}
                 icon={<i className="fas fa-list fa-3x"></i>}

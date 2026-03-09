@@ -3,24 +3,27 @@ import apiBaseURL from '~/utils/httpBaseURL';
 const ARTIST_PATH = '/artists';
 const FAVORITE_ARTIST_PATH = '/favorite-artists';
 
+const apiArtistBaseUrl = `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`;
+const apiFavoriteArtistBaseUrl = `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`;
+
 const apiArtistUrls = {
   // POST
-  createArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
-  addArtistToFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
+  createArtist: apiArtistBaseUrl,
+  addArtistToFavorite: apiFavoriteArtistBaseUrl,
 
   // PUT
-  updateArtistName: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/name`,
-  updateArtistAvatar: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/avatar`,
+  updateArtistName: `${apiArtistBaseUrl}/name`,
+  updateArtistAvatar: `${apiArtistBaseUrl}/avatar`,
 
   // DELETE
-  deleteArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
-  removeArtistFromFavorite: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
+  deleteArtist: apiArtistBaseUrl,
+  removeArtistFromFavorite: apiFavoriteArtistBaseUrl,
 
   // GET
-  getArtist: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
-  getArtists: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}/all`,
-  getArtistByName: `${apiBaseURL.defaults.baseURL}${ARTIST_PATH}`,
-  getMyFavoriteArtists: `${apiBaseURL.defaults.baseURL}${FAVORITE_ARTIST_PATH}`,
+  getArtist: apiArtistBaseUrl,
+  getArtists: `${apiArtistBaseUrl}/all`,
+  getArtistByName: apiArtistBaseUrl,
+  getMyFavoriteArtists: apiFavoriteArtistBaseUrl,
 };
 
 export default apiArtistUrls;

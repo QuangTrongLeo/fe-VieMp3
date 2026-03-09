@@ -1,11 +1,23 @@
 import apiBaseURL from '~/utils/httpBaseURL';
 
-const PLAYLIST_PATH = '/playlist';
+const PLAYLIST_PATH = '/playlists';
+
+const apiPlaylistBaseUrl = `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}`;
 
 const apiPlaylistUrls = {
-  getPlaylist: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}`,
-  getPlaylists: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}/all`,
-  getMyPlaylists: `${apiBaseURL.defaults.baseURL}${PLAYLIST_PATH}/me`,
+  // POST
+  createPlaylist: apiPlaylistBaseUrl,
+
+  // PUT
+  updatePlaylist: apiPlaylistBaseUrl,
+
+  // DELETE
+  deletePlaylist: apiPlaylistBaseUrl,
+
+  // GET
+  getPlaylist: apiPlaylistBaseUrl,
+  getPlaylists: `${apiPlaylistBaseUrl}/all`,
+  getMyPlaylists: `${apiPlaylistBaseUrl}/me`,
 };
 
 export default apiPlaylistUrls;
