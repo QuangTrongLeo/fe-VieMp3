@@ -5,7 +5,12 @@ import icons from '~/assets/icons';
 import * as bootstrap from 'bootstrap';
 import './SongPlayerUnder.scss';
 import PlayerControls from '../PlayerControls';
-import { apiGetSong } from '~/api/services/serviceSongs';
+import {
+  apiGetSong,
+  apiGetMyFavoriteSongs,
+  apiAddSongToFavorite,
+  apiRemoveSongFromFavorite,
+} from '~/api/services/serviceSongs';
 import { apiGetArtist } from '~/api/services/serviceArtists';
 
 initMDB({ Dropdown });
@@ -37,22 +42,37 @@ function SongPlayerUnder({
   const [likedVisible, setLikedVisible] = useState(false);
   const [lyricsVisible, setLyricsVisible] = useState(false);
   const [closedSongPlayerUnder, setClosedSongPlayerUnder] = useState(true);
-
   const [artist, setArtist] = useState(null);
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
+
+  const handleToggleFavorite = async () => {
+    if (!currentSong?.id) return;
+    try {
+      if (likedVisible) {
+        const success = await apiRemoveSongFromFavorite(currentSong.id);
+        if (success) {
+          setFavoriteSongs(prev => prev.filter(f => String(f.song.id) !== String(currentSong.id)));
+        }
+      } else {
+        const success = await apiAddSongToFavorite(currentSong.id);
+        if (success) {
+          setFavoriteSongs(prev => [...prev, { song: currentSong }]);
+        }
+      }
+    } catch (error) {
+      console.error('Lỗi khi cập nhật yêu thích:', error);
+    }
+  };
 
   //////// TOGGLE ////////
-
   const toggleShuffle = () => {
     setMode(prev => (prev === 'shuffle' ? null : 'shuffle'));
   };
-
   const toggleRepeat = () => {
     setMode(prev => (prev === 'repeat' ? null : 'repeat'));
   };
-
   const togglePlayPause = () => {
     if (!audioRef.current) return;
-
     if (isPaused) {
       if (audioRef.current.currentTime === audioRef.current.duration) {
         audioRef.current.currentTime = 0;
@@ -63,40 +83,30 @@ function SongPlayerUnder({
     } else {
       audioRef.current.pause();
     }
-
     setIsPaused(prev => !prev);
   };
 
   //////// TOOLTIP ////////
-
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-
     const tooltipList = [...tooltipTriggerList].map(el => {
       const tooltip = new bootstrap.Tooltip(el, {
         placement: 'top',
         fallbackPlacements: [],
         delay: { show: 0, hide: 0 },
       });
-
       el.addEventListener('mouseleave', () => tooltip.hide());
-
       return tooltip;
     });
-
     return () => tooltipList.forEach(t => t.dispose());
   }, []);
 
   useEffect(() => {
     const el = document.querySelector('.play-pause-btn');
-
     if (!el) return;
-
     const tooltip = bootstrap.Tooltip.getInstance(el);
-
     if (tooltip) {
       el.setAttribute('data-bs-title', isPaused ? 'Phát' : 'Tạm dừng');
-
       tooltip.setContent({
         '.tooltip-inner': isPaused ? 'Phát' : 'Tạm dừng',
       });
@@ -104,54 +114,42 @@ function SongPlayerUnder({
   }, [isPaused]);
 
   //////// PROGRESS ////////
-
   useEffect(() => {
     setProgressTime((currentTime / durationAudio) * 100 || 0);
   }, [currentTime, durationAudio]);
 
   //////// LOAD SONG ////////
-
   useEffect(() => {
     const fetchSong = async () => {
       if (!songId) return;
-
       try {
         const song = await apiGetSong(songId);
-
         if (currentSong && String(currentSong.id) === String(songId)) {
           setClosedSongPlayerUnder(false);
           return;
         }
-
         setCurrentSong(song);
-
         if (song) {
           setClosedSongPlayerUnder(false);
-
           setTimeout(() => {
             if (audioRef.current) {
               audioRef.current.currentTime = 0;
-
               audioRef.current.play().catch(err => console.warn('Không thể tự phát:', err));
             }
           }, 0);
-
           setIsPaused(false);
         }
       } catch (error) {
         console.error('Không tìm thấy bài hát:', error);
       }
     };
-
     fetchSong();
   }, [songId]);
 
   //////// LOAD ARTIST ////////
-
   useEffect(() => {
     const fetchArtist = async () => {
       if (!currentSong?.artistId) return;
-
       try {
         const artistData = await apiGetArtist(currentSong.artistId);
         setArtist(artistData);
@@ -159,37 +157,46 @@ function SongPlayerUnder({
         console.error('Không lấy được artist:', error);
       }
     };
-
     fetchArtist();
   }, [currentSong]);
 
-  //////// AUTO PLAY ////////
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const data = await apiGetMyFavoriteSongs();
+        setFavoriteSongs(data || []);
+      } catch (error) {
+        console.error('Không lấy được favorite songs:', error);
+      }
+    };
+    fetchFavorites();
+  }, []);
 
   useEffect(() => {
-    if (!audioRef.current) return;
+    if (!currentSong) return;
+    const isLiked = favoriteSongs.some(fav => String(fav.song.id) === String(currentSong.id));
+    setLikedVisible(isLiked);
+  }, [currentSong, favoriteSongs]);
 
+  //////// AUTO PLAY ////////
+  useEffect(() => {
+    if (!audioRef.current) return;
     if (!currentSong) {
       setClosedSongPlayerUnder(true);
       return;
     }
-
     setClosedSongPlayerUnder(false);
-
     const playAfterLoad = () => {
       audioRef.current.currentTime = 0;
-
       audioRef.current.play().catch(err => console.warn('Audio auto-play failed:', err));
-
       audioRef.current.removeEventListener('loadedmetadata', playAfterLoad);
     };
-
     audioRef.current.addEventListener('loadedmetadata', playAfterLoad);
   }, [currentSong]);
 
   if (!currentSong) return null;
 
   //////// UTILS ////////
-
   const flashButton = setter => {
     setter(true);
     setTimeout(() => setter(false), 300);
@@ -201,7 +208,6 @@ function SongPlayerUnder({
         audioRef.current.currentTime = 0;
         audioRef.current.play();
       }
-
       setCurrentTime(0);
       setProgressTime(0);
     } else {
@@ -214,15 +220,10 @@ function SongPlayerUnder({
   const handleClickTimeBar = e => {
     const bar = timeRef.current;
     const rect = bar.getBoundingClientRect();
-
     const clickX = e.clientX - rect.left;
-
     const percent = Math.max(0, Math.min(1, clickX / rect.width));
-
     const newTime = durationAudio * percent;
-
     setCurrentTime(newTime);
-
     if (audioRef.current) {
       audioRef.current.currentTime = newTime;
     }
@@ -230,24 +231,19 @@ function SongPlayerUnder({
 
   const handleClosePlayerUnder = () => {
     flashButton(setFlashClose);
-
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-
     setIsPaused(true);
     setClosedSongPlayerUnder(true);
-
     closePlayListSideBar();
   };
 
   const formatTimeBar = seconds => {
     seconds = Math.floor(seconds);
-
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
@@ -322,7 +318,7 @@ function SongPlayerUnder({
               className={`icon-song-player-right-element-btn ${likedVisible ? 'active' : ''}`}
               data-bs-toggle="tooltip"
               title="Thích"
-              onClick={() => setLikedVisible(prev => !prev)}
+              onClick={handleToggleFavorite}
             >
               <i className={icons.iconHeart}></i>
             </button>
