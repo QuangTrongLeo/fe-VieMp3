@@ -1,4 +1,5 @@
 export { default as AlbumDetail } from './AlbumDetail';
+export { default as Analytic } from './Analytic';
 export { default as ArtistDetail } from './ArtistDetail';
 export { default as FavoriteAlbums } from './FavoriteAlbums';
 export { default as FavoriteArtists } from './FavoriteArtists';
@@ -18,4 +19,4 @@ export { default as Profile } from './Profile';
 export { default as Register } from './Register';
 export { default as Searched } from './Searched';
 export { default as SongDetail } from './SongDetail';
-export { default as Upload } from './Upload';
+export { default as Manage } from './Manage';

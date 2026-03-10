@@ -17,13 +17,8 @@ function AvatarDropdownMenu({ isMod, isAdmin }) {
       {isMod && (
         <>
           <li>
-            <Link className="dropdown-item" to={config.routes.mySongs}>
-              <i className={`${icons.iconMusic} me-2`}></i> Bài hát của tôi
-            </Link>
-          </li>
-          <li>
-            <Link className="dropdown-item" to={config.routes.myAlbums}>
-              <i className={`${icons.iconCompactDisc} me-2`}></i> Album của tôi
+            <Link className="dropdown-item" to={config.routes.manage}>
+              <i className="fas fa-users-cog me-2"></i> Quản lý hệ thống
             </Link>
           </li>
         </>
@@ -32,14 +27,14 @@ function AvatarDropdownMenu({ isMod, isAdmin }) {
       {/* ADMIN */}
       {isAdmin && (
         <>
-          <li>
+          {/* <li>
             <Link className="dropdown-item" to="/manage-users">
-              <i className="fas fa-users-cog me-2"></i> Quản lý người dùng
+              <i className="fas fa-users-cog me-2"></i> Quản lý hệ thống
             </Link>
-          </li>
+          </li> */}
           <li>
-            <Link className="dropdown-item" to="/moderate-songs">
-              <i className="fas fa-check-circle me-2"></i> Kiểm duyệt bài hát
+            <Link className="dropdown-item" to={config.routes.analytic}>
+              <i className="fas fa-chart-column me-2"></i> Thống kê
             </Link>
           </li>
         </>

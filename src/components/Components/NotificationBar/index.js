@@ -9,7 +9,7 @@ function NotificationBar({ notification, visible, icon }) {
   if (!notification) return null;
 
   // Nếu không truyền icon, dùng mặc định
-  const IconClass = icon || icons.iconfaExclamationRriangle;
+  const IconClass = icon || icons.iconCheck;
 
   return (
     <div className={cx('notification-wrapper', { visible, hidden: !visible })} aria-live="polite">

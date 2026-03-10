@@ -169,8 +169,11 @@ function SongPlayerUnder({
         console.error('Không lấy được favorite songs:', error);
       }
     };
-    fetchFavorites();
-  }, []);
+
+    if (currentSong) {
+      fetchFavorites();
+    }
+  }, [currentSong]);
 
   useEffect(() => {
     if (!currentSong) return;

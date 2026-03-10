@@ -1,5 +1,6 @@
 const routes = {
   album: '/album',
+  analytic: '/analytic',
   alnums: '/albums',
   artist: '/artist',
   favoriteAlbums: '/favorite-albums',
@@ -21,7 +22,7 @@ const routes = {
   register: '/register',
   searched: '/searched',
   song: '/song',
-  upload: '/upload',
+  manage: '/manage',
 };
 
 export default routes;

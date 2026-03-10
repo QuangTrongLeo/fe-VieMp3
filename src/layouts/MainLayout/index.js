@@ -7,8 +7,10 @@ import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 import BaseLayout from '../BaseLayout';
 import { apiSongs } from '~/api/urls/apiSongs';
+import { useAuth } from '~/components/Components/AuthProvider';
 
 function MainLayout({ children }) {
+  const { currentToken } = useAuth();
   const [showNotificationTablet, setShowNotificationTablet] = useState(false);
   const notifTabletRef = useRef(null);
   const bellButtonRef = useRef(null);
@@ -102,6 +104,14 @@ function MainLayout({ children }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showNotificationTablet]);
+
+  useEffect(() => {
+    if (!currentToken) {
+      setCurrentSong(null);
+      setNextSongs([]);
+      setPlayedSongs([]);
+    }
+  }, [currentToken]);
 
   return (
     <BaseLayout

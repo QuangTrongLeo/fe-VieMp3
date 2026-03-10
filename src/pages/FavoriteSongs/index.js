@@ -67,13 +67,21 @@ function FavoriteSongs() {
         </div>
       </div>
 
-      <LimitedList
-        items={favoriteSongs}
-        renderItem={renderItem}
-        limit={8}
-        showAllText="Hiện tất cả bài hát"
-        showLessText="Ẩn bớt"
-      />
+      {favoriteSongs.length === 0 ? (
+        <div className={cx('empty-state')}>
+          <i className={icons.iconMusic} style={{ fontSize: '60px', opacity: 0.3 }}></i>
+          <h4 style={{ marginTop: '15px' }}>Bạn chưa có bài hát yêu thích</h4>
+          <p style={{ opacity: 0.7 }}>Hãy thêm bài hát vào danh sách yêu thích.</p>
+        </div>
+      ) : (
+        <LimitedList
+          items={favoriteSongs}
+          renderItem={renderItem}
+          limit={8}
+          showAllText="Hiện tất cả bài hát"
+          showLessText="Ẩn bớt"
+        />
+      )}
     </>
   );
 }

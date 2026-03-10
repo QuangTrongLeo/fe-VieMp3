@@ -6,37 +6,30 @@ import styles from './Library.module.scss';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiFavoriteSongs } from '~/api/urls/apiSongs';
+
+import { apiGetMyFavoriteSongs, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 import { apiGetMyFavoriteAlbums } from '~/api/services/serviceAlbums';
 import { apiGetMyPlaylists, apiCreatePlaylist } from '~/api/services/servicePlaylists';
 
 const cx = classNames.bind(styles);
 
-const sortedFavoriteSongs = [...apiFavoriteSongs].sort((a, b) => new Date(b.favotitedAt) - new Date(a.favotitedAt));
-
-const renderItem = (song, index) => (
-  <SongRow
-    key={song.songId}
-    cover={song.cover}
-    song={song.songName}
-    artist={song.artistName}
-    album={song.albumName}
-    audio={song.audio}
-  />
-);
-
 function Library() {
   const [activeTab, setActiveTab] = useState('songs');
+
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
+  const [favoriteAlbums, setFavoriteAlbums] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
+
+  const [loadingFavoriteSongs, setLoadingFavoriteSongs] = useState(true);
+  const [loadingAlbums, setLoadingAlbums] = useState(true);
+  const [loadingPlaylists, setLoadingPlaylists] = useState(true);
+
   const [isOpen, setIsOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState('');
-  const [playlists, setPlaylists] = useState([]);
-  const [loadingPlaylists, setLoadingPlaylists] = useState(true);
   const [coverPreview, setCoverPreview] = useState('');
   const [coverFile, setCoverFile] = useState(null);
-  const [favoriteAlbums, setFavoriteAlbums] = useState([]);
-  const [loadingAlbums, setLoadingAlbums] = useState(false);
 
-  // ===== GET MY PLAYLISTS =====
+  // ================= GET PLAYLISTS =================
   const handleGetMyPlaylists = async () => {
     try {
       const data = await apiGetMyPlaylists();
@@ -49,12 +42,13 @@ function Library() {
     }
   };
 
-  // ===== GET MY FAVORITE ALBUMS =====
+  // ================= GET FAVORITE ALBUMS =================
   const handleGetMyFavoriteAlbums = async () => {
     try {
-      setLoadingAlbums(true);
       const data = await apiGetMyFavoriteAlbums();
+
       const sorted = [...data].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
+
       setFavoriteAlbums(sorted);
     } catch (error) {
       console.error('Lỗi khi lấy album yêu thích:', error);
@@ -63,8 +57,42 @@ function Library() {
     }
   };
 
+  // ================= GET FAVORITE SONGS =================
+  const handleGetMyFavoriteSongs = async () => {
+    try {
+      const data = await apiGetMyFavoriteSongs();
+
+      const sorted = [...data].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
+
+      setFavoriteSongs(sorted);
+    } catch (error) {
+      console.error('Lỗi khi lấy bài hát yêu thích:', error);
+    } finally {
+      setLoadingFavoriteSongs(false);
+    }
+  };
+
+  const handleUnfavorite = async songId => {
+    try {
+      await apiRemoveSongFromFavorite(songId);
+
+      setFavoriteSongs(prev => prev.filter(item => item.song.id !== songId));
+    } catch (error) {
+      console.error('Lỗi bỏ thích bài hát:', error);
+    }
+  };
+
+  // ================= LOAD DATA =================
+  useEffect(() => {
+    handleGetMyPlaylists();
+    handleGetMyFavoriteAlbums();
+    handleGetMyFavoriteSongs();
+  }, []);
+
+  // ================= CREATE PLAYLIST =================
   const handleImageChange = e => {
     const file = e.target.files[0];
+
     if (file) {
       setCoverFile(file);
       setCoverPreview(URL.createObjectURL(file));
@@ -77,8 +105,11 @@ function Library() {
         alert('Vui lòng nhập tên playlist');
         return;
       }
+
       const newPlaylist = await apiCreatePlaylist(playlistName, coverFile);
+
       setPlaylists(prev => [newPlaylist, ...prev]);
+
       setIsOpen(false);
       setPlaylistName('');
       setCoverFile(null);
@@ -93,26 +124,28 @@ function Library() {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    handleGetMyPlaylists();
-    handleGetMyFavoriteAlbums();
-  }, []);
+  // ================= RENDER SONG =================
+  const renderSongItem = item => (
+    <SongRow key={item.song.id} song={item.song} liked={true} onToggleFavorite={handleUnfavorite} />
+  );
 
   const sortedPlaylists = [...playlists].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   return (
     <>
       <h1 className="text-center">
-        <i class={icons.iconBook}></i>
+        <i className={icons.iconBook}></i>
         <span style={{ paddingLeft: '10px' }}>Thư viện</span>
       </h1>
 
-      {/* PLAYLISTS */}
+      {/* ================= PLAYLISTS ================= */}
       <section className={cx('section-block')}>
         <h3>Playlist của bạn</h3>
+
         <div className="mb-3">
           <CreateCard content="Tạo playlist mới" onClick={() => setIsOpen(true)} />
         </div>
+
         {loadingPlaylists ? (
           <p>Đang tải playlist...</p>
         ) : sortedPlaylists.length > 0 ? (
@@ -130,6 +163,8 @@ function Library() {
         ) : (
           <p>Bạn chưa có playlist nào</p>
         )}
+
+        {/* MODAL CREATE PLAYLIST */}
         {isOpen && (
           <div className={cx('modal-overlay')}>
             <div className={cx('modal')}>
@@ -162,6 +197,7 @@ function Library() {
                 <button className="btn btn-secondary" onClick={handleCloseModal}>
                   Hủy
                 </button>
+
                 <button className={cx('custom-btn')} onClick={handleSubmit}>
                   Lưu
                 </button>
@@ -171,47 +207,55 @@ function Library() {
         )}
       </section>
 
-      {/* SONGS & ALBUMS FAVORITE */}
-      {/* TABS: SONGS / ALBUMS */}
+      {/* ================= FAVORITES ================= */}
       <section className={cx('section-block')}>
         <div className={cx('tab-header')}>
           <div className={cx('tab-item', { active: activeTab === 'songs' })} onClick={() => setActiveTab('songs')}>
             BÀI HÁT
           </div>
+
           <div className={cx('tab-item', { active: activeTab === 'albums' })} onClick={() => setActiveTab('albums')}>
             ALBUM
           </div>
         </div>
 
-        {/* CONDITIONAL RENDER */}
+        {/* SONGS */}
         {activeTab === 'songs' && (
           <div className={cx('section-block-songs')}>
-            {/* Header danh sách bài hát */}
             <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
               <div className="col-6 d-flex align-items-center gap-2">
                 <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
                 <span>Bài hát</span>
               </div>
+
               <div className="col-4 d-flex align-items-center">
                 <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
                 <span>Album</span>
               </div>
+
               <div className="col-2 d-flex justify-content-end align-items-center">
                 <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
                 <span>Thời gian</span>
               </div>
             </div>
 
-            <LimitedList
-              items={sortedFavoriteSongs}
-              renderItem={renderItem}
-              limit={8}
-              showAllText="Hiện tất cả bài hát"
-              showLessText="Ẩn bớt"
-            />
+            {loadingFavoriteSongs ? (
+              <p>Đang tải bài hát...</p>
+            ) : favoriteSongs.length > 0 ? (
+              <LimitedList
+                items={favoriteSongs}
+                renderItem={renderSongItem}
+                limit={8}
+                showAllText="Hiện tất cả bài hát"
+                showLessText="Ẩn bớt"
+              />
+            ) : (
+              <p>Bạn chưa có bài hát yêu thích</p>
+            )}
           </div>
         )}
 
+        {/* ALBUMS */}
         {activeTab === 'albums' && (
           <div className={cx('session-block-albums')}>
             {loadingAlbums ? (
@@ -221,7 +265,7 @@ function Library() {
                 items={favoriteAlbums}
                 limit={8}
                 renderItem={item => (
-                  <div key={item.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
+                  <div key={item.album.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
                     <SquareCard
                       content={item.album.title}
                       cover={item.album.cover}

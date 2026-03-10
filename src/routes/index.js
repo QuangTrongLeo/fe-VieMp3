@@ -20,8 +20,11 @@ import {
 } from '~/pages';
 
 // modRoutes
-import { Upload, MySongs, MyAlbums } from '~/pages';
+import { Manage } from '~/pages';
 import PlayListDetail from '~/pages/PlayListDetail';
+
+// adminRoutes
+import { Analytic } from '~/pages';
 
 const publishRoutes = [
   { path: config.routes.home, component: Home },
@@ -48,12 +51,8 @@ const userRoutes = [
   { path: config.routes.favoriteArtists, component: FavoriteArtists },
 ];
 
-const modRoutes = [
-  { path: config.routes.upload, component: Upload },
-  { path: config.routes.mySongs, component: MySongs },
-  { path: config.routes.myAlbums, component: MyAlbums },
-];
+const modRoutes = [{ path: config.routes.manage, component: Manage }];
 
-const adminRoutes = [];
+const adminRoutes = [{ path: config.routes.analytic, component: Analytic }];
 
 export { publishRoutes, userRoutes, modRoutes, adminRoutes };
