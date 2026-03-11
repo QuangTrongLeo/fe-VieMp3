@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function SearchRow({ type, cover, content, desc, onClick }) {
+function SearchRow({ type, id, cover, content, desc, onClick }) {
   let path = '';
 
   if (type === 'artist') {
-    path = `/artist/${encodeURIComponent(content)}`;
+    path = `/artist/${encodeURIComponent(content)}`; // artist dùng name
   } else if (type === 'song') {
-    path = `/song/${encodeURIComponent(content)}`;
+    path = `/song/${id}`; // song dùng id
   } else if (type === 'album') {
-    path = `/album/${encodeURIComponent(content)}`;
+    path = `/album/${id}`; // album dùng id
   }
 
   return (
