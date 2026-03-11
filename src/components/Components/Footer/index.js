@@ -100,7 +100,7 @@ function Footer() {
             <Link to={config.routes.home}>Giới thiệu Quảng cáo</Link>
             <Link to={config.routes.home}>Hỗ trợ tiếp cận</Link>
           </div>
-          <div>© 2025 VieMp3</div>
+          <div>© 2026 VieMp3</div>
         </div>
       </div>
     </footer>

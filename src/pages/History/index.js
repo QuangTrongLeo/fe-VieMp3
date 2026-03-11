@@ -20,9 +20,23 @@ function History() {
       const history = await apiGetMyListenHistory();
       const favorites = await apiGetMyFavoriteSongs();
 
+      // sắp xếp theo thời gian nghe mới nhất
       const sortedHistory = [...history].sort((a, b) => new Date(b.listenedAt) - new Date(a.listenedAt));
 
-      setHistorySongs(sortedHistory);
+      // loại bỏ trùng bài hát, giữ lại lần nghe gần nhất
+      const uniqueSongs = [];
+      const seen = new Set();
+
+      for (const item of sortedHistory) {
+        const songId = item.song.id;
+
+        if (!seen.has(songId)) {
+          seen.add(songId);
+          uniqueSongs.push(item);
+        }
+      }
+
+      setHistorySongs(uniqueSongs);
 
       const ids = favorites.map(item => item.song.id);
       setFavoriteIds(ids);
