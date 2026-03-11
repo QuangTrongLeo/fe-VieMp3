@@ -1,68 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import styles from './SongDetail.module.scss';
 import classNames from 'classnames/bind';
 import { SongRow } from '~/components/Components/Row';
 import { apiGetArtist } from '~/api/services/serviceArtists';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiGetSong, apiGetSongsByArtist } from '~/api/services/serviceSongs';
+import { apiGetSongsByArtist } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-function SongDetail() {
-  const { songId } = useParams();
+function SongDetail({ currentSong }) {
+  // Lấy bài hát
+  const song = currentSong;
 
   const [artist, setArtist] = useState(null);
-  const [song, setSong] = useState(null);
+  // const [song, setSong] = useState(null);
   const [relatedSongs, setRelatedSongs] = useState([]);
 
-  const [songLoading, setSongLoading] = useState(true);
   const [artistLoading, setArtistLoading] = useState(false);
   const [songsLoading, setSongsLoading] = useState(false);
-
-  // Lấy bài hát
-  useEffect(() => {
-    const fetchSong = async () => {
-      try {
-        setSongLoading(true);
-        const data = await apiGetSong(songId);
-        setSong(data);
-      } catch (error) {
-        console.error(error);
-        setSong(null);
-      } finally {
-        setSongLoading(false);
-      }
-    };
-
-    if (songId) {
-      fetchSong();
-    }
-  }, [songId]);
 
   // Lấy artist
   useEffect(() => {
     const fetchArtist = async () => {
+      if (!song?.artistId) return;
+
       try {
         setArtistLoading(true);
         const data = await apiGetArtist(song.artistId);
         setArtist(data);
       } catch (error) {
         console.error(error);
-        setArtist(null);
       } finally {
         setArtistLoading(false);
       }
     };
 
-    if (song?.artistId) {
-      fetchArtist();
-    }
+    fetchArtist();
   }, [song]);
 
   // Lấy bài hát cùng artist
   useEffect(() => {
     const fetchSongs = async () => {
+      if (!song?.artistId) return;
+
       try {
         setSongsLoading(true);
 
@@ -81,9 +61,7 @@ function SongDetail() {
       }
     };
 
-    if (song?.artistId) {
-      fetchSongs();
-    }
+    fetchSongs();
   }, [song]);
 
   const renderItem = item => (
@@ -96,10 +74,6 @@ function SongDetail() {
       audio={item.audio}
     />
   );
-
-  if (songLoading) {
-    return <div className="text-center mt-5">Đang tải bài hát...</div>;
-  }
 
   if (!song) {
     return <div className="text-center mt-5">Không tìm thấy bài hát</div>;

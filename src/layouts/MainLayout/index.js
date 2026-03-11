@@ -144,7 +144,7 @@ function MainLayout({ children }) {
                 }}
               >
                 <div style={{ margin: '0 4%' }}>
-                  {children}
+                  {React.cloneElement(children, { currentSong })}
                   <Footer />
                 </div>
               </div>
