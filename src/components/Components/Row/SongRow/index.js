@@ -46,12 +46,8 @@ function SongRow({ song, liked = false, onToggleFavorite }) {
 
   const toggleLike = async e => {
     e.preventDefault();
-
     try {
-      if (isLiked) {
-        await onToggleFavorite(song.id);
-      }
-
+      await onToggleFavorite(song.id);
       setIsLiked(!isLiked);
     } catch (error) {
       console.error('Favorite error:', error);

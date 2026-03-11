@@ -4,9 +4,8 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './History.module.scss';
 import { SongRow } from '~/components/Components/Row';
-
 import { apiGetMyListenHistory } from '~/api/services/serviceListenHistories';
-import { apiGetMyFavoriteSongs, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
+import { apiGetMyFavoriteSongs, apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -49,22 +48,25 @@ function History() {
     fetchData();
   }, []);
 
-  const handleUnfavorite = async songId => {
+  const handleToggleFavorite = async songId => {
     try {
-      await apiRemoveSongFromFavorite(songId);
-
-      setFavoriteIds(prev => prev.filter(id => id !== songId));
+      const isLiked = favoriteIds.includes(songId);
+      if (isLiked) {
+        await apiRemoveSongFromFavorite(songId);
+        setFavoriteIds(prev => prev.filter(id => id !== songId));
+      } else {
+        await apiAddSongToFavorite(songId);
+        setFavoriteIds(prev => [...prev, songId]);
+      }
     } catch (error) {
-      console.error('Lỗi bỏ thích bài hát:', error);
+      console.error('Lỗi toggle favorite:', error);
     }
   };
 
   const renderItem = item => {
     const song = item.song;
-
     const liked = favoriteIds.includes(song.id);
-
-    return <SongRow key={song.id} song={song} liked={liked} onToggleFavorite={handleUnfavorite} />;
+    return <SongRow key={song.id} song={song} liked={liked} onToggleFavorite={handleToggleFavorite} />;
   };
 
   return (

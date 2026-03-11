@@ -122,10 +122,6 @@ export async function apiAddSongToFavorite(songId) {
 export async function apiRemoveSongFromFavorite(songId) {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Vui lòng đăng nhập');
-      return false;
-    }
     const response = await axios.delete(`${apiSongUrls.removeSongFromFavorite}/${songId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
