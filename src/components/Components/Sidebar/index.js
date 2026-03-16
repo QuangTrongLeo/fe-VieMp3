@@ -24,6 +24,7 @@ const itemsRequireLogin = [
 ];
 
 const itemsManageMod = [
+  { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
   { label: 'Quản lý nghệ sĩ', iconClass: icons.iconStar, href: '/manage/artists' },
   { label: 'Quản lý album', iconClass: icons.iconCompactDisc, href: '/manage/albums' },
   { label: 'Quản lý bài hát', iconClass: icons.iconMusic, href: '/manage/songs' },

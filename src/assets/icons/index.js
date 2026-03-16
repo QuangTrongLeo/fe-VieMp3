@@ -27,6 +27,7 @@ const icons = {
   iconCheck: 'fas fa-check',
   iconfaExclamationRriangle: 'fa fa-exclamation-triangle',
   iconChevronDown: 'fas fa-chevron-down',
+  iconGauge: 'fa-solid fa-gauge',
 };
 
 export default icons;

@@ -12,9 +12,6 @@ export async function apiGetMyListenHistory() {
 
     return response.data.data;
   } catch (error) {
-    if (error.response?.status === 403 || error.response?.status === 401) {
-      alert('Vui lòng đăng nhập');
-    }
-    return null;
+    if (error.response?.status === 403 || error.response?.status === 401) return null;
   }
 }

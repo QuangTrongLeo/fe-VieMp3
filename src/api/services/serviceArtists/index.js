@@ -39,9 +39,6 @@ export async function apiGetArtistByName(artistName) {
 export async function apiGetMyFavoriteArtists() {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return [];
-    }
     const response = await axios.get(apiArtistUrls.getMyFavoriteArtists, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -49,9 +46,6 @@ export async function apiGetMyFavoriteArtists() {
     });
     return response.data.data;
   } catch (error) {
-    if (error.response?.status === 403 || error.response?.status === 401) {
-      alert('Vui lòng đăng nhập');
-    }
     console.error('Lỗi khi lấy danh sách nghệ sĩ:', error);
     return [];
   }
@@ -60,10 +54,6 @@ export async function apiGetMyFavoriteArtists() {
 export async function apiAddArtistToFavorite(artistId) {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Vui lòng đăng nhập');
-      return false;
-    }
     const response = await axios.post(
       `${apiArtistUrls.addArtistToFavorite}/${artistId}`,
       {},
@@ -75,9 +65,6 @@ export async function apiAddArtistToFavorite(artistId) {
     );
     return response.data.success;
   } catch (error) {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      alert('Vui lòng đăng nhập');
-    }
     const message = error.response?.data?.message || error.response?.data || error.message;
     throw new Error(message);
   }
@@ -86,10 +73,6 @@ export async function apiAddArtistToFavorite(artistId) {
 export async function apiRemoveArtistFromFavorite(artistId) {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Vui lòng đăng nhập');
-      return false;
-    }
     const response = await axios.delete(`${apiArtistUrls.removeArtistFromFavorite}/${artistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -97,9 +80,6 @@ export async function apiRemoveArtistFromFavorite(artistId) {
     });
     return response.data.success;
   } catch (error) {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      alert('Vui lòng đăng nhập');
-    }
     const message = error.response?.data?.message || error.response?.data || error.message;
     throw new Error(message);
   }

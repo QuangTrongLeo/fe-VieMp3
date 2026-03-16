@@ -76,9 +76,6 @@ export async function apiGetSongsByPlaylist(playlistId) {
 export async function apiGetMyFavoriteSongs() {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return [];
-    }
     const response = await axios.get(apiSongUrls.getMyFavoriteSongs, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -86,20 +83,13 @@ export async function apiGetMyFavoriteSongs() {
     });
     return response.data.data;
   } catch (error) {
-    if (error.response?.status === 403 || error.response?.status === 401) {
-      alert('Vui lòng đăng nhập');
-    }
-    return [];
+    if (error.response?.status === 403 || error.response?.status === 401) return [];
   }
 }
 
 export async function apiAddSongToFavorite(songId) {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Vui lòng đăng nhập');
-      return false;
-    }
     const response = await axios.post(
       `${apiSongUrls.addSongToFavorite}/${songId}`,
       {},
@@ -111,9 +101,6 @@ export async function apiAddSongToFavorite(songId) {
     );
     return response.data.success;
   } catch (error) {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      alert('Vui lòng đăng nhập');
-    }
     const message = error.response?.data?.message || error.response?.data || error.message;
     throw new Error(message);
   }
@@ -129,9 +116,6 @@ export async function apiRemoveSongFromFavorite(songId) {
     });
     return response.data.success;
   } catch (error) {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      alert('Vui lòng đăng nhập');
-    }
     const message = error.response?.data?.message || error.response?.data || error.message;
     throw new Error(message);
   }

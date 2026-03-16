@@ -1,4 +1,5 @@
 import apiUsersUrls from '~/api/urls/apiUsers';
+import axios from 'axios';
 
 export async function apiGetProfile() {
   const token = localStorage.getItem('token');
@@ -30,4 +31,20 @@ export async function apiUpdateProfile(formData) {
     throw new Error(data.message || 'Update failed');
   }
   return data;
+}
+
+// ===== GET ALL USERS =====
+export async function apiGetUsers() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(apiUsersUrls.getUsers, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message;
+    throw new Error(message);
+  }
 }

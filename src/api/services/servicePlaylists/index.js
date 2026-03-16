@@ -5,9 +5,6 @@ import axios from 'axios';
 export async function apiCreatePlaylist(name, coverFile) {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('Bạn chưa đăng nhập');
-    }
     const formData = new FormData();
     formData.append('name', name);
     if (coverFile) {
@@ -30,9 +27,6 @@ export async function apiCreatePlaylist(name, coverFile) {
 export async function apiGetMyPlaylists() {
   try {
     const token = localStorage.getItem('token');
-    if (!token) {
-      return [];
-    }
     const response = await axios.get(apiPlaylistUrls.getMyPlaylists, {
       headers: {
         Authorization: `Bearer ${token}`,

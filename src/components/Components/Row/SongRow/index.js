@@ -44,6 +44,10 @@ function SongRow({ song, liked = false, onToggleFavorite }) {
     fetchAlbum();
   }, [song.artistId, song.albumId]);
 
+  useEffect(() => {
+    setIsLiked(liked);
+  }, [liked]);
+
   const toggleLike = async e => {
     e.preventDefault();
     try {
