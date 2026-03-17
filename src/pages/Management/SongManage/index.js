@@ -29,7 +29,6 @@ function SongManage() {
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState('');
 
-  // ✅ FILTER
   const [filterArtist, setFilterArtist] = useState('');
   const [filterAlbum, setFilterAlbum] = useState('');
   const [filterGenre, setFilterGenre] = useState('');
