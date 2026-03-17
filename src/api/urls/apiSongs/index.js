@@ -9,9 +9,14 @@ const apiFavoriteSongBaseUrl = `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_P
 
 const apiSongUrls = {
   // POST
+  createSong: apiSongBaseUrl,
   addSongToFavorite: apiFavoriteSongBaseUrl,
 
+  // PUT
+  updateSong: apiSongBaseUrl,
+
   // DELETE
+  deleteSong: apiSongBaseUrl,
   removeSongFromFavorite: apiFavoriteSongBaseUrl,
 
   // GET

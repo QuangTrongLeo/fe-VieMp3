@@ -12,6 +12,7 @@ export async function apiGetArtist(artistId) {
   }
 }
 
+// ===== GET ARTIST =====
 export async function apiGetArtists() {
   try {
     const response = await axios.get(apiArtistUrls.getArtists);
@@ -22,6 +23,7 @@ export async function apiGetArtists() {
   }
 }
 
+// ===== GET ARTIST BY NAME =====
 export async function apiGetArtistByName(artistName) {
   try {
     const response = await axios.get(apiArtistUrls.getArtistByName, {
@@ -34,6 +36,7 @@ export async function apiGetArtistByName(artistName) {
   }
 }
 
+// ===== CREATE ARTIST =====
 export async function apiCreateArtist(name, avatarFile) {
   try {
     const token = localStorage.getItem('token');
@@ -53,6 +56,7 @@ export async function apiCreateArtist(name, avatarFile) {
   }
 }
 
+// ===== UPDATE ARTIST =====
 export async function apiUpdateArtist(artistId, artistName, avatarFile) {
   try {
     const token = localStorage.getItem('token');
