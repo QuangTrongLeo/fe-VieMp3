@@ -25,18 +25,19 @@ const itemsRequireLogin = [
 
 const itemsManageMod = [
   { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
-  { label: 'Quản lý nghệ sĩ', iconClass: icons.iconStar, href: '/manage/artists' },
-  { label: 'Quản lý album', iconClass: icons.iconCompactDisc, href: '/manage/albums' },
-  { label: 'Quản lý bài hát', iconClass: icons.iconMusic, href: '/manage/songs' },
-  { label: 'Quản lý thể loại', iconClass: icons.iconLayerGroup, href: '/manage/genres' },
-  { label: 'Quản lý playlist', iconClass: icons.iconList, href: '/manage/playlists' },
+  { label: 'Quản lý nghệ sĩ', iconClass: icons.iconStar, href: config.routes.manageArtists },
+  { label: 'Quản lý album', iconClass: icons.iconCompactDisc, href: config.routes.manageAlbums },
+  { label: 'Quản lý bài hát', iconClass: icons.iconMusic, href: config.routes.manageSongs },
+  { label: 'Quản lý thể loại', iconClass: icons.iconLayerGroup, href: config.routes.manageGenres },
+  { label: 'Quản lý playlist', iconClass: icons.iconList, href: config.routes.managePlaylists },
 ];
 
 const itemsManageAdmin = [
+  { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
   { label: 'Tài khoản', iconClass: icons.iconUser, href: '/manage/accounts' },
   { label: 'Gói hội viên', iconClass: icons.iconCrown, href: '/manage/memberships' },
   { label: 'Doanh thu', iconClass: icons.iconDollar, href: '/manage/revenue' },
-  ...itemsManageMod,
+  ...itemsManageMod.slice(1),
 ];
 
 const itemsAnalytic = [

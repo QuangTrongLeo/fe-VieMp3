@@ -28,6 +28,9 @@ const icons = {
   iconfaExclamationRriangle: 'fa fa-exclamation-triangle',
   iconChevronDown: 'fas fa-chevron-down',
   iconGauge: 'fa-solid fa-gauge',
+  iconCrown: 'fa-solid fa-crown',
+  iconDollar: 'fa-solid fa-dollar-sign',
+  iconHeadphones: 'fa-solid fa-headphones',
 };
 
 export default icons;

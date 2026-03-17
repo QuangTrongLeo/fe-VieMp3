@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Manage.module.scss';
 import icons from '~/assets/icons';
-
+import LimitedList from '~/components/Components/LimitedList';
+import { SongRow } from '~/components/Components/Row';
 import { apiGetArtists } from '~/api/services/serviceArtists';
 import { apiGetAlbums } from '~/api/services/serviceAlbums';
 import { apiGetSongs } from '~/api/services/serviceSongs';
@@ -26,7 +27,10 @@ function Manage() {
           apiGetUsers(),
         ]);
 
-        setSongs(songsRes || []);
+        // sắp xếp favorites giảm dần
+        const sortedSongs = (songsRes || []).sort((a, b) => b.favorites - a.favorites);
+
+        setSongs(sortedSongs);
         setArtists(artistsRes || []);
         setAlbums(albumsRes || []);
         setUsers(usersRes || []);
@@ -176,41 +180,41 @@ function Manage() {
 
       {/* Top Songs */}
       <div className={cx('cardBox', 'mt-4')}>
-        <h5 className="mb-3">Top Songs</h5>
+        <h5 className="mb-3">🔥 Top Songs</h5>
 
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Bài hát</th>
-              <th>Nghệ sĩ</th>
-              <th>Lượt thích</th>
-            </tr>
-          </thead>
+        {/* Header */}
+        <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
+          <div className="col-6 d-flex align-items-center gap-2">
+            <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
+            <span>Bài hát</span>
+          </div>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Hãy trao cho anh</td>
-              <td>Sơn Tùng MTP</td>
-              <td>12400</td>
-            </tr>
+          <div className="col-4 d-flex align-items-center">
+            <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
+            <span>Album</span>
+          </div>
 
-            <tr>
-              <td>2</td>
-              <td>Nơi này có anh</td>
-              <td>Sơn Tùng MTP</td>
-              <td>9800</td>
-            </tr>
+          <div className="col-2 d-flex justify-content-end align-items-center">
+            <i className={cx('song-row-icon-header', 'fas', 'fa-heart', 'me-2')}></i>
+            <span>Favorites</span>
+          </div>
+        </div>
 
-            <tr>
-              <td>3</td>
-              <td>Em của ngày hôm qua</td>
-              <td>Sơn Tùng MTP</td>
-              <td>8600</td>
-            </tr>
-          </tbody>
-        </table>
+        <LimitedList
+          items={songs}
+          limit={8}
+          showAllText="Hiện tất cả bài hát"
+          showLessText="Ẩn bớt"
+          renderItem={song => (
+            <SongRow
+              key={song.id}
+              song={song}
+              liked={false}
+              favoriteCount={song.favorites}
+              onToggleFavorite={() => {}}
+            />
+          )}
+        />
       </div>
     </div>
   );

@@ -20,9 +20,15 @@ const routes = {
   playlists: '/playlists',
   profile: '/profile',
   register: '/register',
-  searched: '/searched',
+  // searched: '/searched',
   song: '/song',
+
   manage: '/manage',
+  manageArtists: '/manage/artists',
+  manageAlbums: '/manage/albums',
+  manageSongs: '/manage/songs',
+  manageGenres: '/manage/genres',
+  managePlaylists: '/manage/playlists',
 };
 
 export default routes;

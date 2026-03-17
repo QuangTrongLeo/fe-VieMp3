@@ -4,7 +4,7 @@ import { SecondLayout } from '~/layouts';
 import config from '~/config';
 
 // publishRoutes
-import { Home, Genres, History, Login, Register, Otp, Searched, GenreDetail, AlbumDetail } from '~/pages';
+import { Home, Genres, History, Login, Register, Otp, GenreDetail, AlbumDetail } from '~/pages';
 
 // userRoutes
 import {
@@ -20,7 +20,7 @@ import {
 } from '~/pages';
 
 // modRoutes
-import { Manage } from '~/pages';
+import { Manage, AlbumManage, ArtistManage, GenreManage, SongManage } from '~/pages';
 import PlayListDetail from '~/pages/PlayListDetail';
 
 // adminRoutes
@@ -35,7 +35,6 @@ const publishRoutes = [
   { path: config.routes.login, component: Login, layout: SecondLayout },
   { path: config.routes.register, component: Register, layout: SecondLayout },
   { path: config.routes.otp, component: Otp, layout: SecondLayout },
-  { path: config.routes.searched, component: Searched },
 ];
 
 const userRoutes = [
@@ -51,7 +50,13 @@ const userRoutes = [
   { path: config.routes.favoriteArtists, component: FavoriteArtists },
 ];
 
-const modRoutes = [{ path: config.routes.manage, component: Manage }];
+const modRoutes = [
+  { path: config.routes.manage, component: Manage },
+  { path: config.routes.manageArtists, component: ArtistManage },
+  { path: config.routes.manageAlbums, component: AlbumManage },
+  { path: config.routes.manageSongs, component: SongManage },
+  { path: config.routes.manageGenres, component: GenreManage },
+];
 
 const adminRoutes = [{ path: config.routes.analytic, component: Analytic }];
 

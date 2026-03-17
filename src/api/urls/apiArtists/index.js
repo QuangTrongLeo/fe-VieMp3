@@ -12,8 +12,7 @@ const apiArtistUrls = {
   addArtistToFavorite: apiFavoriteArtistBaseUrl,
 
   // PUT
-  updateArtistName: `${apiArtistBaseUrl}/name`,
-  updateArtistAvatar: `${apiArtistBaseUrl}/avatar`,
+  updateArtist: apiArtistBaseUrl,
 
   // DELETE
   deleteArtist: apiArtistBaseUrl,

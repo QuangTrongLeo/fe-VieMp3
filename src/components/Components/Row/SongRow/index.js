@@ -7,7 +7,7 @@ import { apiGetAlbum } from '~/api/services/serviceAlbums';
 
 const cx = classNames.bind(styles);
 
-function SongRow({ song, liked = false, onToggleFavorite }) {
+function SongRow({ song, liked = false, onToggleFavorite, favoriteCount }) {
   const [artist, setArtist] = useState(null);
   const [album, setAlbum] = useState(null);
   const [isLiked, setIsLiked] = useState(liked);
@@ -92,12 +92,16 @@ function SongRow({ song, liked = false, onToggleFavorite }) {
 
         {/* Thời gian + Favorite */}
         <div className="col-2 d-flex justify-content-end align-items-center">
-          <i
-            className={cx('song-row-favorite-icon', isLiked && 'active', 'me-2', 'fas', 'fa-heart')}
-            onClick={toggleLike}
-          ></i>
+          <div className="d-flex align-items-center gap-2">
+            <i
+              className={cx('song-row-favorite-icon', isLiked && 'active', 'fas', 'fa-heart')}
+              onClick={toggleLike}
+            ></i>
 
-          <span className="small">{duration}</span>
+            {favoriteCount !== undefined && <span className="small text-muted">{favoriteCount}</span>}
+
+            <span className="small ms-2">{duration}</span>
+          </div>
         </div>
 
         {/* Audio hidden để lấy duration */}

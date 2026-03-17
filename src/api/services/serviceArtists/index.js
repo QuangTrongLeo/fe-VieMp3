@@ -34,6 +34,67 @@ export async function apiGetArtistByName(artistName) {
   }
 }
 
+export async function apiCreateArtist(name, avatarFile) {
+  try {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('avatar', avatarFile);
+    const response = await axios.post(apiArtistUrls.createArtist, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message || 'Lỗi tạo nghệ sĩ';
+    throw new Error(message);
+  }
+}
+
+export async function apiUpdateArtist(artistId, artistName, avatarFile) {
+  try {
+    const token = localStorage.getItem('token');
+
+    const formData = new FormData();
+    formData.append('artistId', artistId);
+    formData.append('artistName', artistName);
+    if (avatarFile) {
+      formData.append('avatar', avatarFile);
+    }
+    const response = await axios.put(apiArtistUrls.updateArtist, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    console.log(error.response);
+    const message = error.response?.data?.message || error.message || 'Lỗi cập nhật nghệ sĩ';
+    throw new Error(message);
+  }
+}
+
+// =============== DELETE ARTIST ===============
+export async function apiDeleteArtist(artistId) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(apiArtistUrls.deleteArtist, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        artistId: artistId,
+      },
+    });
+    return response.data.success;
+  } catch (error) {
+    const message = error.response?.data?.message || error.response?.data || error.message || 'Lỗi xóa nghệ sĩ';
+    throw new Error(message);
+  }
+}
+
 // =============== FAVORITE ARTIST ===============
 
 export async function apiGetMyFavoriteArtists() {
