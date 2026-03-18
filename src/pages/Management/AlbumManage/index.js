@@ -163,6 +163,7 @@ function AlbumManage() {
     await apiRemoveSongFromAlbum(songId);
     const updatedSongs = await apiGetSongsByAlbum(selectedAlbum.id);
     setAlbumSongs(updatedSongs);
+    setAlbums(prev => prev.map(a => (a.id === selectedAlbum.id ? { ...a, songCount: updatedSongs.length } : a)));
   };
 
   // RENDER
