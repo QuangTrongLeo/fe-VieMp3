@@ -7,6 +7,7 @@ const apiUserBaseUrl = `${apiBaseURL.defaults.baseURL}${USER_PATH}`;
 const apiUsersUrls = {
   // PUT
   updateProfile: `${apiUserBaseUrl}/me`,
+  updateUserRoles: `${apiUserBaseUrl}/roles`,
 
   // GET
   getUsers: `${apiUserBaseUrl}/all`,

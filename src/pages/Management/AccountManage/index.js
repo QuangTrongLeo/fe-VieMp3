@@ -5,7 +5,7 @@ import icons from '~/assets/icons';
 import { images } from '~/assets';
 import LimitedList from '~/components/Components/LimitedList';
 
-import { apiGetUsers } from '~/api/services/serviceUsers';
+import { apiGetUsers, apiUpdateUserRoles } from '~/api/services/serviceUsers';
 import { apiGetRoles } from '~/api/services/serviceRoles';
 
 const cx = classNames.bind(styles);
@@ -18,11 +18,10 @@ function AccountManage() {
   const [filterRole, setFilterRole] = useState('');
 
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedRoleName, setSelectedRoleName] = useState('');
 
   const [modalUpdate, setModalUpdate] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
-
-  const [selectedRole, setSelectedRole] = useState('');
 
   // ===== FETCH DATA =====
   useEffect(() => {
@@ -32,6 +31,7 @@ function AccountManage() {
   const fetchData = async () => {
     const [userRes, roleRes] = await Promise.all([apiGetUsers(), apiGetRoles()]);
     setUsers(userRes);
+
     const rolesData = Array.isArray(roleRes) ? roleRes : roleRes?.data || [];
     setRoles(rolesData);
   };
@@ -50,21 +50,59 @@ function AccountManage() {
       });
   }, [users, search, filterRole]);
 
-  // ===== UPDATE (LOCAL DEMO) =====
+  // ===== OPEN UPDATE =====
   const handleOpenUpdate = user => {
     setSelectedUser(user);
-    setSelectedRole(user.roleId || '');
+    setSelectedRoleName('');
     setModalUpdate(true);
   };
 
-  const handleUpdate = () => {
-    const roleObj = roles.find(r => r.id === selectedRole);
-    const updated = users.map(u =>
-      u.id === selectedUser.id ? { ...u, roleId: selectedRole, roleName: roleObj?.name } : u
-    );
+  // ===== BUILD ROLE LOGIC =====
+  const buildRoles = () => {
+    const roleMap = Object.fromEntries(roles.map(r => [r.name, r]));
 
-    setUsers(updated);
-    setModalUpdate(false);
+    let newRoles = [...(selectedUser.roles || [])];
+
+    const hasRole = name => newRoles.some(r => r.name === name);
+    const addRole = name => {
+      if (!hasRole(name) && roleMap[name]) {
+        newRoles.push(roleMap[name]);
+      }
+    };
+
+    if (selectedRoleName === 'USER') {
+      newRoles = [roleMap['USER']];
+    }
+
+    if (selectedRoleName === 'MOD') {
+      addRole('USER');
+      addRole('MOD');
+    }
+
+    if (selectedRoleName === 'PREMIUM') {
+      addRole('USER');
+      addRole('PREMIUM');
+    }
+
+    return newRoles;
+  };
+
+  // ===== UPDATE =====
+  const handleUpdate = async () => {
+    try {
+      const newRoles = buildRoles();
+      const roleNames = newRoles.map(r => r.name);
+      await apiUpdateUserRoles({
+        userId: selectedUser.id,
+        roles: roleNames,
+      });
+      const updated = users.map(u => (u.id === selectedUser.id ? { ...u, roles: newRoles } : u));
+      setUsers(updated);
+      setModalUpdate(false);
+    } catch (err) {
+      console.error(err);
+      alert('Cập nhật role thất bại');
+    }
   };
 
   // ===== DELETE (LOCAL DEMO) =====
@@ -89,7 +127,6 @@ function AccountManage() {
           <div className={cx('username')}>{user.username}</div>
           <div className={cx('email')}>{user.email}</div>
 
-          {/* HIỂN THỊ ROLE */}
           <div className={cx('role')}>{user.roles?.map(r => r.name).join(', ') || 'Chưa có role'}</div>
         </div>
       </div>
@@ -156,13 +193,11 @@ function AccountManage() {
               <b>{selectedUser?.username}</b>
             </p>
 
-            <select value={selectedRole} onChange={e => setSelectedRole(e.target.value)}>
+            <select value={selectedRoleName} onChange={e => setSelectedRoleName(e.target.value)}>
               <option value="">Chọn role</option>
-              {roles.map(r => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
+              <option value="USER">USER</option>
+              <option value="MOD">MOD</option>
+              <option value="PREMIUM">PREMIUM</option>
             </select>
 
             <div className={cx('modal-actions')}>
