@@ -5,6 +5,7 @@ import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import { useParams } from 'react-router-dom';
+
 import {
   apiGetAlbum,
   apiGetMyFavoriteAlbums,
@@ -12,27 +13,28 @@ import {
   apiRemoveAlbumFromFavorite,
 } from '~/api/services/serviceAlbums';
 
+import { apiGetSongsByAlbum } from '~/api/services/serviceSongs';
+
 const cx = classNames.bind(styles);
 
 function AlbumDetail() {
   const { albumId } = useParams();
+
   const [album, setAlbum] = useState(null);
   const [songsInAlbum, setSongsInAlbum] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [totalDurationSeconds, setTotalDurationSeconds] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // ===== GET ALBUM =====
-  const handleGetAlbum = async () => {
+  // ===== FETCH DATA =====
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const albumData = await apiGetAlbum(albumId);
-      setAlbum(albumData);
 
-      // nếu API album có trả songs thì set luôn
-      if (albumData?.songs) {
-        setSongsInAlbum(albumData.songs);
-      }
+      const [albumData, songsData] = await Promise.all([apiGetAlbum(albumId), apiGetSongsByAlbum(albumId)]);
+
+      setAlbum(albumData);
+      setSongsInAlbum(songsData || []);
     } catch (error) {
       console.error('Lỗi khi fetch album:', error);
     } finally {
@@ -42,7 +44,7 @@ function AlbumDetail() {
 
   useEffect(() => {
     if (albumId) {
-      handleGetAlbum();
+      fetchData();
     }
   }, [albumId]);
 
@@ -51,10 +53,7 @@ function AlbumDetail() {
     const checkFavorite = async () => {
       try {
         const myFavorites = await apiGetMyFavoriteAlbums();
-
-        // 🔥 FIX QUAN TRỌNG: so sánh album.id
         const isFav = myFavorites.some(item => item.album.id === albumId);
-
         setIsFavorite(isFav);
       } catch (error) {
         console.error('Lỗi khi kiểm tra favorite:', error);
@@ -74,9 +73,11 @@ function AlbumDetail() {
     if (songsInAlbum.length > 0) {
       songsInAlbum.forEach(song => {
         const audio = new Audio(song.audio);
+
         audio.addEventListener('loadedmetadata', () => {
           total += Math.floor(audio.duration);
           loadedCount++;
+
           if (loadedCount === songsInAlbum.length) {
             setTotalDurationSeconds(total);
           }
@@ -87,7 +88,7 @@ function AlbumDetail() {
     }
   }, [songsInAlbum]);
 
-  // ===== FORMAT DURATION =====
+  // ===== FORMAT TIME =====
   const hours = Math.floor(totalDurationSeconds / 3600);
   const minutes = Math.floor((totalDurationSeconds % 3600) / 60);
   const seconds = totalDurationSeconds % 60;
@@ -95,7 +96,7 @@ function AlbumDetail() {
   const formattedDuration =
     hours > 0 ? `${hours} giờ ${minutes} phút ${seconds} giây` : `${minutes} phút ${seconds} giây`;
 
-  // ===== TOGGLE FAVORITE =====
+  // ===== FAVORITE =====
   const toggleFavorite = async () => {
     try {
       if (isFavorite) {
@@ -111,16 +112,14 @@ function AlbumDetail() {
     }
   };
 
-  if (loading) {
-    return <div>Đang tải album...</div>;
-  }
+  // ===== UI =====
+  if (loading) return <div>Đang tải album...</div>;
 
-  if (!album) {
-    return <div>Album không tồn tại</div>;
-  }
+  if (!album) return <div>Album không tồn tại</div>;
 
   return (
     <div className={cx('album-wrapper', 'py-4')}>
+      {/* HEADER */}
       <div className={cx('album-header', 'd-flex', 'align-items-center', 'mb-4')}>
         <img src={album.cover} alt="album-cover" className={cx('album-cover')} />
 
@@ -133,15 +132,14 @@ function AlbumDetail() {
             {songsInAlbum.length} bài hát - {formattedDuration}
           </p>
 
-          <div>
-            <button className={cx('favorite-btn')} onClick={toggleFavorite}>
-              <i className={cx(isFavorite ? icons.iconCheck : icons.iconHeart, 'me-1')}></i>
-              {isFavorite ? 'Đã yêu thích' : 'Yêu thích'}
-            </button>
-          </div>
+          <button className={cx('favorite-btn')} onClick={toggleFavorite}>
+            <i className={cx(isFavorite ? icons.iconCheck : icons.iconHeart, 'me-1')}></i>
+            {isFavorite ? 'Đã yêu thích' : 'Yêu thích'}
+          </button>
         </div>
       </div>
 
+      {/* SONG LIST */}
       <h5 className={cx('section-title')}>Bài Hát Nổi Bật</h5>
 
       {songsInAlbum.length > 0 ? (
@@ -150,7 +148,7 @@ function AlbumDetail() {
           limit={8}
           wrapInRow={true}
           renderItem={(song, idx) => (
-            <div className="col-md-6 mb-3" key={idx}>
+            <div className="col-md-6 mb-3" key={song.id || idx}>
               <SongItem song={song} />
             </div>
           )}

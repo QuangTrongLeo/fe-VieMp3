@@ -35,6 +35,59 @@ export async function apiGetAlbumsByArtist(artistId) {
   }
 }
 
+// ===== CREATE ALBUM =====
+export async function apiCreateAlbum(formData) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(apiAlbumUrls.createAlbum, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.response?.data || error.message || 'Lỗi tạo album';
+    throw new Error(message);
+  }
+}
+
+// ===== UPDATE ALBUM =====
+export async function apiUpdateAlbum(formData) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.put(apiAlbumUrls.updateAlbum, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.response?.data || error.message || 'Lỗi cập nhật album';
+    throw new Error(message);
+  }
+}
+
+// ===== DELETE ALBUM =====
+export async function apiDeleteAlbum(albumId) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(apiAlbumUrls.deleteAlbum, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        albumId,
+      },
+    });
+    return response.data.success;
+  } catch (error) {
+    const message = error.response?.data?.message || error.response?.data || error.message || 'Lỗi xóa album';
+    throw new Error(message);
+  }
+}
+
 export async function apiAddSongToAlbum(albumId, songId) {
   try {
     const token = localStorage.getItem('token');
@@ -51,7 +104,7 @@ export async function apiAddSongToAlbum(albumId, songId) {
       }
     );
 
-    return response.data;
+    return response.data.success;
   } catch (error) {
     if (error.response?.status === 403 || error.response?.status === 401) return null;
   }
@@ -66,7 +119,7 @@ export async function apiRemoveSongFromAlbum(songId) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data;
+    return response.data.success;
   } catch (error) {
     if (error.response?.status === 403 || error.response?.status === 401) return null;
   }

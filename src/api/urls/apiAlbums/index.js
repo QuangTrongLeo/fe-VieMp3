@@ -8,10 +8,15 @@ const apiFavoriteAlbumBaseUrl = `${apiBaseURL.defaults.baseURL}${FAVORITE_ALBUM_
 
 const apiAlbumUrls = {
   // POST
+  createAlbum: apiAlbumBaseUrl,
   addAlbumToFavorite: apiFavoriteAlbumBaseUrl,
   addSongToAlbum: `${apiAlbumBaseUrl}/add-song`,
 
+  // PUT
+  updateAlbum: apiAlbumBaseUrl,
+
   // DELETE
+  deleteAlbum: apiAlbumBaseUrl,
   removeAlbumFromFavorite: apiFavoriteAlbumBaseUrl,
   removeSongFromAlbum: apiAlbumBaseUrl,
 
