@@ -24,11 +24,14 @@ const routes = {
   song: '/song',
 
   manage: '/manage',
+  manageAccounts: '/manage/accounts',
   manageArtists: '/manage/artists',
   manageAlbums: '/manage/albums',
   manageSongs: '/manage/songs',
   manageGenres: '/manage/genres',
   managePlaylists: '/manage/playlists',
+  manageMemberships: '/manage/memberships',
+  manageRevenues: '/manage/revenue',
 };
 
 export default routes;
