@@ -13,7 +13,7 @@ import {
   apiRemoveAlbumFromFavorite,
 } from '~/api/services/serviceAlbums';
 
-import { apiGetSongsByAlbum } from '~/api/services/serviceSongs';
+import { apiGetSongsByAlbum, apiGetMyFavoriteSongs } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +22,7 @@ function AlbumDetail() {
 
   const [album, setAlbum] = useState(null);
   const [songsInAlbum, setSongsInAlbum] = useState([]);
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [totalDurationSeconds, setTotalDurationSeconds] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -112,6 +113,19 @@ function AlbumDetail() {
     }
   };
 
+  const loadFavoriteSongs = async () => {
+    try {
+      const data = await apiGetMyFavoriteSongs();
+      setFavoriteSongs(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    loadFavoriteSongs();
+  }, []);
+
   // ===== UI =====
   if (loading) return <div>Đang tải album...</div>;
 
@@ -149,7 +163,7 @@ function AlbumDetail() {
           wrapInRow={true}
           renderItem={(song, idx) => (
             <div className="col-md-6 mb-3" key={song.id || idx}>
-              <SongItem song={song} />
+              <SongItem song={song} favoriteSongs={favoriteSongs} setFavoriteSongs={setFavoriteSongs} />
             </div>
           )}
         />

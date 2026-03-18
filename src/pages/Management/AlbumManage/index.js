@@ -14,7 +14,7 @@ import {
 } from '~/api/services/serviceAlbums';
 
 import { apiGetArtists } from '~/api/services/serviceArtists';
-import { apiGetSongsByArtist } from '~/api/services/serviceSongs';
+import { apiGetSongsByArtist, apiGetSongsByAlbum } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +22,7 @@ function AlbumManage() {
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]);
   const [songs, setSongs] = useState([]);
+  const [albumSongs, setAlbumSongs] = useState([]);
 
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState('');
@@ -50,10 +51,24 @@ function AlbumManage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-
       const [albumRes, artistRes] = await Promise.all([apiGetAlbums(), apiGetArtists()]);
-
-      setAlbums(albumRes);
+      const albumsWithCount = await Promise.all(
+        albumRes.map(async album => {
+          try {
+            const res = await apiGetSongsByAlbum(album.id);
+            return {
+              ...album,
+              songCount: res.length,
+            };
+          } catch (e) {
+            return {
+              ...album,
+              songCount: 0,
+            };
+          }
+        })
+      );
+      setAlbums(albumsWithCount);
       setArtists(artistRes);
     } catch (e) {
       console.error(e);
@@ -85,7 +100,6 @@ function AlbumManage() {
     formData.append('title', title);
     formData.append('cover', coverFile);
     formData.append('artistId', artistId);
-
     await apiCreateAlbum(formData);
     setModalCreate(false);
     fetchData();
@@ -103,7 +117,6 @@ function AlbumManage() {
     formData.append('albumId', selectedAlbum.id);
     formData.append('title', title);
     if (coverFile) formData.append('cover', coverFile);
-
     await apiUpdateAlbum(formData);
     setModalUpdate(false);
     fetchData();
@@ -125,23 +138,31 @@ function AlbumManage() {
   const openAddSong = async album => {
     setSelectedAlbum(album);
     setModalAddSong(true);
-
-    const res = await apiGetSongsByArtist(album.artistId);
-    setSongs(res);
+    try {
+      const [songsByArtist, songsInAlbum] = await Promise.all([
+        apiGetSongsByArtist(album.artistId),
+        apiGetSongsByAlbum(album.id),
+      ]);
+      setSongs(songsByArtist);
+      setAlbumSongs(songsInAlbum);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
+  // FIX
   const handleAddSong = async () => {
     await apiAddSongToAlbum(selectedAlbum.id, songId);
-    const updatedAlbums = await apiGetAlbums();
-    setAlbums(updatedAlbums);
-    const updated = updatedAlbums.find(a => a.id === selectedAlbum.id);
-    setSelectedAlbum(updated);
+    const updatedSongs = await apiGetSongsByAlbum(selectedAlbum.id);
+    setAlbumSongs(updatedSongs);
+    setAlbums(prev => prev.map(a => (a.id === selectedAlbum.id ? { ...a, songCount: updatedSongs.length } : a)));
     setSongId('');
   };
 
   const handleRemoveSong = async songId => {
     await apiRemoveSongFromAlbum(songId);
-    fetchData();
+    const updatedSongs = await apiGetSongsByAlbum(selectedAlbum.id);
+    setAlbumSongs(updatedSongs);
   };
 
   // RENDER
@@ -152,21 +173,17 @@ function AlbumManage() {
         <div>
           <div className={cx('album-title')}>{album.title}</div>
           <small className={cx('album-artist')}>{getArtistName(album.artistId)}</small>
-          <small>{album.songs?.length || 0} bài hát</small>
+          <small>{album.songCount || 0} bài hát</small>
         </div>
       </div>
-
       <div className={cx('album-date')}>{formatDate(album.createdAt)}</div>
-
       <div className={cx('album-actions')}>
         <button className="btn btn-sm btn-success" onClick={() => openAddSong(album)}>
           +
         </button>
-
         <button className="btn btn-sm btn-warning" onClick={() => openUpdate(album)}>
           <i className="fas fa-edit"></i>
         </button>
-
         <button className="btn btn-sm btn-danger" onClick={() => openDelete(album)}>
           <i className="fas fa-trash"></i>
         </button>
@@ -181,7 +198,6 @@ function AlbumManage() {
         <h3>
           <i className={icons.iconStar}></i> Quản lý Album
         </h3>
-
         <button className="btn btn-primary" onClick={() => setModalCreate(true)}>
           Thêm Album
         </button>
@@ -197,7 +213,6 @@ function AlbumManage() {
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-
         <div className="col-md-3">
           <select className="form-select" onChange={e => setFilterArtist(e.target.value)}>
             <option value="">Tất cả nghệ sĩ</option>
@@ -208,7 +223,6 @@ function AlbumManage() {
             ))}
           </select>
         </div>
-
         <div className="col-md-3">
           <select className="form-select" onChange={e => setSortType(e.target.value)}>
             <option value="">Sắp xếp</option>
@@ -222,32 +236,19 @@ function AlbumManage() {
       {loading ? (
         <div>Loading...</div>
       ) : (
-        <LimitedList
-          items={filteredAlbums}
-          renderItem={renderAlbum}
-          limit={8}
-          showAllText="Xem tất cả"
-          showLessText="Ẩn bớt"
-          wrapInRow={false}
-        />
+        <LimitedList items={filteredAlbums} renderItem={renderAlbum} limit={8} wrapInRow={false} />
       )}
 
-      {/* CREATE MODAL */}
+      {/* CREATE */}
       {modalCreate && (
         <div className={cx('modal-backdrop')}>
           <div className={cx('modal-container')}>
-            {/* HEADER */}
             <div className={cx('modal-header')}>
               <h5>Thêm Album</h5>
               <button className="btn-close" onClick={() => setModalCreate(false)} />
             </div>
-
-            {/* BODY */}
             <div className={cx('modal-body')}>
-              <label className="form-label">Tên album</label>
               <input className="form-control mb-3" value={title} onChange={e => setTitle(e.target.value)} />
-
-              <label className="form-label">Nghệ sĩ</label>
               <select className="form-select mb-3" value={artistId} onChange={e => setArtistId(e.target.value)}>
                 <option value="">Chọn nghệ sĩ</option>
                 {artists.map(a => (
@@ -256,18 +257,13 @@ function AlbumManage() {
                   </option>
                 ))}
               </select>
-
-              <label className="form-label">Ảnh bìa</label>
               <input type="file" className="form-control" onChange={e => setCoverFile(e.target.files[0])} />
             </div>
-
-            {/* FOOTER */}
             <div className={cx('modal-footer')}>
               <button className="btn btn-secondary" onClick={() => setModalCreate(false)}>
                 Hủy
               </button>
-
-              <button className="btn btn-primary" disabled={!title || !artistId} onClick={handleCreate}>
+              <button className="btn btn-primary" onClick={handleCreate}>
                 Tạo
               </button>
             </div>
@@ -275,6 +271,7 @@ function AlbumManage() {
         </div>
       )}
 
+      {/* UPDATE */}
       {modalUpdate && (
         <div className={cx('modal-backdrop')}>
           <div className={cx('modal-container')}>
@@ -282,20 +279,14 @@ function AlbumManage() {
               <h5>Cập nhật Album</h5>
               <button className="btn-close" onClick={() => setModalUpdate(false)} />
             </div>
-
             <div className={cx('modal-body')}>
-              <label className="form-label">Tên album</label>
               <input className="form-control mb-3" value={title} onChange={e => setTitle(e.target.value)} />
-
-              <label className="form-label">Ảnh bìa</label>
               <input type="file" className="form-control" onChange={e => setCoverFile(e.target.files[0])} />
             </div>
-
             <div className={cx('modal-footer')}>
               <button className="btn btn-secondary" onClick={() => setModalUpdate(false)}>
                 Hủy
               </button>
-
               <button className="btn btn-warning" onClick={handleUpdate}>
                 Cập nhật
               </button>
@@ -304,6 +295,7 @@ function AlbumManage() {
         </div>
       )}
 
+      {/* DELETE */}
       {modalDelete && (
         <div className={cx('modal-backdrop')}>
           <div className={cx('modal-container')}>
@@ -311,18 +303,15 @@ function AlbumManage() {
               <h5>Xóa Album</h5>
               <button className="btn-close" onClick={() => setModalDelete(false)} />
             </div>
-
             <div className={cx('modal-body')}>
-              Bạn có chắc muốn xóa album:
+              Bạn có chắc muốn xóa:
               <br />
               <b>{selectedAlbum?.title}</b> ?
             </div>
-
             <div className={cx('modal-footer')}>
               <button className="btn btn-secondary" onClick={() => setModalDelete(false)}>
                 Hủy
               </button>
-
               <button className="btn btn-danger" onClick={handleDelete}>
                 Xóa
               </button>
@@ -331,7 +320,7 @@ function AlbumManage() {
         </div>
       )}
 
-      {/* ADD SONG MODAL */}
+      {/* ADD SONG */}
       {modalAddSong && (
         <div className={cx('modal-backdrop')}>
           <div className={cx('modal-container')}>
@@ -339,10 +328,7 @@ function AlbumManage() {
               <h5>Quản lý bài hát</h5>
               <button className="btn-close" onClick={() => setModalAddSong(false)} />
             </div>
-
             <div className={cx('modal-body')}>
-              {/* ADD SONG */}
-              <label className="form-label">Thêm bài hát</label>
               <select className="form-select mb-3" value={songId} onChange={e => setSongId(e.target.value)}>
                 <option value="">Chọn bài hát</option>
                 {songs.map(s => (
@@ -351,41 +337,37 @@ function AlbumManage() {
                   </option>
                 ))}
               </select>
-
-              <button
-                className="btn btn-success mb-3"
-                disabled={!songId}
-                onClick={async () => {
-                  await handleAddSong();
-                  fetchData(); // refresh
-                }}
-              >
+              <button className="btn btn-success mb-3" onClick={handleAddSong}>
                 Thêm
               </button>
-
               <hr />
-
-              {/* REMOVE SONG */}
               <h6>Danh sách bài trong album</h6>
-
-              {selectedAlbum?.songs?.length === 0 && <div>Chưa có bài hát</div>}
-
-              {selectedAlbum?.songs?.map(s => (
-                <div key={s.id} className="d-flex justify-content-between align-items-center mb-2">
-                  <span>{s.title}</span>
-
-                  <button
-                    className="btn btn-sm btn-danger"
-                    onClick={async () => {
-                      await handleRemoveSong(s.id);
-                    }}
-                  >
-                    Xóa
-                  </button>
-                </div>
-              ))}
+              {albumSongs.length === 0 && <div>Chưa có bài hát</div>}
+              <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                {albumSongs.map(s => (
+                  <div key={s.id} className="d-flex justify-content-between align-items-center mb-2">
+                    {/* LEFT */}
+                    <div className="d-flex align-items-center gap-2">
+                      <img
+                        src={s.cover}
+                        alt={s.title}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          objectFit: 'cover',
+                          borderRadius: 4,
+                        }}
+                      />
+                      <span>{s.title}</span>
+                    </div>
+                    {/* RIGHT */}
+                    <button className="btn btn-sm btn-danger" onClick={() => handleRemoveSong(s.id)}>
+                      Xóa
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-
             <div className={cx('modal-footer')}>
               <button className="btn btn-secondary" onClick={() => setModalAddSong(false)}>
                 Đóng

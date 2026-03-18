@@ -6,7 +6,7 @@ import styles from './GenreDetail.module.scss';
 import SongItem from '~/components/Components/SongItem';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiGetGenre } from '~/api/services/serviceGenres';
-import { apiGetSongsByGenre } from '~/api/services/serviceSongs';
+import { apiGetSongsByGenre, apiGetMyFavoriteSongs } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +15,7 @@ function GenreDetail() {
 
   const [genre, setGenre] = useState(null);
   const [songs, setSongs] = useState([]);
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // ===== GET GENRE =====
@@ -48,6 +49,19 @@ function GenreDetail() {
     };
     fetchData();
   }, [genreId]);
+
+  const loadFavoriteSongs = async () => {
+    try {
+      const data = await apiGetMyFavoriteSongs();
+      setFavoriteSongs(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    loadFavoriteSongs();
+  }, []);
 
   // ===== SORT SONGS (NEWEST FIRST) =====
   const sortedSongs = [...songs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -83,7 +97,7 @@ function GenreDetail() {
           wrapInRow={true}
           renderItem={song => (
             <div className="col-md-6 mb-3" key={song.id}>
-              <SongItem song={song} />
+              <SongItem song={song} favoriteSongs={favoriteSongs} setFavoriteSongs={setFavoriteSongs} />
             </div>
           )}
         />
