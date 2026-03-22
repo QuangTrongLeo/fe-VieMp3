@@ -321,7 +321,7 @@ function SongManage() {
       </div>
 
       <div className={cx('list')}>
-        <LimitedList items={filteredSongs} renderItem={renderSong} limit={10} />
+        <LimitedList items={filteredSongs} renderItem={renderSong} />
       </div>
 
       {/* ===== MODALS (GIỮ NGUYÊN) ===== */}

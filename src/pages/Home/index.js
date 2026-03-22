@@ -4,10 +4,10 @@ import styles from './Home.module.scss';
 import classNames from 'classnames/bind';
 import { useAuth } from '~/components/Components/AuthProvider';
 import { CircleCard, RectangleCard, SquareCard } from '~/components/Components/Card';
-import { apiFavoriteSongsOfTheWeek, apiSuitableSongs } from '~/api/urls/apiSongs';
+import { apiFavoriteSongsOfTheWeek } from '~/api/urls/apiSongs';
 import { apiGetArtist, apiGetArtists, apiGetMyFavoriteArtists } from '~/api/services/serviceArtists';
 import { apiGetAlbums } from '~/api/services/serviceAlbums';
-import { apiGetSongs } from '~/api/services/serviceSongs';
+import { apiGetSongs, apiGetRecommendSongs } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +26,7 @@ function Home() {
   const [trendingArtists, setTrendingArtists] = useState([]);
   const [hotAlbums, setHotAlbums] = useState([]);
   const [favoriteArtists, setFavoriteArtists] = useState([]);
+  const [recommendSongs, setRecommendSongs] = useState([]);
 
   const handleTrendingArtists = async () => {
     try {
@@ -86,12 +87,46 @@ function Home() {
     }
   }, [currentToken]);
 
+  const handleRecommendSongs = useCallback(async () => {
+    try {
+      if (!currentToken) return;
+
+      const data = await apiGetRecommendSongs();
+
+      // Thêm artistName cho mỗi bài giống handleNewSongs
+      const songsWithArtist = await Promise.all(
+        data.map(async song => {
+          try {
+            const artist = await apiGetArtist(song.artistId);
+            return {
+              ...song,
+              artistName: artist?.name || 'Không tìm thấy nghệ sĩ',
+            };
+          } catch {
+            return {
+              ...song,
+              artistName: 'Không tìm thấy nghệ sĩ',
+            };
+          }
+        })
+      );
+
+      setRecommendSongs(songsWithArtist);
+    } catch (error) {
+      console.error('Lỗi khi lấy bài hát gợi ý:', error);
+    }
+  }, [currentToken]);
+
   useEffect(() => {
-    handleTrendingArtists();
-    handleHotAlbums();
-    handleNewSongs();
-    handleMyFavoriteArtists();
-  }, [currentToken, handleMyFavoriteArtists]);
+    const fetchAll = async () => {
+      await handleRecommendSongs();
+      await handleNewSongs();
+      await handleTrendingArtists();
+      await handleHotAlbums();
+      await handleMyFavoriteArtists();
+    };
+    fetchAll();
+  }, [currentToken, handleMyFavoriteArtists, handleRecommendSongs]);
 
   const sortedFavoriteSongsOfTheWeek = sortDesc(apiFavoriteSongsOfTheWeek, 'favoritesOfWeek');
 
@@ -159,20 +194,23 @@ function Home() {
       </section>
 
       {/* SUITABLE SONGS */}
-      <section className={cx('section-block')}>
-        <h3>Phù hợp với bạn</h3>
-        <HorizontalScroll>
-          {apiSuitableSongs.map(song => (
-            <SquareCard
-              key={song.songId}
-              content={song.songName}
-              desc={song.artistName}
-              cover={song.cover}
-              href={`/song/${song.songName}`}
-            />
-          ))}
-        </HorizontalScroll>
-      </section>
+      {currentToken && recommendSongs.length > 0 && (
+        <section className={cx('section-block')}>
+          <h3>Phù hợp với bạn</h3>
+          <HorizontalScroll>
+            {recommendSongs.map(song => (
+              <RectangleCard
+                key={song.id}
+                content={song.title || song.songName}
+                desc={song.artistName}
+                createdAt={song.createdAt}
+                cover={song.cover}
+                href={`/song/${song.id}`}
+              />
+            ))}
+          </HorizontalScroll>
+        </section>
+      )}
 
       {/* YOUR FAVORITE ARTISTS */}
       {currentToken && favoriteArtists.length > 0 && (

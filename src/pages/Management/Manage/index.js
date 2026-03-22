@@ -8,6 +8,7 @@ import { apiGetArtists } from '~/api/services/serviceArtists';
 import { apiGetAlbums } from '~/api/services/serviceAlbums';
 import { apiGetSongs } from '~/api/services/serviceSongs';
 import { apiGetUsers } from '~/api/services/serviceUsers';
+import { apiGetGenres } from '~/api/services/serviceGenres';
 
 const cx = classNames.bind(styles);
 
@@ -15,15 +16,17 @@ function Manage() {
   const [songs, setSongs] = useState([]);
   const [artists, setArtists] = useState([]);
   const [albums, setAlbums] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [songsRes, artistsRes, albumsRes, usersRes] = await Promise.all([
+        const [songsRes, artistsRes, albumsRes, genresRes, usersRes] = await Promise.all([
           apiGetSongs(),
           apiGetArtists(),
           apiGetAlbums(),
+          apiGetGenres(),
           apiGetUsers(),
         ]);
 
@@ -33,6 +36,7 @@ function Manage() {
         setSongs(sortedSongs);
         setArtists(artistsRes || []);
         setAlbums(albumsRes || []);
+        setGenres(genresRes || []);
         setUsers(usersRes || []);
       } catch (error) {
         console.error('Fetch dashboard data error:', error);
@@ -51,50 +55,22 @@ function Manage() {
       </div>
 
       {/* System Overview */}
-      <div className="row g-4 mb-4">
-        {/* Songs */}
-        <div className="col-lg-3 col-md-6">
-          <div className={cx('statCard', 'songs')}>
+      <div className={cx('systemOverview')}>
+        {[
+          { label: 'Total Songs', count: songs.length, icon: icons.iconMusic, style: 'songs' },
+          { label: 'Total Artists', count: artists.length, icon: icons.iconStar, style: 'artists' },
+          { label: 'Total Albums', count: albums.length, icon: icons.iconCompactDisc, style: 'albums' },
+          { label: 'Total Genres', count: genres.length, icon: icons.iconTags || 'fas fa-tags', style: 'genres' },
+          { label: 'Total Users', count: users.length, icon: icons.iconUser, style: 'users' },
+        ].map((item, index) => (
+          <div key={index} className={cx('statCard', item.style)}>
             <div>
-              <p className="text-muted mb-1">Total Songs</p>
-              <h3>{songs.length}</h3>
+              <p className="text-muted mb-1">{item.label}</p>
+              <h3>{item.count}</h3>
             </div>
-            <i className={`${icons.iconMusic} ${cx('icon')}`}></i>
+            <i className={`${item.icon} ${cx('icon')}`}></i>
           </div>
-        </div>
-
-        {/* Artists */}
-        <div className="col-lg-3 col-md-6">
-          <div className={cx('statCard', 'artists')}>
-            <div>
-              <p className="text-muted mb-1">Total Artists</p>
-              <h3>{artists.length}</h3>
-            </div>
-            <i className={`${icons.iconStar} ${cx('icon')}`}></i>
-          </div>
-        </div>
-
-        {/* Albums */}
-        <div className="col-lg-3 col-md-6">
-          <div className={cx('statCard', 'albums')}>
-            <div>
-              <p className="text-muted mb-1">Total Albums</p>
-              <h3>{albums.length}</h3>
-            </div>
-            <i className={`${icons.iconCompactDisc} ${cx('icon')}`}></i>
-          </div>
-        </div>
-
-        {/* Users */}
-        <div className="col-lg-3 col-md-6">
-          <div className={cx('statCard', 'users')}>
-            <div>
-              <p className="text-muted mb-1">Total Users</p>
-              <h3>{users.length}</h3>
-            </div>
-            <i className={`${icons.iconUser} ${cx('icon')}`}></i>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Row 2 */}
