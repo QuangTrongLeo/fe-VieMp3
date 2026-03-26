@@ -49,3 +49,46 @@ export async function apiGetPlaylist(playlistId) {
   });
   return response.data.data;
 }
+
+// ===== ADD SONG TO PLAYLIST =====
+export async function apiAddSongToPlaylist(playlistId, songId) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.put(
+      apiPlaylistUrls.addSongToPlaylist,
+      {
+        playlistId,
+        songId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data?.success ?? false;
+  } catch (error) {
+    console.error('Add song error:', error);
+    return null;
+  }
+}
+
+// ===== REMOVE SONG FROM PLAYLIST =====
+export async function apiRemoveSongFromPlaylist(playlistId, songId) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(apiPlaylistUrls.removeSongFromPlaylist, {
+      data: {
+        playlistId,
+        songId,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data?.success ?? false;
+  } catch (error) {
+    console.error('Remove song error:', error);
+    return null;
+  }
+}

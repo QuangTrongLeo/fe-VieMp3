@@ -4,8 +4,7 @@ import LimitedList from '~/components/Components/LimitedList';
 import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import styles from './FavoriteSongs.module.scss';
-
-import { apiGetMyFavoriteSongs, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
+import { apiGetMyFavoriteSongs } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
@@ -15,32 +14,17 @@ function FavoriteSongs() {
   const handleGetFavoriteSongs = async () => {
     try {
       const data = await apiGetMyFavoriteSongs();
-
       const sorted = [...data].sort((a, b) => new Date(b.favoritedAt) - new Date(a.favoritedAt));
-
       setFavoriteSongs(sorted);
     } catch (error) {
       console.error('Lỗi khi lấy bài hát yêu thích:', error);
     }
   };
-
   useEffect(() => {
     handleGetFavoriteSongs();
   }, []);
 
-  const handleUnfavorite = async songId => {
-    try {
-      await apiRemoveSongFromFavorite(songId);
-
-      setFavoriteSongs(prev => prev.filter(item => item.song.id !== songId));
-    } catch (error) {
-      console.error('Lỗi bỏ thích bài hát:', error);
-    }
-  };
-
-  const renderItem = item => (
-    <SongRow key={item.song.id} song={item.song} liked={true} onToggleFavorite={handleUnfavorite} />
-  );
+  const renderItem = item => <SongRow key={item.song.id} song={item.song} />;
 
   return (
     <>

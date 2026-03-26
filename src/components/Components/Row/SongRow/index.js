@@ -1,23 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import Tippy from '@tippyjs/react/headless';
-import 'tippy.js/dist/tippy.css';
-import icons from '~/assets/icons';
 import styles from './SongRow.module.scss';
+import SongMenu from '../../SongMenu';
+
 import { apiGetArtist } from '~/api/services/serviceArtists';
 import { apiGetAlbum } from '~/api/services/serviceAlbums';
-import { apiGetMyPlaylists } from '~/api/services/servicePlaylists';
-import LimitedList from '../../LimitedList';
+
+import { apiGetMyFavoriteSongs, apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-function SongRow({ song, liked = false, onToggleFavorite }) {
+function SongRow({ song }) {
   const [artist, setArtist] = useState(null);
   const [album, setAlbum] = useState(null);
-  const [isLiked, setIsLiked] = useState(liked);
+  const [isLiked, setIsLiked] = useState(false);
   const [duration, setDuration] = useState('');
-  const [playlists, setPlaylists] = useState([]);
 
   const audioRef = useRef(null);
 
@@ -40,102 +38,48 @@ function SongRow({ song, liked = false, onToggleFavorite }) {
     fetchData();
   }, [song.artistId, song.albumId]);
 
-  // ===== FETCH PLAYLIST =====
+  // ===== FETCH FAVORITE =====
   useEffect(() => {
-    const fetchPlaylists = async () => {
+    const fetchFavorites = async () => {
       try {
-        const data = await apiGetMyPlaylists();
-        setPlaylists(data || []);
+        const favorites = await apiGetMyFavoriteSongs();
+        const ids = favorites.map(item => item.song.id);
+        setIsLiked(ids.includes(song.id));
       } catch (error) {
-        console.error('Lỗi lấy playlist:', error);
+        console.error('Lỗi lấy favorite:', error);
       }
     };
-    fetchPlaylists();
-  }, []);
-
-  useEffect(() => {
-    setIsLiked(liked);
-  }, [liked]);
+    fetchFavorites();
+  }, [song.id]);
 
   const handleActionClick = e => {
     e.preventDefault();
     e.stopPropagation();
   };
 
+  // ===== TOGGLE LIKE =====
   const handleToggleLike = async e => {
     handleActionClick(e);
     try {
-      await onToggleFavorite(song.id);
-      setIsLiked(!isLiked);
+      if (isLiked) {
+        await apiRemoveSongFromFavorite(song.id);
+        setIsLiked(false);
+      } else {
+        await apiAddSongToFavorite(song.id);
+        setIsLiked(true);
+      }
     } catch (error) {
       console.error('Lỗi toggle favorite:', error);
     }
   };
 
+  // ===== LOAD DURATION =====
   const handleLoadedMetadata = () => {
     const seconds = audioRef.current.duration;
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     setDuration(`${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`);
   };
-
-  // ===== RENDER PLAYLIST ITEM =====
-  const renderPlaylistItem = pl => (
-    <div key={pl.id} className={cx('menu-item')}>
-      <i className="fas fa-plus"></i>
-      <span className="ms-2">{pl.name}</span>
-    </div>
-  );
-
-  // ===== PLAYLIST MENU =====
-  const renderPlaylistMenu = attrs => (
-    <div className={cx('menu-popper')} tabIndex="-1" {...attrs} onClick={handleActionClick}>
-      <div className={cx('search-wrapper')}>
-        <input type="text" placeholder="Tìm một danh sách phát" onClick={e => e.stopPropagation()} />
-      </div>
-
-      <div className={cx('menu-item')}>
-        <i className="fas fa-plus"></i>
-        <span>Danh sách phát mới</span>
-      </div>
-
-      <div className={cx('divider')}></div>
-
-      <div className={cx('playlist-list')}>
-        {playlists.length > 0 ? (
-          <LimitedList items={playlists} limit={6} wrapInRow={false} renderItem={item => renderPlaylistItem(item)} />
-        ) : (
-          <div className={cx('menu-item-disabled')}>Trống</div>
-        )}
-      </div>
-    </div>
-  );
-
-  // ===== MAIN MENU =====
-  const renderMainMenu = attrs => (
-    <div className={cx('menu-popper')} tabIndex="-1" {...attrs} onClick={handleActionClick}>
-      <Tippy placement="left-start" offset={[-5, 0]} interactive render={renderPlaylistMenu}>
-        <div className={cx('menu-item', 'has-submenu')}>
-          <i className="fas fa-plus"></i>
-          <span>Thêm vào danh sách phát</span>
-          <i className="fas fa-caret-right ms-auto"></i>
-        </div>
-      </Tippy>
-
-      <div className={cx('menu-item')} onClick={handleToggleLike}>
-        <i className="fas fa-heart"></i>
-        <span>{isLiked ? 'Loại bỏ khỏi bài hát đã thích' : 'Lưu vào bài hát đã thích'}</span>
-      </div>
-      <Link className={cx('menu-item')}>
-        <i className={icons.iconStar}></i>
-        <span>Truy cập nghệ sĩ</span>
-      </Link>
-      <Link className={cx('menu-item')}>
-        <i className={icons.iconCompactDisc}></i>
-        <span>Truy cập album</span>
-      </Link>
-    </div>
-  );
 
   return (
     <Link to={`/song/${song.id}`} className={cx('song-row')}>
@@ -159,12 +103,12 @@ function SongRow({ song, liked = false, onToggleFavorite }) {
 
             <span className={cx('duration-text')}>{duration}</span>
 
-            {/* FIX TIPPY */}
-            <Tippy interactive trigger="click" placement="bottom-end" offset={[0, 10]} render={renderMainMenu}>
-              <div className={cx('more-icon')} onClick={handleActionClick}>
-                <i className="fas fa-ellipsis-h"></i>
-              </div>
-            </Tippy>
+            <SongMenu
+              song={song}
+              isLiked={isLiked}
+              onToggleLike={handleToggleLike}
+              handleActionClick={handleActionClick}
+            />
           </div>
         </div>
 

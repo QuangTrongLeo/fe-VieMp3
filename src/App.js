@@ -57,7 +57,7 @@ function App() {
     }
 
     // Kiểm tra route có hợp lệ không
-    const isAllowed = accessibleRoutes.some(r => matchPath({ path: r.path, end: true }, currentPath));
+    const isAllowed = accessibleRoutes.some(r => matchPath({ path: r.path, end: false }, currentPath));
 
     if (!isAllowed) {
       showNotification('Vui lòng "Đăng Nhập" hoặc không có quyền truy cập');

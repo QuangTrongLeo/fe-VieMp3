@@ -5,7 +5,7 @@ import { SongRow } from '~/components/Components/Row';
 import { apiGetArtist } from '~/api/services/serviceArtists';
 import LimitedList from '~/components/Components/LimitedList';
 import { apiGetSongsByArtist } from '~/api/services/serviceSongs';
-import { apiGetMyFavoriteSongs, apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
+import icons from '~/assets/icons';
 
 const cx = classNames.bind(styles);
 
@@ -18,40 +18,9 @@ function SongDetail({ currentSong }) {
 
   const [artist, setArtist] = useState(null);
   const [relatedSongs, setRelatedSongs] = useState([]);
-  const [favoriteIds, setFavoriteIds] = useState([]);
 
   const [artistLoading, setArtistLoading] = useState(false);
   const [songsLoading, setSongsLoading] = useState(false);
-
-  // ===== GET FAVORITES =====
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const favorites = await apiGetMyFavoriteSongs();
-        const ids = favorites.map(item => item.song.id);
-        setFavoriteIds(ids);
-      } catch (error) {
-        console.error('Lỗi khi lấy favorite:', error);
-      }
-    };
-    fetchFavorites();
-  }, []);
-
-  // ===== TOGGLE FAVORITE =====
-  const handleToggleFavorite = async songId => {
-    try {
-      const isLiked = favoriteIds.includes(songId);
-      if (isLiked) {
-        await apiRemoveSongFromFavorite(songId);
-        setFavoriteIds(prev => prev.filter(id => id !== songId));
-      } else {
-        await apiAddSongToFavorite(songId);
-        setFavoriteIds(prev => [...prev, songId]);
-      }
-    } catch (error) {
-      console.error('Lỗi toggle favorite:', error);
-    }
-  };
 
   // ===== GET ARTIST =====
   useEffect(() => {
@@ -92,8 +61,7 @@ function SongDetail({ currentSong }) {
 
   // ===== RENDER ITEM =====
   const renderItem = item => {
-    const liked = favoriteIds.includes(item.id);
-    return <SongRow key={item.id} song={item} liked={liked} onToggleFavorite={handleToggleFavorite} />;
+    return <SongRow key={item.id} song={item} />;
   };
 
   // ===== UI =====
@@ -120,16 +88,36 @@ function SongDetail({ currentSong }) {
         {/* RIGHT */}
         <div className="col-12 col-md-8">
           <h5 className={cx('subtitle', 'mb-3', 'text-center')}>Bài hát khác của "{artist?.name}"</h5>
+
           {songsLoading ? (
             <div className="text-center">Đang tải danh sách bài hát...</div>
           ) : relatedSongs.length > 0 ? (
-            <LimitedList
-              items={relatedSongs}
-              renderItem={renderItem}
-              limit={8}
-              showAllText="Hiện tất cả bài hát"
-              showLessText="Ẩn bớt"
-            />
+            <>
+              <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
+                <div className="col-6 d-flex align-items-center gap-2">
+                  <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
+                  <span>Bài hát</span>
+                </div>
+
+                <div className="col-4 d-flex align-items-center">
+                  <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
+                  <span>Album</span>
+                </div>
+
+                <div className="col-2 d-flex justify-content-end align-items-center">
+                  <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
+                  <span>Thời gian</span>
+                </div>
+              </div>
+
+              <LimitedList
+                items={relatedSongs}
+                renderItem={renderItem}
+                limit={8}
+                showAllText="Hiện tất cả bài hát"
+                showLessText="Ẩn bớt"
+              />
+            </>
           ) : (
             <p className={cx('text-center', 'mt-3', 'fw-bold')}>Không có bài hát liên quan</p>
           )}

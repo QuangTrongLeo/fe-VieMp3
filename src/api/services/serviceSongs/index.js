@@ -80,7 +80,12 @@ export async function apiGetSongsByGenre(genreId) {
 // ===== GET SONGS BY PLAYLIST =====
 export async function apiGetSongsByPlaylist(playlistId) {
   try {
-    const response = await axios.get(`${apiSongUrls.getSongsByPlaylist}/${playlistId}`);
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${apiSongUrls.getSongsByPlaylist}/${playlistId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo playlist';

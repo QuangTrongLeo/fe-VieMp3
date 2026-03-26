@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateCard, SquareCard } from '~/components/Components/Card';
 import { SongRow } from '~/components/Components/Row';
 import HorizontalScroll from '~/components/Components/HorizontalScroll';
@@ -7,7 +7,7 @@ import icons from '~/assets/icons';
 import classNames from 'classnames/bind';
 import LimitedList from '~/components/Components/LimitedList';
 
-import { apiGetMyFavoriteSongs, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
+import { apiGetMyFavoriteSongs } from '~/api/services/serviceSongs';
 import { apiGetMyFavoriteAlbums } from '~/api/services/serviceAlbums';
 import { apiGetMyPlaylists, apiCreatePlaylist } from '~/api/services/servicePlaylists';
 
@@ -29,7 +29,7 @@ function Library() {
   const [coverPreview, setCoverPreview] = useState('');
   const [coverFile, setCoverFile] = useState(null);
 
-  // ================= GET PLAYLISTS =================
+  // ================= PLAYLIST =================
   const handleGetMyPlaylists = async () => {
     try {
       const data = await apiGetMyPlaylists();
@@ -42,7 +42,7 @@ function Library() {
     }
   };
 
-  // ================= GET FAVORITE ALBUMS =================
+  // ================= FAVORITE ALBUM =================
   const handleGetMyFavoriteAlbums = async () => {
     try {
       const data = await apiGetMyFavoriteAlbums();
@@ -57,7 +57,7 @@ function Library() {
     }
   };
 
-  // ================= GET FAVORITE SONGS =================
+  // ================= FAVORITE SONG =================
   const handleGetMyFavoriteSongs = async () => {
     try {
       const data = await apiGetMyFavoriteSongs();
@@ -72,17 +72,7 @@ function Library() {
     }
   };
 
-  const handleUnfavorite = async songId => {
-    try {
-      await apiRemoveSongFromFavorite(songId);
-
-      setFavoriteSongs(prev => prev.filter(item => item.song.id !== songId));
-    } catch (error) {
-      console.error('Lỗi bỏ thích bài hát:', error);
-    }
-  };
-
-  // ================= LOAD DATA =================
+  // ================= LOAD =================
   useEffect(() => {
     handleGetMyPlaylists();
     handleGetMyFavoriteAlbums();
@@ -92,7 +82,6 @@ function Library() {
   // ================= CREATE PLAYLIST =================
   const handleImageChange = e => {
     const file = e.target.files[0];
-
     if (file) {
       setCoverFile(file);
       setCoverPreview(URL.createObjectURL(file));
@@ -107,7 +96,6 @@ function Library() {
       }
 
       const newPlaylist = await apiCreatePlaylist(playlistName, coverFile);
-
       setPlaylists(prev => [newPlaylist, ...prev]);
 
       setIsOpen(false);
@@ -120,14 +108,12 @@ function Library() {
     }
   };
 
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
+  const handleCloseModal = () => setIsOpen(false);
 
   // ================= RENDER SONG =================
-  const renderSongItem = item => (
-    <SongRow key={item.song.id} song={item.song} liked={true} onToggleFavorite={handleUnfavorite} />
-  );
+  const renderSongItem = item => {
+    return <SongRow key={item.song.id} song={item.song} />;
+  };
 
   const sortedPlaylists = [...playlists].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -138,7 +124,7 @@ function Library() {
         <span style={{ paddingLeft: '10px' }}>Thư viện</span>
       </h1>
 
-      {/* ================= PLAYLISTS ================= */}
+      {/* ================= PLAYLIST ================= */}
       <section className={cx('section-block')}>
         <h3>Playlist của bạn</h3>
 
@@ -164,7 +150,7 @@ function Library() {
           <p>Bạn chưa có playlist nào</p>
         )}
 
-        {/* MODAL CREATE PLAYLIST */}
+        {/* MODAL */}
         {isOpen && (
           <div className={cx('modal-overlay')}>
             <div className={cx('modal')}>
@@ -182,7 +168,7 @@ function Library() {
                   )}
                 </label>
 
-                <input type="file" id="coverInput" accept="image/*" hidden onChange={handleImageChange} />
+                <input type="file" hidden onChange={handleImageChange} />
               </div>
 
               <input
@@ -222,40 +208,17 @@ function Library() {
         {/* SONGS */}
         {activeTab === 'songs' && (
           <div className={cx('section-block-songs')}>
-            <div className={cx('song-row', 'd-flex', 'align-items-center', 'px-3', 'py-3')}>
-              <div className="col-6 d-flex align-items-center gap-2">
-                <i className={cx('song-row-icon-header', icons.iconMusic)}></i>
-                <span>Bài hát</span>
-              </div>
-
-              <div className="col-4 d-flex align-items-center">
-                <i className={cx('song-row-icon-header', icons.iconCompactDisc, 'me-2')}></i>
-                <span>Album</span>
-              </div>
-
-              <div className="col-2 d-flex justify-content-end align-items-center">
-                <i className={cx('song-row-icon-header', icons.iconClock, 'me-2')}></i>
-                <span>Thời gian</span>
-              </div>
-            </div>
-
             {loadingFavoriteSongs ? (
               <p>Đang tải bài hát...</p>
             ) : favoriteSongs.length > 0 ? (
-              <LimitedList
-                items={favoriteSongs}
-                renderItem={renderSongItem}
-                limit={8}
-                showAllText="Hiện tất cả bài hát"
-                showLessText="Ẩn bớt"
-              />
+              <LimitedList items={favoriteSongs} renderItem={renderSongItem} limit={8} />
             ) : (
               <p>Bạn chưa có bài hát yêu thích</p>
             )}
           </div>
         )}
 
-        {/* ALBUMS */}
+        {/* ALBUM */}
         {activeTab === 'albums' && (
           <div className={cx('session-block-albums')}>
             {loadingAlbums ? (
@@ -265,14 +228,12 @@ function Library() {
                 items={favoriteAlbums}
                 limit={8}
                 renderItem={item => (
-                  <div key={item.album.id} className="col-6 col-sm-4 col-lg-3 mb-3 d-flex justify-content-center">
-                    <SquareCard
-                      content={item.album.title}
-                      cover={item.album.cover}
-                      href={`/album/${item.album.id}`}
-                      icon={<i className="fas fa-list fa-3x"></i>}
-                    />
-                  </div>
+                  <SquareCard
+                    key={item.album.id}
+                    content={item.album.title}
+                    cover={item.album.cover}
+                    href={`/album/${item.album.id}`}
+                  />
                 )}
               />
             ) : (

@@ -10,9 +10,11 @@ const apiPlaylistUrls = {
 
   // PUT
   updatePlaylist: apiPlaylistBaseUrl,
+  addSongToPlaylist: `${apiPlaylistBaseUrl}/add-song`,
 
   // DELETE
   deletePlaylist: apiPlaylistBaseUrl,
+  removeSongFromPlaylist: `${apiPlaylistBaseUrl}/remove-song`,
 
   // GET
   getPlaylist: apiPlaylistBaseUrl,
