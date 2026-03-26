@@ -93,7 +93,6 @@ function Home() {
 
       const data = await apiGetRecommendSongs();
 
-      // Thêm artistName cho mỗi bài giống handleNewSongs
       const songsWithArtist = await Promise.all(
         data.map(async song => {
           try {

@@ -40,7 +40,6 @@ function SongPlayerUnder({
   const [flashClose, setFlashClose] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [likedVisible, setLikedVisible] = useState(false);
-  const [lyricsVisible, setLyricsVisible] = useState(false);
   const [closedSongPlayerUnder, setClosedSongPlayerUnder] = useState(true);
   const [artist, setArtist] = useState(null);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
@@ -324,15 +323,6 @@ function SongPlayerUnder({
               onClick={handleToggleFavorite}
             >
               <i className={icons.iconHeart}></i>
-            </button>
-
-            <button
-              className={`icon-song-player-right-element-btn ${lyricsVisible ? 'active' : ''}`}
-              data-bs-toggle="tooltip"
-              title="Lời bài hát"
-              onClick={() => setLyricsVisible(prev => !prev)}
-            >
-              <i className={icons.iconMicrophone}></i>
             </button>
 
             <button

@@ -11,7 +11,6 @@ export { default as Home } from './Home';
 export { default as Library } from './Library';
 export { default as Login } from './Login';
 export { default as LyrisDetail } from './LyrisDetail';
-export { default as MySongs } from './MySongs';
 export { default as Otp } from './Otp';
 export { default as PlayList } from './PlayList';
 export { default as Profile } from './Profile';

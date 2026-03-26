@@ -26,6 +26,7 @@ const apiSongUrls = {
   getSongsByArtist: `${apiSongBaseUrl}/artist`,
   getSongsByGenre: `${apiSongBaseUrl}/genre`,
   getSongsByPlaylist: `${apiSongBaseUrl}/playlist`,
+  getRecommendSongs: `${apiSongBaseUrl}/recommend`,
   getMyFavoriteSongs: apiFavoriteSongBaseUrl,
 };
 
