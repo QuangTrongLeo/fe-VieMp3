@@ -5,6 +5,7 @@ import Footer from '~/components/Components/Footer';
 import NotificationTablet from '~/components/Components/NotificationTablet';
 import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
+import ChatBoxAI from '~/components/Components/ChatBoxAI';
 import BaseLayout from '../BaseLayout';
 import { apiSongs } from '~/api/urls/apiSongs';
 import { useAuth } from '~/components/Components/AuthProvider';
@@ -183,6 +184,9 @@ function MainLayout({ children }) {
             onNextSong={handleNextSong}
             onPrevSong={handlePrevSong}
           />
+
+          {/* CHAT BOX AI */}
+          <ChatBoxAI />
         </>
       )}
     />
