@@ -2,106 +2,109 @@ import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SongItem.module.scss';
 import icons from '~/assets/icons';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import SongMenu from '../SongMenu';
+
 import { apiGetArtist } from '~/api/services/serviceArtists';
-import { apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
+import { apiGetMyFavoriteSongs, apiAddSongToFavorite, apiRemoveSongFromFavorite } from '~/api/services/serviceSongs';
 
 const cx = classNames.bind(styles);
 
-function SongItem({ song, favoriteSongs, setFavoriteSongs }) {
+function SongItem({ song }) {
   const [duration, setDuration] = useState('00:00');
   const [artist, setArtist] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   const audioRef = useRef(null);
-  const navigate = useNavigate();
-  const liked = favoriteSongs?.some(fav => String(fav.song.id) === String(song.id));
+
+  const handleActionClick = e => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  // ===== FAVORITE =====
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const data = await apiGetMyFavoriteSongs();
+        const ids = data.map(item => item.song.id);
+        setIsLiked(ids.includes(song.id));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchFavorites();
+  }, [song.id]);
 
   const toggleLike = async e => {
-    e.stopPropagation();
+    handleActionClick(e);
+
     try {
-      let success = false;
-      if (!liked) {
-        success = await apiAddSongToFavorite(song.id);
-        if (success) {
-          setFavoriteSongs(prev => [...prev, { song }]);
-        }
+      if (isLiked) {
+        await apiRemoveSongFromFavorite(song.id);
+        setIsLiked(false);
       } else {
-        success = await apiRemoveSongFromFavorite(song.id);
-        if (success) {
-          setFavoriteSongs(prev => prev.filter(fav => String(fav.song.id) !== String(song.id)));
-        }
+        await apiAddSongToFavorite(song.id);
+        setIsLiked(true);
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
   };
 
-  const handleClick = () => {
-    navigate(`/song/${song.id}`);
-  };
-
-  const formatTime = seconds => {
-    seconds = Math.floor(seconds);
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  };
-
-  // ===== GET ARTIST =====
-  const handleGetArtist = async () => {
-    try {
+  // ===== ARTIST =====
+  useEffect(() => {
+    const fetchArtist = async () => {
       if (!song.artistId) return;
       const data = await apiGetArtist(song.artistId);
       setArtist(data);
-    } catch (error) {
-      console.error('Lỗi khi lấy artist:', error);
-    }
-  };
+    };
 
-  useEffect(() => {
-    handleGetArtist();
+    fetchArtist();
   }, [song.artistId]);
 
-  // ===== GET DURATION =====
+  // ===== DURATION =====
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio) {
-      const handleLoadedMetadata = () => {
-        setDuration(formatTime(audio.duration));
-      };
-      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-      return () => {
-        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      };
-    }
+    if (!audio) return;
+
+    const handleLoaded = () => {
+      const mins = Math.floor(audio.duration / 60);
+      const secs = Math.floor(audio.duration % 60);
+      setDuration(`${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`);
+    };
+
+    audio.addEventListener('loadedmetadata', handleLoaded);
+    return () => audio.removeEventListener('loadedmetadata', handleLoaded);
   }, [song.audio]);
 
   return (
-    <div className={cx('song-row', 'd-flex justify-content-between align-items-center')} onClick={handleClick}>
-      <div className="d-flex align-items-center">
-        <img
-          src={song.cover || 'https://via.placeholder.com/40'}
-          alt={song.title}
-          className={cx('song-cover', 'me-2')}
-        />
-
-        <div>
-          <div className={cx('song-name')} title={song.title}>
-            {song.title}
-          </div>
-
-          <div className={cx('song-artist')}>{artist ? artist.name : 'Đang tải...'}</div>
+    <Link to={`/song/${song.id}`} className={cx('song-item')}>
+      {/* LEFT */}
+      <div className={cx('left')}>
+        <img src={song.cover} className={cx('cover')} />
+        <div className={cx('info')}>
+          <div className={cx('title')}>{song.title}</div>
+          <div className={cx('artist')}>{artist?.name || 'Đang tải...'}</div>
         </div>
       </div>
 
-      <div className="d-flex align-items-center gap-2">
-        <i className={cx(icons.iconHeart, 'song-heart-icon', { liked })} onClick={toggleLike}></i>
+      {/* RIGHT */}
+      <div className={cx('right')}>
+        <i className={cx('heart-icon', icons.iconHeart, isLiked && 'active')} onClick={toggleLike} />
 
-        <span className={cx('song-duration')}>{duration}</span>
+        {/* TIME + MENU */}
+        <div className={cx('right-group')}>
+          <span className={cx('duration')}>{duration}</span>
+
+          <SongMenu song={song} isLiked={isLiked} onToggleLike={toggleLike} handleActionClick={handleActionClick} />
+        </div>
       </div>
 
-      {song.audio && <audio ref={audioRef} src={song.audio} preload="metadata" style={{ display: 'none' }} />}
-    </div>
+      {song.audio && <audio ref={audioRef} src={song.audio} style={{ display: 'none' }} />}
+    </Link>
   );
 }
 

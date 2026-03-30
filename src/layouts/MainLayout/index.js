@@ -11,7 +11,7 @@ import { apiSongs } from '~/api/urls/apiSongs';
 import { useAuth } from '~/components/Components/AuthProvider';
 
 function MainLayout({ children }) {
-  const { currentToken } = useAuth();
+  const { currentToken, roles } = useAuth();
   const [showNotificationTablet, setShowNotificationTablet] = useState(false);
   const notifTabletRef = useRef(null);
   const bellButtonRef = useRef(null);
@@ -23,6 +23,8 @@ function MainLayout({ children }) {
 
   // Chế độ (lặp lại/ngẫu nhiên) bài hát
   const [mode, setMode] = useState(null);
+
+  const isUser = roles?.includes('USER');
 
   // Hiển thị NotificationTable
   const toggleNotificationTable = () => {
@@ -186,7 +188,7 @@ function MainLayout({ children }) {
           />
 
           {/* CHAT BOX AI */}
-          <ChatBoxAI />
+          {isUser && <ChatBoxAI />}
         </>
       )}
     />
