@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import { apiRefreshToken } from '~/api/services/serviceAuths';
+import config from '~/config';
 
 const AuthContext = createContext();
 
@@ -11,6 +13,26 @@ export function useAuth() {
 function AuthProvider({ children }) {
   const [currentToken, setCurrentToken] = useState(() => localStorage.getItem('token') || '');
   const [roles, setRoles] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const accessToken = params.get('accessToken');
+    const refreshToken = params.get('refreshToken');
+
+    if (accessToken && refreshToken) {
+      // Lưu refreshToken vào máy
+      localStorage.setItem('refreshToken', refreshToken);
+      // Cập nhật token để kích hoạt useEffect giải mã roles bên dưới
+      setCurrentToken(accessToken);
+
+      // Làm sạch URL (xóa các tham số token trên thanh địa chỉ)
+      window.history.replaceState({}, document.title, window.location.pathname);
+
+      // Điều hướng về Home
+      navigate(config.routes.home, { replace: true });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (!currentToken) {

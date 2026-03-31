@@ -18,6 +18,10 @@ function Login({ showNotification }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleLoginGoogle = () => {
+    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  };
+
   const handleLogin = async e => {
     e.preventDefault();
     try {
@@ -126,7 +130,7 @@ function Login({ showNotification }) {
                   {/* LOGIN BY GG */}
                   <div className={cx('text-center')}>
                     <p>hoặc đăng nhập với</p>
-                    <button className={cx('google-btn')}>
+                    <button className={cx('google-btn')} onClick={handleLoginGoogle}>
                       <i className={cx('fab', 'fa-google')}></i>
                     </button>
                   </div>

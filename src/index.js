@@ -7,16 +7,19 @@ import 'tippy.js/dist/tippy.css';
 import App from '~/App';
 import GlobalStyles from './components/GlobalStyles';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router } from 'react-router-dom';
 import AuthProvider from './components/Components/AuthProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <AuthProvider>
-    <GlobalStyles>
-      <App />
-    </GlobalStyles>
-  </AuthProvider>
+  <Router>
+    <AuthProvider>
+      <GlobalStyles>
+        <App />
+      </GlobalStyles>
+    </AuthProvider>
+  </Router>
 
   // </React.StrictMode>
 );
