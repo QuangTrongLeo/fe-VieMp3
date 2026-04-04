@@ -1,6 +1,5 @@
 const routes = {
   album: '/album',
-  analytic: '/analytic',
   alnums: '/albums',
   artist: '/artist',
   favoriteAlbums: '/favorite-albums',
@@ -32,6 +31,12 @@ const routes = {
   managePlaylists: '/manage/playlists',
   manageMemberships: '/manage/memberships',
   manageRevenues: '/manage/revenue',
+
+  analytic: '/analytic',
+  analyticRevenues: '/analytic/revenues', // Doanh thu
+  analyticUsers: '/analytic/users', // Người dùng
+  analyticContents: '/analytic/contents', // Nội dung (Bài hát/Playlist chung)
+  analyticArtists: '/analytic/artists', // Nghệ sĩ & Album
 };
 
 export default routes;

@@ -24,7 +24,16 @@ import { Manage, AlbumManage, ArtistManage, GenreManage, SongManage } from '~/pa
 import PlayListDetail from '~/pages/PlayListDetail';
 
 // adminRoutes
-import { Analytic, AccountManage, MembershipManage, RevenueManage } from '~/pages';
+import {
+  Analytic,
+  ArtistsAnalytic,
+  ContentsAnalytic,
+  RevenuesAnalytic,
+  UsersAnalytic,
+  AccountManage,
+  MembershipManage,
+  RevenueManage,
+} from '~/pages';
 
 const publishRoutes = [
   { path: config.routes.home, component: Home },
@@ -63,6 +72,10 @@ const adminRoutes = [
   { path: config.routes.manageMemberships, component: MembershipManage },
   { path: config.routes.manageRevenues, component: RevenueManage },
   { path: config.routes.analytic, component: Analytic },
+  { path: config.routes.analyticArtists, component: ArtistsAnalytic },
+  { path: config.routes.analyticContents, component: ContentsAnalytic },
+  { path: config.routes.analyticRevenues, component: RevenuesAnalytic },
+  { path: config.routes.analyticUsers, component: UsersAnalytic },
 ];
 
 export { publishRoutes, userRoutes, modRoutes, adminRoutes };

@@ -5,6 +5,7 @@ import icons from '~/assets/icons';
 import * as bootstrap from 'bootstrap';
 import './SongPlayerUnder.scss';
 import PlayerControls from '../PlayerControls';
+import { useAuth } from '~/components/Components/AuthProvider';
 import {
   apiGetSong,
   apiGetMyFavoriteSongs,
@@ -28,6 +29,8 @@ function SongPlayerUnder({
   onPrevSong,
 }) {
   const { songId } = useParams();
+  const { roles } = useAuth();
+  const isPremium = roles?.includes('PREMIUM');
 
   const timeRef = useRef(null);
   const audioRef = useRef(null);
@@ -43,6 +46,22 @@ function SongPlayerUnder({
   const [closedSongPlayerUnder, setClosedSongPlayerUnder] = useState(true);
   const [artist, setArtist] = useState(null);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
+
+  const handleDownload = () => {
+    if (!isPremium) {
+      alert('Chỉ tài khoản PREMIUM mới được tải nhạc!');
+      return;
+    }
+
+    if (!currentSong?.audio) return;
+
+    const link = document.createElement('a');
+    link.href = currentSong.audio;
+    link.download = `${currentSong.title}.mp3`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleToggleFavorite = async () => {
     if (!currentSong?.id) return;
@@ -324,6 +343,17 @@ function SongPlayerUnder({
             >
               <i className={icons.iconHeart}></i>
             </button>
+
+            {isPremium && (
+              <button
+                className="icon-song-player-right-element-btn"
+                data-bs-toggle="tooltip"
+                title="Tải nhạc"
+                onClick={handleDownload}
+              >
+                <i className={icons.iconDownload}></i>
+              </button>
+            )}
 
             <button
               className={`icon-song-player-right-element-btn ${isShowPlayListSideBar ? 'active' : ''}`}

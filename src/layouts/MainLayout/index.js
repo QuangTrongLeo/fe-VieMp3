@@ -7,7 +7,7 @@ import PlayListSideBar from '~/components/Components/PlayListSideBar';
 import SongPlayerUnder from '~/components/Components/SongPlayerUnder';
 import ChatBoxAI from '~/components/Components/ChatBoxAI';
 import BaseLayout from '../BaseLayout';
-import { apiSongs } from '~/api/urls/apiSongs';
+import { apiGetSongs } from '~/api/services/serviceSongs';
 import { useAuth } from '~/components/Components/AuthProvider';
 
 function MainLayout({ children }) {
@@ -77,18 +77,20 @@ function MainLayout({ children }) {
 
   // PLAYLIST-SIDEBAR
   useEffect(() => {
-    if (currentSong) {
-      const filtered = apiSongs
-        .filter(
-          song =>
-            song.artistName === currentSong.artistName &&
-            song.songName !== currentSong.songName &&
-            !playedSongs.some(played => played.songId === song.songId)
-        )
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const fetchNextSongs = async () => {
+      if (!currentSong) return;
 
-      setNextSongs(filtered);
-    }
+      try {
+        const songs = await apiGetSongs();
+        const filtered = songs.filter(song => song.id !== currentSong.id && !playedSongs.some(p => p.id === song.id));
+        const shuffled = filtered.sort(() => 0.5 - Math.random());
+        setNextSongs(shuffled.slice(0, 10));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNextSongs();
   }, [currentSong, playedSongs]);
 
   // NOTIFICATION-TABLE

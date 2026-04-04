@@ -31,6 +31,7 @@ const icons = {
   iconCrown: 'fa-solid fa-crown',
   iconDollar: 'fa-solid fa-dollar-sign',
   iconHeadphones: 'fa-solid fa-headphones',
+  iconDownload: 'fa-solid fa-download',
 };
 
 export default icons;

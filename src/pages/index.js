@@ -1,5 +1,4 @@
 export { default as AlbumDetail } from './AlbumDetail';
-export { default as Analytic } from './Analytic';
 export { default as ArtistDetail } from './ArtistDetail';
 export { default as FavoriteAlbums } from './FavoriteAlbums';
 export { default as FavoriteArtists } from './FavoriteArtists';
@@ -16,6 +15,7 @@ export { default as PlayList } from './PlayList';
 export { default as Profile } from './Profile';
 export { default as Register } from './Register';
 export { default as SongDetail } from './SongDetail';
+
 export { default as Manage } from './Management/Manage';
 export { default as AccountManage } from './Management/AccountManage';
 export { default as AlbumManage } from './Management/AlbumManage';
@@ -24,3 +24,9 @@ export { default as GenreManage } from './Management/GenreManage';
 export { default as SongManage } from './Management/SongManage';
 export { default as MembershipManage } from './Management/MembershipManage';
 export { default as RevenueManage } from './Management/RevenueManage';
+
+export { default as Analytic } from './Analysis/Analytic';
+export { default as ArtistsAnalytic } from './Analysis/ArtistsAnalytic';
+export { default as ContentsAnalytic } from './Analysis/ContentsAnalytic';
+export { default as RevenuesAnalytic } from './Analysis/RevenuesAnalytic';
+export { default as UsersAnalytic } from './Analysis/UsersAnalytic';

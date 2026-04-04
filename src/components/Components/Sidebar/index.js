@@ -41,10 +41,11 @@ const itemsManageAdmin = [
 ];
 
 const itemsAnalytic = [
-  { label: 'Lượt nghe', iconClass: icons.iconHeadphones, href: '/analytic/plays' },
-  { label: 'Doanh thu', iconClass: icons.iconDollar, href: '/analytic/revenue' },
-  { label: 'Người dùng', iconClass: icons.iconUser, href: '/analytic/users' },
-  { label: 'Bài hát', iconClass: icons.iconMusic, href: '/analytic/songs' },
+  { label: 'Tổng quan', iconClass: icons.iconHeadphones, href: config.routes.analytic },
+  { label: 'Doanh thu', iconClass: icons.iconDollar, href: config.routes.analyticRevenues },
+  { label: 'Người dùng', iconClass: icons.iconUser, href: config.routes.analyticUsers },
+  { label: 'Nội dung', iconClass: icons.iconMusic, href: config.routes.analyticContents },
+  { label: 'Nghệ sĩ & Album', iconClass: icons.iconCompactDisc, href: config.routes.analyticArtists },
 ];
 
 function Sidebar() {
