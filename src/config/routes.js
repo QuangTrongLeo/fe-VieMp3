@@ -21,6 +21,7 @@ const routes = {
   register: '/register',
   // searched: '/searched',
   song: '/song',
+  premium: '/premium',
 
   manage: '/manage',
   manageAccounts: '/manage/accounts',

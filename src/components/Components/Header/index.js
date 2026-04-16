@@ -54,9 +54,6 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
       const result = await response.json();
 
       console.log('Kết quả AI:', result);
-
-      // TODO: điều hướng sang trang search
-      // navigate(`/search?keyword=${transcript}`)
     };
 
     recognition.onerror = err => {
@@ -105,7 +102,7 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
           <ul className="navbar-nav navbar-nav-header d-flex align-items-center justify-content-end flex-row gap-3 mb-0">
             {/* Nút Khám phá Premium */}
             <li>
-              <LongButton href="/premium" backgroundColor="var(--white-color)" color="var(--black-color)">
+              <LongButton href={config.routes.premium} backgroundColor="var(--white-color)" color="var(--black-color)">
                 Khám phá Premium
               </LongButton>
             </li>
