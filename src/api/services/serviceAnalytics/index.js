@@ -29,3 +29,18 @@ export async function apiGetListenByWeek() {
     throw error;
   }
 }
+
+// ===== GENRE =====
+export async function apiGetGenreStatistics() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(apiAnalyticUrls.getGenreStatistics, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}

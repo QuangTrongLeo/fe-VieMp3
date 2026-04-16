@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ContentsAnalytic.module.scss';
+import { apiGetSongs } from '~/api/services/serviceSongs';
+import { apiGetGenres } from '~/api/services/serviceGenres';
+import { apiGetGenreStatistics } from '~/api/services/serviceAnalytics';
 
 const cx = classNames.bind(styles);
 
 function ContentsAnalytic() {
-  // Dữ liệu mẫu cho Top 5 bài hát
+  const [songs, setSongs] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [genreStats, setGenreStats] = useState([]);
+
+  // Bảng màu cố định để đồng bộ giữa Chart và Legend
+  const chartColors = ['#72fe8f', '#1cb853', '#88ebff', '#00d4ee', '#f472b6', '#a78bfa'];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const genresRes = await apiGetGenres();
+      const songsRes = await apiGetSongs();
+      const statsRes = await apiGetGenreStatistics();
+
+      setGenres(genresRes || []);
+      setSongs(songsRes || []);
+      setGenreStats(statsRes);
+    };
+    fetchData();
+  }, []);
+
+  // Biến tích lũy để tính toán vị trí bắt đầu (offset) của mỗi phân đoạn SVG
+  let cumulativeOffset = 0;
+
   const topSongs = [
     {
       id: '01',
@@ -56,78 +81,99 @@ function ContentsAnalytic() {
 
   return (
     <main>
-      {/* Editorial Header Section */}
       <header className={cx('header')}>
         <h2 className={cx('editorial-header')}>Thống kê Nội dung</h2>
         <p className={cx('subtitle')}>Phân tích nhịp điệu và sự lan tỏa của âm nhạc trên hệ thống.</p>
       </header>
 
-      {/* Bento Grid Layout */}
       <div className={cx('bento-grid')}>
         {/* Total Songs Card */}
         <div className={cx('card', 'total-songs')}>
-          <div className={cx('card-top')}>
-            <div className={cx('icon-row')}>
-              <span className="material-symbols-outlined icon-box">music</span>
-              <span className={cx('badge')}>+12% tháng này</span>
+          <div className={cx('card-main-info')}>
+            <div className={cx('content-wrapper')}>
+              <h3 className={cx('label')}>Tổng số bài hát</h3>
+              <div className={cx('number-group')}>
+                <p className={cx('number')}>{songs.length.toLocaleString()}</p>
+                <span className={cx('sub-label')}>Thống kê bài hát theo tháng</span>
+              </div>
             </div>
-            <h3 className={cx('label')}>Tổng số bài hát</h3>
-            <p className={cx('number')}>1,284,502</p>
+          </div>
+
+          {/* Phần thêm mới: Mini Sparkline để Card trông "Pro" hơn */}
+          <div className={cx('card-footer')}>
+            <div className={cx('mini-chart')}>
+              {/* Một SVG đơn giản mô phỏng đường tăng trưởng */}
+              <svg viewBox="0 0 100 30" preserveAspectRatio="none">
+                <path
+                  d="M0 25 Q 25 25, 40 15 T 70 20 T 100 5"
+                  fill="none"
+                  stroke="url(#gradient-green)"
+                  strokeWidth="2"
+                />
+                <defs>
+                  <linearGradient id="gradient-green" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(114, 254, 143, 0.2)" />
+                    <stop offset="100%" stopColor="#72fe8f" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div className={cx('quick-stats')}>
+              <p>
+                +24 bài hát mới <span>tháng này</span>
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Genre Distribution */}
+        {/* Genre Distribution - UPDATED */}
         <div className={cx('card', 'genre-chart')}>
           <div className={cx('chart-header')}>
             <h3 className={cx('chart-title')}>Phân bổ Thể loại Nhạc</h3>
-            <div className={cx('filter-tabs')}>
-              <span className={cx('tab')}>Tuần</span>
-              <span className={cx('tab', 'active')}>Tháng</span>
-            </div>
           </div>
           <div className={cx('chart-content')}>
             <div className={cx('circular-chart')}>
               <svg viewBox="0 0 36 36">
                 <circle className={cx('base-circle')} cx="18" cy="18" r="15.9"></circle>
-                <circle className={cx('segment', 's1')} cx="18" cy="18" r="15.9"></circle>
-                <circle className={cx('segment', 's2')} cx="18" cy="18" r="15.9"></circle>
-                <circle className={cx('segment', 's3')} cx="18" cy="18" r="15.9"></circle>
-                <circle className={cx('segment', 's4')} cx="18" cy="18" r="15.9"></circle>
+                {genreStats.map((item, index) => {
+                  const strokeDashArray = `${item.percentage} 100`;
+                  const strokeDashOffset = -cumulativeOffset;
+                  cumulativeOffset += item.percentage;
+
+                  return (
+                    <circle
+                      key={index}
+                      className={cx('segment')}
+                      cx="18"
+                      cy="18"
+                      r="15.9"
+                      stroke={chartColors[index % chartColors.length]}
+                      strokeDasharray={strokeDashArray}
+                      strokeDashoffset={strokeDashOffset}
+                      fill="transparent"
+                      strokeWidth="3.8"
+                    ></circle>
+                  );
+                })}
               </svg>
               <div className={cx('chart-label')}>
-                <span className={cx('count')}>12</span>
+                <span className={cx('count')}>{genres.length}</span>
                 <span className={cx('unit')}>Thể loại</span>
               </div>
             </div>
+
             <div className={cx('legend')}>
-              <div className={cx('legend-item')}>
-                <div className={cx('dot', 'pop')}></div>
-                <div>
-                  <p className={cx('name')}>Pop</p>
-                  <p className={cx('info')}>40% • 513K</p>
+              {genreStats.map((item, index) => (
+                <div key={index} className={cx('legend-item')}>
+                  <div className={cx('dot')} style={{ backgroundColor: chartColors[index % chartColors.length] }}></div>
+                  <div>
+                    <p className={cx('name')}>{item.genreName}</p>
+                    <p className={cx('info')}>
+                      {item.percentage}% • {item.songCount} bài
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <div className={cx('legend-item')}>
-                <div className={cx('dot', 'edm')}></div>
-                <div>
-                  <p className={cx('name')}>EDM</p>
-                  <p className={cx('info')}>25% • 321K</p>
-                </div>
-              </div>
-              <div className={cx('legend-item')}>
-                <div className={cx('dot', 'indie')}></div>
-                <div>
-                  <p className={cx('name')}>Indie</p>
-                  <p className={cx('info')}>20% • 256K</p>
-                </div>
-              </div>
-              <div className={cx('legend-item')}>
-                <div className={cx('dot', 'rock')}></div>
-                <div>
-                  <p className={cx('name')}>Rock</p>
-                  <p className={cx('info')}>15% • 192K</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -35,13 +35,11 @@ export async function apiUpdateProfile(formData) {
 
 export async function apiUpdateUserRoles(data) {
   const token = localStorage.getItem('token');
-
   const res = await axios.put(apiUsersUrls.updateUserRoles, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-
   return res.data.success;
 }
 

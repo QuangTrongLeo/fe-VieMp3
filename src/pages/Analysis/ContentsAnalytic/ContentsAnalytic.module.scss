@@ -32,63 +32,23 @@
 
 // Total Songs Card
 .total-songs {
-  grid-column: span 4;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  .icon-box {
-    padding: 0.75rem;
-    background: rgba(29, 185, 84, 0.1);
-    color: #1db954;
-    border-radius: 0.75rem;
-  }
-
-  .badge {
-    color: #1db954;
-    font-size: 0.75rem;
-    font-weight: bold;
-  }
+  grid-column: span 5;
 
   .number {
-    font-size: 2rem;
+    color: var(--primary-color);
+    font-size: 2.4rem;
     font-weight: 800;
-    margin-top: 2rem;
   }
 }
 
 // Genre Chart Card
 .genre-chart {
-  grid-column: span 8;
-
-  .chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  .filter-tabs {
-    display: flex;
-    gap: 0.5rem;
-    .tab {
-      padding: 0.25rem 1rem;
-      border-radius: 99px;
-      font-size: 12px;
-      cursor: pointer;
-      &.active {
-        background: var(--primary-color);
-        color: var(--black-color);
-        font-weight: bold;
-      }
-    }
-  }
+  grid-column: span 7;
 
   .chart-content {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    gap: 2rem;
   }
 }
 
@@ -104,32 +64,11 @@
   .base-circle {
     fill: transparent;
     stroke: #1a1a1a;
-    stroke-width: 3.5;
   }
 
   .segment {
     fill: transparent;
     stroke-width: 3.8;
-    &.s1 {
-      stroke: #72fe8f;
-      stroke-dasharray: 40 100;
-      stroke-dashoffset: 0;
-    }
-    &.s2 {
-      stroke: #1cb853;
-      stroke-dasharray: 25 100;
-      stroke-dashoffset: -40;
-    }
-    &.s3 {
-      stroke: #88ebff;
-      stroke-dasharray: 20 100;
-      stroke-dashoffset: -65;
-    }
-    &.s4 {
-      stroke: #00d4ee;
-      stroke-dasharray: 15 100;
-      stroke-dashoffset: -85;
-    }
   }
 
   .chart-label {
@@ -143,42 +82,25 @@
       font-size: 2rem;
       font-weight: bold;
     }
-    .unit {
-      font-size: 10px;
-      text-transform: uppercase;
-      color: #a7a7a7;
-    }
   }
 }
 
 .legend {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
   .legend-item {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     .dot {
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-    }
-    .dot.pop {
-      background: #1db954;
-    }
-    .dot.edm {
-      background: #1cb853;
-    }
-    .dot.indie {
-      background: #88ebff;
-    }
-    .dot.rock {
-      background: #00d4ee;
     }
     .name {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 16px;
     }
     .info {
       font-size: 11px;
@@ -281,99 +203,5 @@
         }
       }
     }
-  }
-}
-
-// Insight Section
-.insight-section {
-  grid-column: span 12;
-  margin-top: 2rem;
-  .insight-content {
-    background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
-    padding: 4rem;
-    border-radius: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-
-    .tag {
-      color: #1db954;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-    .insight-title {
-      font-size: 2.5rem;
-      font-weight: 900;
-      margin: 1.5rem 0;
-      line-height: 1.1;
-    }
-    .highlight {
-      color: #88ebff;
-    }
-    .desc {
-      color: #a7a7a7;
-      font-size: 1.125rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-      max-width: 600px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 1rem;
-      button {
-        padding: 0.75rem 2rem;
-        border-radius: 99px;
-        font-weight: bold;
-        transition: 0.3s;
-      }
-      .btn-primary {
-        background: #fff;
-        color: #000;
-        &:hover {
-          background: #1db954;
-        }
-      }
-      .btn-secondary {
-        background: #282828;
-        color: #fff;
-        &:hover {
-          background: #333;
-        }
-      }
-    }
-
-    .image-side {
-      position: relative;
-      width: 30%;
-      img {
-        width: 100%;
-        border-radius: 1rem;
-        position: relative;
-        z-index: 2;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      }
-      .glow {
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle, #1db95433, #88ebff33);
-        blur: 40px;
-        animation: pulse 4s infinite;
-      }
-    }
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.1);
   }
 }

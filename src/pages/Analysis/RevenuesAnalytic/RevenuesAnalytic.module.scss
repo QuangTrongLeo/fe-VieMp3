@@ -1,0 +1,361 @@
+$bg-color: #0e0e0e;
+$card-bg: #121212;
+$text-primary: #ffffff;
+$text-secondary: #a7a7a7;
+$spotify-green: #1db954;
+$student-blue: #0fe3ff;
+$border-color: rgba(255, 255, 255, 0.08);
+
+.wrapper {
+  min-height: 100vh;
+  color: $text-primary;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+
+  .title {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -2px;
+  }
+  .subtitle {
+    color: $text-secondary;
+    font-size: 15px;
+    margin-top: 8px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    .date-picker {
+      background: #282828;
+      padding: 10px 18px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: 500;
+      span:first-child {
+        color: $spotify-green;
+        font-size: 20px;
+      }
+    }
+    .export-btn {
+      background: #1db954;
+      color: #000;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: transform 0.2s;
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: $card-bg;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.revenue-card {
+  .card-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: $text-secondary;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+  .revenue-value {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 15px;
+  }
+  .trend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    &.up {
+      color: $spotify-green;
+    }
+  }
+}
+
+.distribution-card {
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .card-desc {
+    color: $text-secondary;
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: $text-secondary;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .individual {
+      background: $spotify-green;
+    }
+    .student {
+      background: $student-blue;
+    }
+  }
+
+  .bar-chart-mock {
+    height: 160px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 0 20px;
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .bars {
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+      height: 100px;
+    }
+    .bar {
+      width: 12px;
+      border-radius: 2px;
+    }
+    .ind {
+      background: $spotify-green;
+    }
+    .stu {
+      background: $student-blue;
+    }
+    .axis-label {
+      font-size: 11px;
+      color: $text-secondary;
+      font-weight: 600;
+    }
+  }
+}
+
+/* CHART SECTION - Cấu trúc CSS tối ưu */
+.chart-section {
+  background: $card-bg;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .tabs {
+    display: flex;
+    background: #282828;
+    padding: 4px;
+    border-radius: 8px;
+    .tab {
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: $text-secondary;
+      border-radius: 6px;
+      &.active {
+        background: $spotify-green;
+        color: #000;
+      }
+    }
+  }
+
+  .line-chart-container {
+    padding-top: 40px; // Padding top thật sự cho container
+    height: 320px;
+    width: 100%;
+
+    .line-chart {
+      width: 100%;
+      height: 220px;
+      overflow: visible; // Đảm bảo các điểm dot không bị cắt khi ở sát mép
+
+      .line {
+        fill: none;
+        stroke: $spotify-green;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .chart-dot {
+        fill: $spotify-green;
+        stroke: $card-bg;
+        stroke-width: 2;
+      }
+    }
+
+    .x-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      padding: 0 10px;
+      span {
+        font-size: 12px;
+        color: $text-secondary;
+        font-weight: 600;
+        &.active {
+          color: $spotify-green;
+        }
+      }
+    }
+  }
+}
+
+// ... (Các phần Table giữ nguyên như cũ)
+.table-section {
+  background: $card-bg;
+  border-radius: 12px;
+  padding: 32px;
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .view-all {
+    color: $spotify-green;
+    font-weight: 700;
+    font-size: 14px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  th {
+    text-align: left;
+    font-size: 11px;
+    color: $text-secondary;
+    letter-spacing: 1px;
+    padding: 0 16px 20px;
+    border-bottom: 1px solid $border-color;
+  }
+  td {
+    padding: 20px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  .avatar {
+    width: 36px;
+    height: 36px;
+    background: #282828;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: $spotify-green;
+  }
+  .user-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .user-email {
+    font-size: 12px;
+    color: $text-secondary;
+    margin-top: 2px;
+  }
+}
+
+.badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  &.individual {
+    background: rgba($spotify-green, 0.15);
+    color: $spotify-green;
+  }
+  &.student {
+    background: rgba($student-blue, 0.15);
+    color: $student-blue;
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  span {
+    font-size: 18px;
+  }
+  &.success {
+    color: $spotify-green;
+  }
+  &.failed {
+    color: #f15533;
+  }
+}
