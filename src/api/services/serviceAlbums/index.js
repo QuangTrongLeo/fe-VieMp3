@@ -53,10 +53,10 @@ export async function apiCreateAlbum(formData) {
 }
 
 // ===== UPDATE ALBUM =====
-export async function apiUpdateAlbum(formData) {
+export async function apiUpdateAlbum(id, formData) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(apiAlbumUrls.updateAlbum, formData, {
+    const response = await axios.put(`${apiAlbumUrls.updateAlbum}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',

@@ -114,10 +114,9 @@ function AlbumManage() {
 
   const handleUpdate = async () => {
     const formData = new FormData();
-    formData.append('albumId', selectedAlbum.id);
     formData.append('title', title);
     if (coverFile) formData.append('cover', coverFile);
-    await apiUpdateAlbum(formData);
+    await apiUpdateAlbum(selectedAlbum.id, formData);
     setModalUpdate(false);
     fetchData();
   };
