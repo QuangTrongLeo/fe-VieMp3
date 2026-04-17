@@ -83,6 +83,7 @@ export async function apiGetAllVouchers() {
 // ===== GET AVAILABLE VOUCHERS =====
 export async function apiGetAvailableVouchers() {
   try {
+    const token = localStorage.getItem('token');
     const response = await axios.get(apiVoucherUrls.getAvailableVouchers, {
       headers: {
         Authorization: `Bearer ${token}`,
