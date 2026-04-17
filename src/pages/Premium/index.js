@@ -1,83 +1,120 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import styles from './Premium.module.scss';
 import classNames from 'classnames/bind';
 import icons from '~/assets/icons';
-import { images } from '~/assets';
 import SubscriptionModal from '~/components/Components/SubscriptionModal';
+import { useAuth } from '~/components/Components/AuthProvider';
+import { images } from '~/assets';
+import { apiGetPackages } from '~/api/services/servicePackages';
 
 const cx = classNames.bind(styles);
 
+const DURATION_MAP = {
+  ONE_MONTH: '1 tháng',
+  THREE_MONTHS: '3 tháng',
+  SIX_MONTHS: '6 tháng',
+};
+
+const formatPrice = price => {
+  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price).replace('₫', 'đ');
+};
+
 function Premium() {
-  // Quản lý trạng thái Modal
+  const { roles } = useAuth();
+  const [packages, setPackages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const individualOptions = [
-    { duration: '1 tháng', desc: 'Thanh toán mỗi tháng', price: '20.000đ' },
-    { duration: '3 tháng', desc: 'Tiết kiệm 10%', price: '54.000đ' },
-    { duration: '6 tháng', desc: 'Tiết kiệm 25%', price: '90.000đ' },
-  ];
+  const featuresMap = {
+    INDIVIDUAL: ['Nghe nhạc không quảng cáo', 'Tải xuống ngoại tuyến', 'Âm thanh cực cao'],
+    STUDENT: ['Tất cả quyền lợi gói Cá nhân', 'Giá ưu đãi dành cho sinh viên', 'Xác thực hàng năm'],
+  };
 
-  const studentOptions = [
-    { duration: '1 tháng', desc: 'Dành cho sinh viên', price: '10.000đ' },
-    { duration: '3 tháng', desc: 'Tiết kiệm 10%', price: '27.000đ' },
-    { duration: '6 tháng', desc: 'Tiết kiệm 30%', price: '42.000đ' },
-  ];
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const data = await apiGetPackages();
+        setPackages(data);
+      } catch (error) {
+        console.error('Lỗi khi lấy gói cước:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPackages();
+  }, []);
 
-  const individualFeatures = ['Nghe nhạc không quảng cáo', 'Tải xuống ngoại tuyến', 'Âm thanh cực cao'];
-  const studentFeatures = ['Tất cả quyền lợi gói Cá nhân', 'Giá ưu đãi dành cho sinh viên', 'Xác thực hàng năm'];
+  // Phân loại gói dùng useMemo để tối ưu performance
+  const individualOptions = useMemo(() => packages.filter(p => p.packageType === 'INDIVIDUAL'), [packages]);
 
-  // Hàm xử lý khi nhấn Đăng ký
-  const handleSubscribeClick = (planName, option) => {
+  const studentOptions = useMemo(() => packages.filter(p => p.packageType === 'STUDENT'), [packages]);
+
+  const handleSubscribeClick = (planName, pkg) => {
+    if (!roles || roles.length === 0) {
+      alert('Vui lòng đăng nhập để thực hiện đăng ký gói Premium!');
+      return;
+    }
+
     setSelectedPlan({
       planName,
-      ...option,
+      id: pkg.id,
+      duration: DURATION_MAP[pkg.duration],
+      price: formatPrice(pkg.finalPrice),
+      discount: pkg.discountPercent,
     });
     setShowModal(true);
   };
 
-  const renderCard = (title, badge, options, features) => (
-    <div className={cx('card')}>
-      <div className={cx('card-header')}>
-        <div className={cx('header-left')}>
-          <img src={images.logo} className={cx('avatar')} alt={title} />
-          <h2 className={cx('plan-name')}>{title}</h2>
-        </div>
-        <span className={cx('badge')}>{badge}</span>
-      </div>
+  const renderCard = (title, type, options, badge) => {
+    const features = featuresMap[type];
 
-      <div className={cx('options-list')}>
-        {options.map((opt, index) => (
-          <div key={index} className={cx('option-item')}>
-            <div>
-              <div className={cx('duration')}>{opt.duration}</div>
-              <div className={cx('desc')} style={{ color: '#adaaaa', fontSize: '0.8rem' }}>
-                {opt.desc}
-              </div>
-            </div>
-            <div className="text-right">
-              <span className={cx('price')}>{opt.price}</span>
-              <button
-                className={cx('btn-subscribe')}
-                onClick={() => handleSubscribeClick(title, opt)} // Gắn sự kiện
-              >
-                Đăng ký
-              </button>
-            </div>
+    return (
+      <div className={cx('card')}>
+        <div className={cx('card-header')}>
+          <div className={cx('header-left')}>
+            <img src={images.logo} className={cx('avatar')} alt={title} />
+            <h2 className={cx('plan-name')}>{title}</h2>
           </div>
-        ))}
-      </div>
+          {badge && <span className={cx('badge')}>{badge}</span>}
+        </div>
 
-      <ul className={cx('feature-list')}>
-        {features.map((feature, index) => (
-          <li key={index}>
-            <i className={cx(icons.iconCheck)} style={{ color: 'var(--primary-color)' }}></i>
-            {feature}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+        <div className={cx('options-list')}>
+          {options.length > 0 ? (
+            options.map(opt => (
+              <div key={opt.id} className={cx('option-item')}>
+                <div>
+                  <div className={cx('duration')}>{DURATION_MAP[opt.duration]}</div>
+                  <div className={cx('desc')} style={{ color: '#adaaaa', fontSize: '0.8rem' }}>
+                    {opt.discountPercent > 0 ? `Tiết kiệm ${opt.discountPercent}%` : 'Thanh toán định kỳ'}
+                  </div>
+                </div>
+                <div className="text-right d-flex flex-column align-items-end">
+                  <span className={cx('price')}>{formatPrice(opt.finalPrice)}</span>
+                  <button className={cx('btn-subscribe')} onClick={() => handleSubscribeClick(title, opt)}>
+                    {roles && roles.length > 0 ? 'Đăng ký' : 'Đăng nhập để đăng ký'}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-3 text-center">Đang tải gói cước...</div>
+          )}
+        </div>
+
+        <ul className={cx('feature-list')}>
+          {features.map((feature, index) => (
+            <li key={index}>
+              <i className={cx(icons.iconCheck)} style={{ color: 'var(--primary-color)' }}></i>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  if (loading) return <div className="text-center p-5">Đang tải dữ liệu...</div>;
 
   return (
     <div className={cx('premium-container')}>
@@ -90,11 +127,10 @@ function Premium() {
       </section>
 
       <section className={cx('pricing-grid')}>
-        {renderCard('Gói Cá nhân', 'Phổ biến', individualOptions, individualFeatures)}
-        {renderCard('Gói Sinh viên', 'Tiết kiệm', studentOptions, studentFeatures)}
+        {renderCard('Gói Cá nhân', 'INDIVIDUAL', individualOptions, 'Phổ biến')}
+        {renderCard('Gói Sinh viên', 'STUDENT', studentOptions, 'Tiết kiệm')}
       </section>
 
-      {/* Render Modal */}
       <SubscriptionModal show={showModal} onClose={() => setShowModal(false)} data={selectedPlan} />
     </div>
   );

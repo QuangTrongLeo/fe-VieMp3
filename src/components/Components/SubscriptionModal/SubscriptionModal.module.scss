@@ -33,98 +33,55 @@ $on-surface-variant: #adaaaa;
 
   .header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-    padding: 20px 24px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 
     .title {
-      font-weight: 800;
+      font-weight: 600;
       font-family: 'Plus Jakarta Sans', sans-serif;
       color: white;
-      margin: 0;
-    }
-    .btnCloseCustom {
-      background-color: transparent;
-      opacity: 1;
-      filter: brightness(0) invert(1);
-      transition: all 0.25s ease-in-out;
-      box-shadow: none !important;
-
-      &:hover {
-        filter: invert(86%) sepia(31%) saturate(1000%) hue-rotate(86deg) brightness(105%) contrast(105%);
-        transform: rotate(90deg);
-      }
     }
   }
 
   .body {
-    padding: 24px;
+    padding: 0 20px;
 
     .label {
       font-size: 0.85rem;
-      color: $on-surface-variant;
-      margin-bottom: 4px;
     }
 
     .planHighlight {
       color: var(--primary-color);
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
     }
 
-    .infoList {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 18px;
-      border-radius: 16px;
-      margin: 0;
-
-      li {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-
-        &:last-child {
-          margin-bottom: 0;
-          padding-top: 10px;
-          border-top: 1px dashed rgba(255, 255, 255, 0.1);
-        }
-
-        strong {
-          color: $on-surface-variant;
-          font-weight: 500;
-        }
-
-        span {
-          color: white;
-          font-weight: 700;
-        }
-
-        &.description {
-          display: block;
-          font-style: italic;
-          color: $on-surface-variant;
-          font-size: 0.85rem;
-          font-weight: 400;
-        }
+    .voucherSection {
+      .voucherSelect {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        padding: 12px;
+        color: white;
+        cursor: pointer;
       }
     }
   }
 
   .footer {
     border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
-    padding: 18px 24px;
+    padding: 20px;
     display: flex;
-    gap: 12px;
 
     .btnCancel {
       flex: 1;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      color: white;
+      color: var(--white-color);
       border-radius: 12px;
-      padding: 12px;
+      padding: 8px;
       font-weight: 600;
       transition: all 0.2s;
 
@@ -140,19 +97,109 @@ $on-surface-variant: #adaaaa;
       color: var(--white-color);
       border: none;
       border-radius: 12px;
-      padding: 12px;
+      padding: 8px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
         filter: brightness(1.2);
       }
+    }
+  }
+}
 
-      &:active {
-        transform: translateY(0);
+.infoBox {
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+
+    span {
+      color: $on-surface-variant;
+    }
+    strong {
+      color: var(--white-color);
+    }
+
+    &.discountText {
+      strong {
+        color: #ff4d4f;
       }
+    }
+
+    &.totalRow {
+      span {
+        color: var(--white-color);
+        font-weight: 600;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .finalPrice {
+    color: var(--primary-color) !important;
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+  }
+
+  .divider {
+    margin: 8px 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  }
+}
+
+.voucherCard {
+  margin-top: 10px;
+  display: flex;
+  background: linear-gradient(135deg, #2dbd69 0%, #1a9a52 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  animation: modalIn 0.3s ease;
+
+  .cardLeft {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px dashed rgba(255, 255, 255, 0.3);
+    color: var(--white-color);
+
+    .percent {
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+    .off {
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+  }
+
+  .cardRight {
+    flex: 1;
+    padding: 6px;
+    color: var(--white-color);
+
+    .vTitle {
+      margin: 0;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .vLimit,
+    .vDate {
+      margin: 0;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+    .vStock {
+      margin-top: 5px;
+      font-size: 0.7rem;
+      background: rgba(0, 0, 0, 0.2);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
     }
   }
 }
