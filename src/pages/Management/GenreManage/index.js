@@ -74,8 +74,7 @@ function GenreManage() {
 
   const handleUpdate = async () => {
     try {
-      await apiUpdateGenre({
-        genreId: selectedGenre.id,
+      await apiUpdateGenre(selectedGenre.id, {
         name: form.name,
       });
 

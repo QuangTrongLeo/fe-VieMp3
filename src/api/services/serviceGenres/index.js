@@ -42,10 +42,10 @@ export async function apiCreateGenre(data) {
 }
 
 // ===== UPDATE GENRE =====
-export async function apiUpdateGenre(data) {
+export async function apiUpdateGenre(id, data) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(apiGenreUrls.updateGenre, data, {
+    const response = await axios.put(`${apiGenreUrls.updateGenre}/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
