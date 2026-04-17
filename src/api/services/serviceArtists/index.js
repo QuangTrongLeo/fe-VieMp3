@@ -57,24 +57,25 @@ export async function apiCreateArtist(name, avatarFile) {
 }
 
 // ===== UPDATE ARTIST =====
-export async function apiUpdateArtist(artistId, artistName, avatarFile) {
+export async function apiUpdateArtist(id, name, avatarFile) {
   try {
     const token = localStorage.getItem('token');
 
     const formData = new FormData();
-    formData.append('artistId', artistId);
-    formData.append('artistName', artistName);
+    formData.append('name', name);
     if (avatarFile) {
       formData.append('avatar', avatarFile);
     }
-    const response = await axios.put(apiArtistUrls.updateArtist, formData, {
+    const response = await axios.put(`${apiArtistUrls.updateArtist}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     });
+
     return response.data.data;
   } catch (error) {
-    console.log(error.response);
+    console.error('Lỗi API:', error.response);
     const message = error.response?.data?.message || error.message || 'Lỗi cập nhật nghệ sĩ';
     throw new Error(message);
   }

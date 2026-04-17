@@ -19,7 +19,6 @@ const routes = {
   playlists: '/playlists',
   profile: '/profile',
   register: '/register',
-  // searched: '/searched',
   song: '/song',
   premium: '/premium',
 
