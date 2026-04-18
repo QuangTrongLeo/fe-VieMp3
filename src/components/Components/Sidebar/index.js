@@ -29,7 +29,7 @@ const itemsManageMod = [
   { label: 'Quản lý album', iconClass: icons.iconCompactDisc, href: config.routes.manageAlbums },
   { label: 'Quản lý bài hát', iconClass: icons.iconMusic, href: config.routes.manageSongs },
   { label: 'Quản lý thể loại', iconClass: icons.iconLayerGroup, href: config.routes.manageGenres },
-  { label: 'Quản lý playlist', iconClass: icons.iconList, href: config.routes.managePlaylists },
+  { label: 'Quản lý voucher', iconClass: icons.iconVoucher, href: config.routes.manageVouchers },
 ];
 
 const itemsManageAdmin = [

@@ -10,18 +10,17 @@ import { Home, Genres, History, Login, Register, Otp, GenreDetail, AlbumDetail, 
 import {
   ArtistDetail,
   SongDetail,
-  LyrisDetail,
   Profile,
   FavoriteSongs,
   FavoriteAlbums,
   FavoriteArtists,
   Library,
   PlayList,
+  PlayListDetail,
 } from '~/pages';
 
 // modRoutes
-import { Manage, AlbumManage, ArtistManage, GenreManage, SongManage } from '~/pages';
-import PlayListDetail from '~/pages/PlayListDetail';
+import { Manage, AlbumManage, ArtistManage, GenreManage, SongManage, VoucherManage } from '~/pages';
 
 // adminRoutes
 import {
@@ -49,7 +48,6 @@ const publishRoutes = [
 
 const userRoutes = [
   { path: `${config.routes.song}/:songId`, component: SongDetail },
-  { path: `${config.routes.lyris}/:lyrisName`, component: LyrisDetail },
   { path: `${config.routes.playlist}/:playlistId`, component: PlayListDetail },
   { path: config.routes.history, component: History },
   { path: config.routes.library, component: Library },
@@ -66,6 +64,7 @@ const modRoutes = [
   { path: config.routes.manageAlbums, component: AlbumManage },
   { path: config.routes.manageSongs, component: SongManage },
   { path: config.routes.manageGenres, component: GenreManage },
+  { path: config.routes.manageVouchers, component: VoucherManage },
 ];
 
 const adminRoutes = [

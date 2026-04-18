@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Premium.module.scss';
 import classNames from 'classnames/bind';
 import icons from '~/assets/icons';
+import config from '~/config';
 import SubscriptionModal from '~/components/Components/SubscriptionModal';
 import { useAuth } from '~/components/Components/AuthProvider';
 import { images } from '~/assets';
@@ -22,6 +24,7 @@ const formatPrice = price => {
 
 function Premium() {
   const { roles } = useAuth();
+  const navigate = useNavigate();
   const [packages, setPackages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -53,7 +56,7 @@ function Premium() {
 
   const handleSubscribeClick = async (planName, pkg) => {
     if (!roles || roles.length === 0) {
-      alert('Vui lòng đăng nhập để thực hiện đăng ký gói Premium!');
+      navigate(config.routes.login);
       return;
     }
 

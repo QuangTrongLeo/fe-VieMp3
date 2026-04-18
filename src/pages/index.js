@@ -9,7 +9,7 @@ export { default as History } from './History';
 export { default as Home } from './Home';
 export { default as Library } from './Library';
 export { default as Login } from './Login';
-export { default as LyrisDetail } from './LyrisDetail';
+export { default as PlayListDetail } from './PlayListDetail';
 export { default as Otp } from './Otp';
 export { default as PlayList } from './PlayList';
 export { default as Profile } from './Profile';
@@ -25,6 +25,7 @@ export { default as GenreManage } from './Management/GenreManage';
 export { default as SongManage } from './Management/SongManage';
 export { default as MembershipManage } from './Management/MembershipManage';
 export { default as RevenueManage } from './Management/RevenueManage';
+export { default as VoucherManage } from './Management/VoucherManage';
 
 export { default as Analytic } from './Analysis/Analytic';
 export { default as ArtistsAnalytic } from './Analysis/ArtistsAnalytic';

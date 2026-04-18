@@ -32,6 +32,7 @@ const icons = {
   iconDollar: 'fa-solid fa-dollar-sign',
   iconHeadphones: 'fa-solid fa-headphones',
   iconDownload: 'fa-solid fa-download',
+  iconVoucher: 'fas fa-ticket-alt',
 };
 
 export default icons;

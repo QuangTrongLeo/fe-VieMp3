@@ -31,6 +31,7 @@ const routes = {
   managePlaylists: '/manage/playlists',
   manageMemberships: '/manage/memberships',
   manageRevenues: '/manage/revenue',
+  manageVouchers: '/manage/vouchers',
 
   analytic: '/analytic',
   analyticRevenues: '/analytic/revenues', // Doanh thu
