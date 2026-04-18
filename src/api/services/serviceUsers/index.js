@@ -58,3 +58,20 @@ export async function apiGetUsers() {
     throw new Error(message);
   }
 }
+
+// ===== CHECK IF USER IS STUDENT =====
+export async function apiCheckUserIsStudent() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(apiUsersUrls.checkUserIsStudent, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message;
+    throw new Error(message);
+  }
+}

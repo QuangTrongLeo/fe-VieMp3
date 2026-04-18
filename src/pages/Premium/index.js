@@ -6,6 +6,7 @@ import SubscriptionModal from '~/components/Components/SubscriptionModal';
 import { useAuth } from '~/components/Components/AuthProvider';
 import { images } from '~/assets';
 import { apiGetPackages } from '~/api/services/servicePackages';
+import { apiCheckUserIsStudent } from '~/api/services/serviceUsers';
 
 const cx = classNames.bind(styles);
 
@@ -50,10 +51,21 @@ function Premium() {
 
   const studentOptions = useMemo(() => packages.filter(p => p.packageType === 'STUDENT'), [packages]);
 
-  const handleSubscribeClick = (planName, pkg) => {
+  const handleSubscribeClick = async (planName, pkg) => {
     if (!roles || roles.length === 0) {
       alert('Vui lòng đăng nhập để thực hiện đăng ký gói Premium!');
       return;
+    }
+
+    if (pkg.packageType === 'STUDENT') {
+      const isStudent = await apiCheckUserIsStudent();
+
+      if (!isStudent) {
+        alert(
+          'Tài khoản của bạn không phải là email sinh viên. Vui lòng sử dụng email sinh viên để đăng ký gói ưu đãi này!'
+        );
+        return;
+      }
     }
 
     setSelectedPlan({

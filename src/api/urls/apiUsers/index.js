@@ -12,6 +12,7 @@ const apiUsersUrls = {
   // GET
   getUsers: `${apiUserBaseUrl}/all`,
   getProfile: `${apiUserBaseUrl}/me`,
+  checkUserIsStudent: `${apiUserBaseUrl}/is-student`,
 };
 
 export default apiUsersUrls;
