@@ -23,6 +23,31 @@ export async function apiCreatePlaylist(name, coverFile) {
   }
 }
 
+// ===== UPDATE PLAYLIST =====
+export async function apiUpdatePlaylist(id, name, coverFile) {
+  try {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    if (name !== undefined && name !== null) {
+      formData.append('name', name);
+    }
+    if (coverFile) {
+      formData.append('cover', coverFile);
+    }
+    const response = await axios.put(`${apiPlaylistUrls.updatePlaylist}/${id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    const message = error.response?.data?.message || error.message;
+    throw new Error(message);
+  }
+}
+
 // ===== GET MY PLAYLISTS =====
 export async function apiGetMyPlaylists() {
   try {

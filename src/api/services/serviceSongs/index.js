@@ -119,29 +119,30 @@ export async function apiCreateSong(title, description, artistId, genreId, cover
 }
 
 // ===== UPDATE SONG =====
-export async function apiUpdateSong(songId, title, description, genreId, albumId, cover, audio) {
+export async function apiUpdateSong(id, title, description, genreId, albumId, cover, audio) {
   try {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('songId', songId);
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('genreId', genreId);
-    formData.append('albumId', albumId);
+    if (title) formData.append('title', title.trim());
+    if (description) formData.append('description', description);
+    if (genreId) formData.append('genreId', genreId);
+    if (albumId) formData.append('albumId', albumId);
     if (cover) {
       formData.append('cover', cover);
     }
     if (audio) {
       formData.append('audio', audio);
     }
-    const response = await axios.put(apiSongUrls.updateSong, formData, {
+
+    const response = await axios.put(`${apiSongUrls.updateSong}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
     });
+
     return response.data.data;
   } catch (error) {
-    console.log(error.response);
     const message = error.response?.data?.message || error.message;
     throw new Error(message);
   }
