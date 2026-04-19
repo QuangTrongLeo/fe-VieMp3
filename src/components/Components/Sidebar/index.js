@@ -34,9 +34,9 @@ const itemsManageMod = [
 
 const itemsManageAdmin = [
   { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
-  { label: 'Tài khoản', iconClass: icons.iconUser, href: config.routes.manageAccounts },
-  { label: 'Gói hội viên', iconClass: icons.iconCrown, href: config.routes.manageMemberships },
-  { label: 'Doanh thu', iconClass: icons.iconDollar, href: config.routes.manageRevenues },
+  { label: 'Quản lý tài khoản', iconClass: icons.iconUser, href: config.routes.manageAccounts },
+  { label: 'Quản lý gói Premium', iconClass: icons.iconPackage, href: config.routes.managePackages },
+  { label: 'Quản lý doanh thu', iconClass: icons.iconDollar, href: config.routes.manageRevenues },
   ...itemsManageMod.slice(1),
 ];
 

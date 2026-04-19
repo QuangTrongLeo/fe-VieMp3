@@ -30,7 +30,7 @@ import {
   RevenuesAnalytic,
   UsersAnalytic,
   AccountManage,
-  MembershipManage,
+  PackageManage,
   RevenueManage,
 } from '~/pages';
 
@@ -69,7 +69,7 @@ const modRoutes = [
 
 const adminRoutes = [
   { path: config.routes.manageAccounts, component: AccountManage },
-  { path: config.routes.manageMemberships, component: MembershipManage },
+  { path: config.routes.managePackages, component: PackageManage },
   { path: config.routes.manageRevenues, component: RevenueManage },
   { path: config.routes.analytic, component: Analytic },
   { path: config.routes.analyticArtists, component: ArtistsAnalytic },

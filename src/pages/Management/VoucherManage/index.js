@@ -160,7 +160,7 @@ function VoucherManage() {
             className={cx('cover')}
             style={{ background: '#e3f2fd', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            <i className="fas fa-ticket-alt" style={{ color: '#1976d2', fontSize: '20px' }}></i>
+            <i className={icons.iconVoucher} style={{ fontSize: '20px' }}></i>
           </div>
           <div>
             <div className={cx('song-name')}>

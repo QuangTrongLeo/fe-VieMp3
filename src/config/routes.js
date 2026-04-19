@@ -29,7 +29,7 @@ const routes = {
   manageSongs: '/manage/songs',
   manageGenres: '/manage/genres',
   managePlaylists: '/manage/playlists',
-  manageMemberships: '/manage/memberships',
+  managePackages: '/manage/packages',
   manageRevenues: '/manage/revenue',
   manageVouchers: '/manage/vouchers',
 
