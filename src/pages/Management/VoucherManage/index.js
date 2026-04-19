@@ -15,7 +15,6 @@ const cx = classNames.bind(styles);
 
 function VoucherManage() {
   const [vouchers, setVouchers] = useState([]);
-  const [search, setSearch] = useState('');
   const [filterActive, setFilterActive] = useState('all');
   const [selectedVoucher, setSelectedVoucher] = useState(null);
 
@@ -24,13 +23,18 @@ function VoucherManage() {
   const [modalDelete, setModalDelete] = useState(false);
 
   const [form, setForm] = useState({
-    code: '',
-    discountPercent: '',
     quantity: '',
+    discountPercentage: '',
+    maxDiscountAmount: '',
     startDate: '',
     endDate: '',
-    description: '',
   });
+
+  const formatToBackendDate = dateStr => {
+    if (!dateStr) return null;
+    const [year, month, day] = dateStr.split('-');
+    return `${day}-${month}-${year}`;
+  };
 
   // ===== FETCH DATA =====
   useEffect(() => {
@@ -40,7 +44,8 @@ function VoucherManage() {
   const fetchVouchers = async () => {
     try {
       const res = await apiGetAllVouchers();
-      setVouchers(res || []);
+      const data = res?.data || res || [];
+      setVouchers(data);
     } catch (error) {
       console.error('Lỗi fetch voucher:', error);
     }
@@ -51,20 +56,15 @@ function VoucherManage() {
     const now = new Date();
 
     return vouchers.filter(v => {
-      const code = v.code ? v.code.toLowerCase() : '';
-      const desc = v.description ? v.description.toLowerCase() : '';
-      const searchTerm = search.toLowerCase();
-      const matchesSearch = code.includes(searchTerm) || desc.includes(searchTerm);
-
       const start = v.startDate ? new Date(v.startDate) : null;
       const end = v.endDate ? new Date(v.endDate) : null;
       const isActive = start && end && now >= start && now <= end;
 
-      if (filterActive === 'true') return matchesSearch && isActive;
-      if (filterActive === 'false') return matchesSearch && !isActive;
-      return matchesSearch;
+      if (filterActive === 'true') return isActive;
+      if (filterActive === 'false') return !isActive;
+      return true;
     });
-  }, [vouchers, search, filterActive]);
+  }, [vouchers, filterActive]);
 
   const formatDate = date => (date ? new Date(date).toLocaleDateString('vi-VN') : '---');
 
@@ -76,19 +76,25 @@ function VoucherManage() {
 
   const resetForm = () => {
     setForm({
-      code: '',
-      discountPercent: '',
       quantity: '',
+      discountPercentage: '',
+      maxDiscountAmount: '',
       startDate: '',
       endDate: '',
-      description: '',
     });
   };
 
   // ===== ACTIONS =====
   const handleCreate = async () => {
+    const requestData = {
+      ...form,
+      startDate: formatToBackendDate(form.startDate),
+      endDate: formatToBackendDate(form.endDate),
+      active: true,
+    };
+
     try {
-      await apiCreateVoucher(form);
+      await apiCreateVoucher(requestData);
       setModalCreate(false);
       resetForm();
       fetchVouchers();
@@ -100,19 +106,25 @@ function VoucherManage() {
   const handleOpenUpdate = voucher => {
     setSelectedVoucher(voucher);
     setForm({
-      code: voucher.code || '',
-      discountPercent: voucher.discountPercent || '',
       quantity: voucher.quantity || '',
+      discountPercentage: voucher.discountPercentage || '',
+      maxDiscountAmount: voucher.maxDiscountAmount || '',
       startDate: voucher.startDate?.split('T')[0] || '',
       endDate: voucher.endDate?.split('T')[0] || '',
-      description: voucher.description || '',
     });
     setModalUpdate(true);
   };
 
   const handleUpdate = async () => {
+    const requestData = {
+      ...form,
+      startDate: formatToBackendDate(form.startDate),
+      endDate: formatToBackendDate(form.endDate),
+      active: selectedVoucher.active,
+    };
+
     try {
-      await apiUpdateVoucher(selectedVoucher.id, form);
+      await apiUpdateVoucher(selectedVoucher.id, requestData);
       setModalUpdate(false);
       resetForm();
       fetchVouchers();
@@ -138,7 +150,6 @@ function VoucherManage() {
 
   // ===== RENDER ITEM =====
   const renderVoucher = voucher => {
-    // Xác định trạng thái hiển thị nhãn (Badge)
     const now = new Date();
     const isActive = new Date(voucher.startDate) <= now && new Date(voucher.endDate) >= now;
 
@@ -153,13 +164,12 @@ function VoucherManage() {
           </div>
           <div>
             <div className={cx('song-name')}>
-              {voucher.code}
               <span className={cx('status-badge', isActive ? 'active' : 'expired')}>
-                {isActive ? ' Đang chạy' : ' Hết hạn/Chưa tới'}
+                {isActive ? 'Hoạt động' : 'Không hoạt động/Hết hạn'}
               </span>
             </div>
             <div className={cx('song-sub')}>
-              Giảm: {voucher.discountPercent}% • Còn lại: {voucher.quantity}
+              Giảm: {voucher.discountPercentage}% • Tối đa: {voucher.maxDiscountAmount}đ • Còn lại: {voucher.quantity}
             </div>
           </div>
         </div>
@@ -168,7 +178,6 @@ function VoucherManage() {
             <span className={cx('favorite')}>
               {formatDate(voucher.startDate)} - {formatDate(voucher.endDate)}
             </span>
-            <span>{voucher.description || 'Không có mô tả'}</span>
           </div>
 
           <div className={cx('artist-actions')}>
@@ -202,7 +211,6 @@ function VoucherManage() {
       </div>
 
       <div className={cx('toolbar')}>
-        {/* BỘ LỌC TRẠNG THÁI */}
         <select value={filterActive} onChange={e => setFilterActive(e.target.value)} className={cx('filter-select')}>
           <option value="all">Tất cả trạng thái</option>
           <option value="true">Đang hoạt động (Active)</option>
@@ -219,9 +227,9 @@ function VoucherManage() {
         <div className={cx('modal')}>
           <div className={cx('modal-content')}>
             <h4>Thêm Voucher mới</h4>
-            <input name="code" placeholder="Mã Voucher" onChange={handleChange} />
-            <input name="discountPercent" type="number" placeholder="% Giảm giá" onChange={handleChange} />
             <input name="quantity" type="number" placeholder="Số lượng" onChange={handleChange} />
+            <input name="discountPercentage" type="number" placeholder="% Giảm giá" onChange={handleChange} />
+            <input name="maxDiscountAmount" type="number" placeholder="Giảm giá tối đa" onChange={handleChange} />
             <label>Ngày bắt đầu:</label>
             <input name="startDate" type="date" onChange={handleChange} />
             <label>Ngày kết thúc:</label>
@@ -244,12 +252,12 @@ function VoucherManage() {
         <div className={cx('modal')}>
           <div className={cx('modal-content')}>
             <h4>Cập nhật Voucher</h4>
-            <label>Mã Voucher:</label>
-            <input name="code" value={form.code} onChange={handleChange} />
-            <label>% Giảm giá:</label>
-            <input name="discountPercent" type="number" value={form.discountPercent} onChange={handleChange} />
             <label>Số lượng:</label>
             <input name="quantity" type="number" value={form.quantity} onChange={handleChange} />
+            <label>% Giảm giá:</label>
+            <input name="discountPercentage" type="number" value={form.discountPercentage} onChange={handleChange} />
+            <label>Giảm giá tối đa:</label>
+            <input name="maxDiscountAmount" type="number" value={form.maxDiscountAmount} onChange={handleChange} />
             <label>Ngày bắt đầu:</label>
             <input name="startDate" type="date" value={form.startDate} onChange={handleChange} />
             <label>Ngày kết thúc:</label>
@@ -271,7 +279,7 @@ function VoucherManage() {
       {modalDelete && (
         <div className={cx('modal')}>
           <div className={cx('modal-content')}>
-            <h4>Xác nhận xóa Voucher {selectedVoucher?.code}?</h4>
+            <h4>Xác nhận xóa Voucher?</h4>
             <div className={cx('modal-actions')}>
               <button className="btn btn-danger" onClick={handleDelete}>
                 Xóa ngay
