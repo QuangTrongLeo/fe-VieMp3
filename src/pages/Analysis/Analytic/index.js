@@ -78,13 +78,6 @@ function Analytic() {
           </h2>
           <p className={cx('subtitle')}>Báo cáo hiệu suất nội dung của hệ thống.</p>
         </div>
-
-        <div className={cx('actions')}>
-          <button className={cx('btn', 'btnPrimary')}>
-            <i className={icons.iconDownload}></i>
-            Xuất báo cáo
-          </button>
-        </div>
       </div>
 
       {/* KPI GRID */}
