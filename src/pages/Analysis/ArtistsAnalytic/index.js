@@ -1,34 +1,80 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './ArtistsAnalytic.module.scss';
+import icons from '~/assets/icons';
+import LimitedList from '~/components/Components/LimitedList';
+import { apiGetAlbums } from '~/api/services/serviceAlbums';
+import { apiGetArtists } from '~/api/services/serviceArtists';
 
 const cx = classNames.bind(styles);
 
 function ArtistsAnalytic() {
-  // Dữ liệu mẫu cho biểu đồ và danh sách
+  const [artists, setArtists] = useState([]);
+  const [albums, setAlbums] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const months = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [artistsRes, albumsRes] = await Promise.all([apiGetArtists(), apiGetAlbums()]);
+
+        // Sắp xếp dữ liệu: createdAt mới nhất lên đầu
+        const sortedArtists = (artistsRes?.data || artistsRes || []).sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        const sortedAlbums = (albumsRes?.data || albumsRes || []).sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        setArtists(sortedArtists);
+        setAlbums(sortedAlbums);
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const kpiData = [
-    { label: 'Tổng số Nghệ sĩ', value: '4,829', trend: '+12.5%', icon: 'groups', type: 'primary' },
-    { label: 'Tổng số Album', value: '24,510', trend: '+8.2%', icon: 'album', type: 'tertiary' },
-    { label: 'Số bài hát mới', value: '324', trend: 'Hôm nay', icon: 'new_releases', type: 'secondary' },
+    {
+      label: 'Tổng số Nghệ sĩ',
+      value: artists.length.toLocaleString(),
+      icon: icons.iconStar,
+      type: 'primary',
+      trend: 'Live',
+    },
+    {
+      label: 'Tổng số Album',
+      value: albums.length.toLocaleString(),
+      icon: icons.iconCompactDisc,
+      type: 'tertiary',
+      trend: 'Live',
+    },
+    { label: 'Cập nhật mới', value: '324', icon: icons.iconMusic, type: 'secondary', trend: 'Hôm nay' },
   ];
+
+  if (loading) return <div className={cx('loading')}>Đang tải dữ liệu...</div>;
 
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
-        {/* Page Header */}
         <header className={cx('header')}>
           <h2 className={cx('title')}>Thống kê Nghệ sĩ & Album</h2>
           <p className={cx('description')}>Quản trị hiệu suất nội dung âm nhạc trên hệ thống.</p>
         </header>
 
-        {/* KPI Cards Bento */}
         <div className={cx('kpi-grid')}>
           {kpiData.map((kpi, index) => (
             <div key={index} className={cx('kpi-card')}>
               <div className={cx('kpi-top')}>
                 <div className={cx('icon-box', kpi.type)}>
-                  <span className="material-symbols-outlined">{kpi.icon}</span>
+                  <span className="material-symbols-outlined">
+                    <i className={cx(kpi.icon)}></i>
+                  </span>
                 </div>
                 <span className={cx('trend-badge', kpi.type)}>{kpi.trend}</span>
               </div>
@@ -38,9 +84,7 @@ function ArtistsAnalytic() {
           ))}
         </div>
 
-        {/* Charts Row */}
         <div className={cx('charts-row')}>
-          {/* Bar Chart: Release Growth */}
           <div className={cx('chart-box')}>
             <div className={cx('chart-header')}>
               <div>
@@ -66,12 +110,11 @@ function ArtistsAnalytic() {
             </div>
           </div>
 
-          {/* Line Chart: Performance */}
           <div className={cx('chart-box')}>
             <div className={cx('chart-header')}>
               <div>
                 <h4 className={cx('chart-title')}>Hiệu suất nghe</h4>
-                <p className={cx('chart-subtitle')}>So sánh lượt nghe Top 3 Nghệ sĩ (30 ngày)</p>
+                <p className={cx('chart-subtitle')}>So sánh lượt nghe (Dữ liệu mô phỏng)</p>
               </div>
               <div className={cx('legend')}>
                 <div className={cx('legend-item')}>
@@ -83,7 +126,7 @@ function ArtistsAnalytic() {
               </div>
             </div>
             <div className={cx('line-chart-svg')}>
-              <svg viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 400 150" fill="none">
                 <path
                   d="M0 120C50 110 80 40 150 60C220 80 300 10 400 30"
                   stroke="#72fe8f"
@@ -97,75 +140,59 @@ function ArtistsAnalytic() {
                   strokeLinecap="round"
                   strokeOpacity="0.6"
                 />
-                <defs>
-                  <linearGradient id="chartFade" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#72fe8f" stopOpacity="0.1" />
-                    <stop offset="100%" stopColor="#72fe8f" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <path d="M0 120C50 110 80 40 150 60C220 80 300 10 400 30V150H0V120Z" fill="url(#chartFade)" />
               </svg>
             </div>
           </div>
         </div>
 
-        {/* Lists Row */}
         <div className={cx('lists-row')}>
           {/* New Artists */}
           <section className={cx('list-section')}>
             <div className={cx('list-header')}>
-              <h4 className={cx('list-title')}>Nghệ sĩ mới tạo</h4>
-              <button className={cx('text-btn')}>Xem tất cả</button>
+              <h4 className={cx('list-title')}>Nghệ sĩ mới nhất</h4>
             </div>
             <div className={cx('items-stack')}>
-              {[
-                { name: 'Minh Anh', sub: 'Pop • Hôm nay', img: '9' },
-                { name: 'The Wind Band', sub: 'Indie • 2 giờ trước', img: '10' },
-                { name: 'T-Flow', sub: 'Hip Hop • Hôm qua', img: '11' },
-                { name: 'Luna Night', sub: 'EDM • 3 ngày trước', img: '12' },
-              ].map((item, i) => (
-                <div key={i} className={cx('item-card')}>
-                  <img
-                    src={`http://googleusercontent.com/profile/picture/${item.img}`}
-                    alt={item.name}
-                    className={cx('avatar')}
-                  />
-                  <div className={cx('info')}>
-                    <h5 className={cx('name')}>{item.name}</h5>
-                    <p className={cx('sub')}>{item.sub}</p>
+              <LimitedList
+                items={artists}
+                limit={5}
+                wrapInRow={false}
+                renderItem={item => (
+                  <div key={item.id} className={cx('item-card')}>
+                    <img src={item.avatar} alt={item.name} className={cx('avatar')} />
+                    <div className={cx('info')}>
+                      <h5 className={cx('name')}>{item.name}</h5>
+                      <p className={cx('sub')}>{item.favorites?.toLocaleString() || 0} yêu thích</p>
+                    </div>
+                    <span className={cx('date-label')}>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</span>
                   </div>
-                  <span className="material-symbols-outlined">chevron_right</span>
-                </div>
-              ))}
+                )}
+              />
             </div>
           </section>
 
           {/* New Albums */}
           <section className={cx('list-section')}>
             <div className={cx('list-header')}>
-              <h4 className={cx('list-title')}>Album mới cập nhật</h4>
-              <button className={cx('text-btn')}>Duyệt nhanh</button>
+              <h4 className={cx('list-title')}>Album mới nhất</h4>
             </div>
             <div className={cx('items-stack')}>
-              {[
-                { title: 'Hành Trình Mới', artist: 'Minh Anh', status: 'approved', img: '13' },
-                { title: 'Lặng Lẽ', artist: 'The Wind Band', status: 'pending', img: '14' },
-                { title: 'Neon Streets', artist: 'Luna Night', status: 'approved', img: '15' },
-                { title: 'Giai Điệu Cổ Điển', artist: 'Trần Long', status: 'approved', img: '16' },
-              ].map((item, i) => (
-                <div key={i} className={cx('item-card')}>
-                  <div className={cx('cover-box')}>
-                    <img src={`http://googleusercontent.com/profile/picture/${item.img}`} alt={item.title} />
+              <LimitedList
+                items={albums}
+                limit={5}
+                wrapInRow={false}
+                renderItem={item => (
+                  <div key={item.id} className={cx('item-card')}>
+                    <div className={cx('cover-box')}>
+                      <img src={item.cover} alt={item.title} />
+                    </div>
+                    <div className={cx('info')}>
+                      <h5 className={cx('name')}>{item.title}</h5>
+                      <p className={cx('sub')}>{item.favorites?.toLocaleString() || 0} yêu thích</p>
+                    </div>
+                    <span className={cx('date-label')}>{new Date(item.createdAt).toLocaleDateString('vi-VN')}</span>
                   </div>
-                  <div className={cx('info')}>
-                    <h5 className={cx('name')}>{item.title}</h5>
-                    <p className={cx('sub')}>{item.artist}</p>
-                  </div>
-                  <span className={cx('status-badge', item.status)}>
-                    {item.status === 'approved' ? 'Đã duyệt' : 'Chờ duyệt'}
-                  </span>
-                </div>
-              ))}
+                )}
+              />
             </div>
           </section>
         </div>

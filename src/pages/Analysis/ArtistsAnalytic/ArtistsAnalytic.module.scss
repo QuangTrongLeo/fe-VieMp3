@@ -7,19 +7,21 @@ $tertiary: #88ebff;
 $error: #ff7351;
 $text-variant: #adaaaa;
 
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
+.loading {
+  color: $primary;
+  text-align: center;
+  padding: 50px;
+  font-size: 1.5rem;
 }
 
 .header {
   margin-bottom: 40px;
   .title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 3rem;
-    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
     letter-spacing: -0.05em;
     margin-bottom: 8px;
+    color: var(--white-color);
   }
   .description {
     color: $text-variant;
@@ -27,38 +29,38 @@ $text-variant: #adaaaa;
   }
 }
 
-// KPI Section
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2%;
+  margin-bottom: 4%;
 }
 
 .kpi-card {
-  background-color: $bg-color;
-  border: 1px solid white;
-  padding: 24px;
+  background-color: $surface;
+  border: 1px solid #333;
+  padding: 16px;
   border-radius: 12px;
   transition: all 0.3s ease;
+
   &:hover {
-    background-color: $surface-bright;
     transform: translateY(-4px);
+    border-color: var(--primary-color);
   }
 
   .kpi-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
 
   .icon-box {
-    padding: 12px;
+    padding: 8px;
     border-radius: 8px;
     &.primary {
       background: rgba($primary, 0.1);
-      color: $primary;
+      color: var(--primary-color);
     }
     &.tertiary {
       background: rgba($tertiary, 0.1);
@@ -73,19 +75,19 @@ $text-variant: #adaaaa;
   .trend-badge {
     font-size: 11px;
     font-weight: 700;
-    padding: 4px 8px;
+    padding: 4px 10px;
     border-radius: 99px;
     &.primary {
-      background: rgba($primary, 0.1);
-      color: $primary;
+      background: $primary;
+      color: #000;
     }
     &.tertiary {
-      background: rgba($tertiary, 0.1);
-      color: $tertiary;
+      background: $tertiary;
+      color: #000;
     }
     &.secondary {
+      background: #333;
       color: $text-variant;
-      font-weight: 500;
     }
   }
 
@@ -95,24 +97,28 @@ $text-variant: #adaaaa;
     margin-bottom: 4px;
   }
   .kpi-value {
-    font-size: 30px;
-    font-weight: 700;
-    font-family: 'Plus Jakarta Sans';
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
   }
 }
 
-// Charts Section
 .charts-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 32px;
   margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .chart-box {
-  background-color: $bg-color;
+  background-color: $surface;
   padding: 32px;
   border-radius: 16px;
+  border: 1px solid #222;
 
   .chart-header {
     display: flex;
@@ -123,7 +129,7 @@ $text-variant: #adaaaa;
   .chart-title {
     font-size: 18px;
     font-weight: 700;
-    font-family: 'Plus Jakarta Sans';
+    color: #fff;
   }
   .chart-subtitle {
     font-size: 12px;
@@ -141,7 +147,6 @@ $text-variant: #adaaaa;
       font-size: 10px;
       color: $text-variant;
       text-transform: uppercase;
-      letter-spacing: 1px;
     }
   }
 }
@@ -150,20 +155,16 @@ $text-variant: #adaaaa;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  height: 192px;
-  gap: 12px;
+  height: 150px;
+  gap: 8px;
 
   .bar {
     flex: 1;
-    background-color: #262626;
-    border-radius: 8px 8px 0 0;
-    transition: all 0.3s;
-    &:hover {
-      background-color: rgba($primary, 0.4);
-    }
+    background-color: #333;
+    border-radius: 4px 4px 0 0;
+    transition: 0.3s;
     &.active {
       background-color: $primary;
-      box-shadow: 0 -10px 20px rgba($primary, 0.15);
     }
   }
 }
@@ -171,87 +172,66 @@ $text-variant: #adaaaa;
 .chart-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
-  font-size: 10px;
+  margin-top: 12px;
+  font-size: 11px;
   color: $text-variant;
-  .active {
-    color: #fff;
-    font-weight: 700;
-  }
-}
-
-.legend {
-  display: flex;
-  gap: 16px;
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    color: $text-variant;
-  }
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    &.primary {
-      background: $primary;
-    }
-    &.tertiary {
-      background: $tertiary;
-    }
-  }
 }
 
 .line-chart-svg {
-  height: 200px;
-  position: relative;
+  height: 150px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 }
 
-// Lists Section
 .lists-row {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 4%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   .list-title {
     font-size: 20px;
     font-weight: 700;
-    font-family: 'Plus Jakarta Sans';
-  }
-  .text-btn {
-    color: $primary;
-    font-size: 12px;
-    font-weight: 700;
-    &:hover {
-      text-decoration: underline;
-    }
+    color: var(--white-color);
   }
 }
 
 .items-stack {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 8px;
+  background-color: rgba($surface, 0.5);
 }
 
 .item-card {
   background-color: $surface;
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 16px;
-  transition: all 0.3s;
+  border: 1px solid transparent;
+  transition: 0.3s;
   cursor: pointer;
+  margin-bottom: 4px;
+
   &:hover {
     background-color: $surface-bright;
+    border-color: #444;
+    .material-symbols-outlined {
+      opacity: 1;
+      transform: translateX(4px);
+    }
   }
 
   .avatar {
@@ -263,9 +243,8 @@ $text-variant: #adaaaa;
   .cover-box {
     width: 48px;
     height: 48px;
-    border-radius: 4px;
+    border-radius: 6px;
     overflow: hidden;
-    background: #262626;
     img {
       width: 100%;
       height: 100%;
@@ -276,37 +255,27 @@ $text-variant: #adaaaa;
   .info {
     flex: 1;
     .name {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
+      color: #fff;
     }
     .sub {
-      font-size: 11px;
+      font-size: 12px;
       color: $text-variant;
     }
   }
 
-  .status-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
+  .date-label {
+    font-size: 11px;
+    color: $text-variant;
+    background: #222;
+    padding: 4px 8px;
     border-radius: 4px;
-    &.approved {
-      background: rgba($primary, 0.1);
-      color: $primary;
-    }
-    &.pending {
-      background: rgba($error, 0.1);
-      color: $error;
-    }
   }
 
   .material-symbols-outlined {
-    color: $text-variant;
+    color: $primary;
     opacity: 0;
     transition: 0.2s;
-  }
-  &:hover .material-symbols-outlined {
-    opacity: 1;
-    transform: translateX(4px);
   }
 }
