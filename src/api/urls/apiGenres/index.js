@@ -1,22 +1,24 @@
 import apiBaseURL from '~/utils/httpBaseURL';
 
-const GENRE_PATH = '/genres';
+const apiGenreUrl = `${apiBaseURL.defaults.baseURL}/genres`;
+export default apiGenreUrl;
+// const GENRE_PATH = '/genres';
 
-const apiGenreBaseUrl = `${apiBaseURL.defaults.baseURL}${GENRE_PATH}`;
+// const apiGenreBaseUrl = `${apiBaseURL.defaults.baseURL}${GENRE_PATH}`;
 
-const apiGenreUrls = {
-  // POST
-  createGenre: apiGenreBaseUrl,
+// const apiGenreUrls = {
+//   // POST
+//   createGenre: apiGenreBaseUrl,
 
-  // PUT
-  updateGenre: apiGenreBaseUrl,
+//   // PUT
+//   updateGenre: apiGenreBaseUrl,
 
-  // DELETE
-  deleteGenre: apiGenreBaseUrl,
+//   // DELETE
+//   deleteGenre: apiGenreBaseUrl,
 
-  // GET
-  getGenre: apiGenreBaseUrl,
-  getGenres: `${apiGenreBaseUrl}/all`,
-};
+//   // GET
+//   getGenre: apiGenreBaseUrl,
+//   getGenres: `${apiGenreBaseUrl}/all`,
+// };
 
-export default apiGenreUrls;
+// export default apiGenreUrls;

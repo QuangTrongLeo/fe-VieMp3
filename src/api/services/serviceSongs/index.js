@@ -4,7 +4,7 @@ import axios from 'axios';
 // ===== GET ALL SONGS =====
 export async function apiGetSongs() {
   try {
-    const response = await axios.get(apiSongUrls.getSongs);
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/all`);
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy danh sách bài hát';
@@ -16,7 +16,7 @@ export async function apiGetSongs() {
 export async function apiGetSong(songId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${apiSongUrls.getSong}/${songId}`, {
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/${songId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,7 +32,7 @@ export async function apiGetSong(songId) {
 export async function apiGetRecommendSongs() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiSongUrls.getRecommendSongs, {
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/recommend`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -47,7 +47,7 @@ export async function apiGetRecommendSongs() {
 // ===== GET SONGS BY ALBUM =====
 export async function apiGetSongsByAlbum(albumId) {
   try {
-    const response = await axios.get(`${apiSongUrls.getSongsByAlbum}/${albumId}`);
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/album/${albumId}`);
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo album';
@@ -58,7 +58,7 @@ export async function apiGetSongsByAlbum(albumId) {
 // ===== GET SONGS BY ARTIST =====
 export async function apiGetSongsByArtist(artistId) {
   try {
-    const response = await axios.get(`${apiSongUrls.getSongsByArtist}/${artistId}`);
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/artist/${artistId}`);
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo nghệ sĩ';
@@ -69,7 +69,7 @@ export async function apiGetSongsByArtist(artistId) {
 // ===== GET SONGS BY GENRE =====
 export async function apiGetSongsByGenre(genreId) {
   try {
-    const response = await axios.get(`${apiSongUrls.getSongsByGenre}/${genreId}`);
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/genre/${genreId}`);
     return response.data.data;
   } catch (error) {
     const message = error.response?.data?.message || error.message || 'Lỗi khi lấy bài hát theo thể loại';
@@ -81,7 +81,7 @@ export async function apiGetSongsByGenre(genreId) {
 export async function apiGetSongsByPlaylist(playlistId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${apiSongUrls.getSongsByPlaylist}/${playlistId}`, {
+    const response = await axios.get(`${apiSongUrls.apiSongUrl}/playlist/${playlistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -104,7 +104,7 @@ export async function apiCreateSong(title, description, artistId, genreId, cover
     formData.append('genreId', genreId);
     formData.append('cover', cover);
     formData.append('audio', audio);
-    const response = await axios.post(apiSongUrls.createSong, formData, {
+    const response = await axios.post(apiSongUrls.apiSongUrl, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -134,7 +134,7 @@ export async function apiUpdateSong(id, title, description, genreId, albumId, co
       formData.append('audio', audio);
     }
 
-    const response = await axios.put(`${apiSongUrls.updateSong}/${id}`, formData, {
+    const response = await axios.put(`${apiSongUrls.apiSongUrl}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -152,7 +152,7 @@ export async function apiUpdateSong(id, title, description, genreId, albumId, co
 export async function apiDeleteSong(songId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(apiSongUrls.deleteSong, {
+    const response = await axios.delete(apiSongUrls.apiSongUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -171,7 +171,7 @@ export async function apiDeleteSong(songId) {
 export async function apiGetMyFavoriteSongs() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiSongUrls.getMyFavoriteSongs, {
+    const response = await axios.get(apiSongUrls.apiFavoriteSongUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -186,7 +186,7 @@ export async function apiAddSongToFavorite(songId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post(
-      `${apiSongUrls.addSongToFavorite}/${songId}`,
+      `${apiSongUrls.apiFavoriteSongUrl}/${songId}`,
       {},
       {
         headers: {
@@ -204,7 +204,7 @@ export async function apiAddSongToFavorite(songId) {
 export async function apiRemoveSongFromFavorite(songId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiSongUrls.removeSongFromFavorite}/${songId}`, {
+    const response = await axios.delete(`${apiSongUrls.apiFavoriteSongUrl}/${songId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

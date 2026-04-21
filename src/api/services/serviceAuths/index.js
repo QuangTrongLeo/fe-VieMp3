@@ -1,8 +1,8 @@
-import apiAuthUrls from '~/api/urls/apiAuths';
+import apiAuthUrl from '~/api/urls/apiAuths';
 
 // Hàm gọi API login
 export async function apiLogin(email, password) {
-  const res = await fetch(apiAuthUrls.login, {
+  const res = await fetch(`${apiAuthUrl}/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -22,7 +22,7 @@ export async function apiLogin(email, password) {
 
 // Hàm gọi API register
 export async function apiRegister(username, email, password) {
-  const res = await fetch(apiAuthUrls.register, {
+  const res = await fetch(`${apiAuthUrl}/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -43,7 +43,7 @@ export async function apiRegister(username, email, password) {
 
 // Hàm gọi API verify OTP
 export async function apiVerifyOtp(email, otp) {
-  const res = await fetch(apiAuthUrls.verifyOtp, {
+  const res = await fetch(`${apiAuthUrl}/verify-otp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -62,7 +62,7 @@ export async function apiVerifyOtp(email, otp) {
 }
 
 export async function apiRefreshToken(refreshToken) {
-  const res = await fetch(apiAuthUrls.refresh, {
+  const res = await fetch(`${apiAuthUrl}/refresh`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

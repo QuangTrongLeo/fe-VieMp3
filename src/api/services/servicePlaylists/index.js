@@ -1,4 +1,4 @@
-import apiPlaylistUrls from '~/api/urls/apiPlayLists';
+import apiPlaylistUrl from '~/api/urls/apiPlayLists';
 import axios from 'axios';
 
 // ===== CREATE PLAYLIST =====
@@ -10,7 +10,7 @@ export async function apiCreatePlaylist(name, coverFile) {
     if (coverFile) {
       formData.append('cover', coverFile);
     }
-    const response = await axios.post(apiPlaylistUrls.createPlaylist, formData, {
+    const response = await axios.post(apiPlaylistUrl, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -34,7 +34,7 @@ export async function apiUpdatePlaylist(id, name, coverFile) {
     if (coverFile) {
       formData.append('cover', coverFile);
     }
-    const response = await axios.put(`${apiPlaylistUrls.updatePlaylist}/${id}`, formData, {
+    const response = await axios.put(`${apiPlaylistUrl}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -52,7 +52,7 @@ export async function apiUpdatePlaylist(id, name, coverFile) {
 export async function apiGetMyPlaylists() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiPlaylistUrls.getMyPlaylists, {
+    const response = await axios.get(`${apiPlaylistUrl}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +67,7 @@ export async function apiGetMyPlaylists() {
 // ===== GET PLAYLIST =====
 export async function apiGetPlaylist(playlistId) {
   const token = localStorage.getItem('token');
-  const response = await axios.get(`${apiPlaylistUrls.getPlaylist}/${playlistId}`, {
+  const response = await axios.get(`${apiPlaylistUrl}/${playlistId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -80,7 +80,7 @@ export async function apiAddSongToPlaylist(playlistId, songId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.put(
-      apiPlaylistUrls.addSongToPlaylist,
+      `${apiPlaylistUrl}/add-song`,
       {
         playlistId,
         songId,
@@ -102,7 +102,7 @@ export async function apiAddSongToPlaylist(playlistId, songId) {
 export async function apiRemoveSongFromPlaylist(playlistId, songId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(apiPlaylistUrls.removeSongFromPlaylist, {
+    const response = await axios.delete(`${apiPlaylistUrl}/remove-song`, {
       data: {
         playlistId,
         songId,

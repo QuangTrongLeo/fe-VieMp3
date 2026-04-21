@@ -1,34 +1,13 @@
 import apiBaseURL from '~/utils/httpBaseURL';
 
-const SONGS_PATH = '/songs';
-const FAVORITE_SONGS_PATH = '/favorite-songs';
-
-const apiSongBaseUrl = `${apiBaseURL.defaults.baseURL}${SONGS_PATH}`;
-const apiFavoriteSongBaseUrl = `${apiBaseURL.defaults.baseURL}${FAVORITE_SONGS_PATH}`;
+const BASE = apiBaseURL.defaults.baseURL;
+const SONG = `${BASE}/songs`;
+const FAVORITE = `${BASE}/favorite-songs`;
 
 const apiSongUrls = {
-  // POST
-  createSong: apiSongBaseUrl,
-  addSongToFavorite: apiFavoriteSongBaseUrl,
-
-  // PUT
-  updateSong: apiSongBaseUrl,
-
-  // DELETE
-  deleteSong: apiSongBaseUrl,
-  removeSongFromFavorite: apiFavoriteSongBaseUrl,
-
-  // GET
-  getSong: apiSongBaseUrl,
-  getSongs: `${apiSongBaseUrl}/all`,
-  getSongsByAlbum: `${apiSongBaseUrl}/album`,
-  getSongsByArtist: `${apiSongBaseUrl}/artist`,
-  getSongsByGenre: `${apiSongBaseUrl}/genre`,
-  getSongsByPlaylist: `${apiSongBaseUrl}/playlist`,
-  getRecommendSongs: `${apiSongBaseUrl}/recommend`,
-  getMyFavoriteSongs: apiFavoriteSongBaseUrl,
+  apiSongUrl: SONG,
+  apiFavoriteSongUrl: FAVORITE,
 };
-
 export default apiSongUrls;
 
 // FAVORITE SONGS OF THE WEEK

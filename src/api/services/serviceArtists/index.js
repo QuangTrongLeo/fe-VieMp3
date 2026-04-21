@@ -4,7 +4,7 @@ import axios from 'axios';
 // =============== ARTIST ===============
 export async function apiGetArtist(artistId) {
   try {
-    const response = await axios.get(`${apiArtistUrls.getArtist}/${artistId}`);
+    const response = await axios.get(`${apiArtistUrls.apiArtistUrl}/${artistId}`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy album:', error);
@@ -15,7 +15,7 @@ export async function apiGetArtist(artistId) {
 // ===== GET ARTIST =====
 export async function apiGetArtists() {
   try {
-    const response = await axios.get(apiArtistUrls.getArtists);
+    const response = await axios.get(`${apiArtistUrls.apiArtistUrl}/all`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách nghệ sĩ:', error);
@@ -26,7 +26,7 @@ export async function apiGetArtists() {
 // ===== GET ARTIST BY NAME =====
 export async function apiGetArtistByName(artistName) {
   try {
-    const response = await axios.get(apiArtistUrls.getArtistByName, {
+    const response = await axios.get(apiArtistUrls.apiArtistUrl, {
       params: { name: artistName },
     });
     return response.data.data;
@@ -43,7 +43,7 @@ export async function apiCreateArtist(name, avatarFile) {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('avatar', avatarFile);
-    const response = await axios.post(apiArtistUrls.createArtist, formData, {
+    const response = await axios.post(apiArtistUrls.apiArtistUrl, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -66,7 +66,7 @@ export async function apiUpdateArtist(id, name, avatarFile) {
     if (avatarFile) {
       formData.append('avatar', avatarFile);
     }
-    const response = await axios.put(`${apiArtistUrls.updateArtist}/${id}`, formData, {
+    const response = await axios.put(`${apiArtistUrls.apiArtistUrl}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -85,7 +85,7 @@ export async function apiUpdateArtist(id, name, avatarFile) {
 export async function apiDeleteArtist(artistId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(apiArtistUrls.deleteArtist, {
+    const response = await axios.delete(apiArtistUrls.apiArtistUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -105,7 +105,7 @@ export async function apiDeleteArtist(artistId) {
 export async function apiGetMyFavoriteArtists() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiArtistUrls.getMyFavoriteArtists, {
+    const response = await axios.get(apiArtistUrls.apiFavoriteArtistUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -121,7 +121,7 @@ export async function apiAddArtistToFavorite(artistId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post(
-      `${apiArtistUrls.addArtistToFavorite}/${artistId}`,
+      `${apiArtistUrls.apiFavoriteArtistUrl}/${artistId}`,
       {},
       {
         headers: {
@@ -139,7 +139,7 @@ export async function apiAddArtistToFavorite(artistId) {
 export async function apiRemoveArtistFromFavorite(artistId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiArtistUrls.removeArtistFromFavorite}/${artistId}`, {
+    const response = await axios.delete(`${apiArtistUrls.apiFavoriteArtistUrl}/${artistId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

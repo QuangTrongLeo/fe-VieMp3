@@ -1,11 +1,11 @@
-import apiPackageUrls from '~/api/urls/apiPackages';
+import apiPackageUrl from '~/api/urls/apiPackages';
 import axios from 'axios';
 
 // ===== CREATE PACKAGE (POST) =====
 export async function apiCreatePackage(payload) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post(apiPackageUrls.createPackage, payload, {
+    const response = await axios.post(apiPackageUrl, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export async function apiCreatePackage(payload) {
 export async function apiUpdatePackage(id, payload) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(`${apiPackageUrls.updatePackage}/${id}`, payload, {
+    const response = await axios.put(`${apiPackageUrl}/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export async function apiUpdatePackage(id, payload) {
 export async function apiDeletePackage(id) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiPackageUrls.deletePackage}/${id}`, {
+    const response = await axios.delete(`${apiPackageUrl}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -51,7 +51,7 @@ export async function apiDeletePackage(id) {
 // ===== GET ALL PACKAGES (GET) =====
 export async function apiGetPackages() {
   try {
-    const response = await axios.get(apiPackageUrls.getPackages);
+    const response = await axios.get(`${apiPackageUrl}/all`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách gói cước:', error);
@@ -63,7 +63,7 @@ export async function apiGetPackages() {
 export async function apiGetPackageById(id) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${apiPackageUrls.getPackage}/${id}`, {
+    const response = await axios.get(`${apiPackageUrl}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -78,7 +78,7 @@ export async function apiGetPackageById(id) {
 // ===== GET PACKAGE TYPES (GET) =====
 export async function apiGetPackageTypes() {
   try {
-    const response = await axios.get(apiPackageUrls.getPackagesType);
+    const response = await axios.get(`${apiPackageUrl}/types`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách loại gói:', error);
@@ -89,7 +89,7 @@ export async function apiGetPackageTypes() {
 // ===== GET DURATION TYPES (GET) =====
 export async function apiGetDurationTypes() {
   try {
-    const response = await axios.get(apiPackageUrls.getPackagesDuration);
+    const response = await axios.get(`${apiPackageUrl}/durations`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách thời hạn gói:', error);

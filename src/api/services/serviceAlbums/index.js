@@ -4,7 +4,7 @@ import axios from 'axios';
 // ===== GET ALBUM =====
 export async function apiGetAlbum(albumId) {
   try {
-    const response = await axios.get(`${apiAlbumUrls.getAlbum}/${albumId}`);
+    const response = await axios.get(`${apiAlbumUrls.apiAlbumUrl}/${albumId}`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy album:', error);
@@ -15,7 +15,7 @@ export async function apiGetAlbum(albumId) {
 // ===== GET ALL ALBUMS =====
 export async function apiGetAlbums() {
   try {
-    const response = await axios.get(apiAlbumUrls.getAlbums);
+    const response = await axios.get(`${apiAlbumUrls.apiAlbumUrl}/all`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy danh sách album:', error);
@@ -26,7 +26,7 @@ export async function apiGetAlbums() {
 // ===== GET ALBUMS BY ARTIST =====
 export async function apiGetAlbumsByArtist(artistId) {
   try {
-    const response = await axios.get(`${apiAlbumUrls.getAlbumsByArtist}/artist/${artistId}`);
+    const response = await axios.get(`${apiAlbumUrls.apiAlbumUrl}/artist/${artistId}`);
     return response.data.data;
   } catch (error) {
     const message =
@@ -39,7 +39,7 @@ export async function apiGetAlbumsByArtist(artistId) {
 export async function apiCreateAlbum(formData) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post(apiAlbumUrls.createAlbum, formData, {
+    const response = await axios.post(apiAlbumUrls.apiAlbumUrl, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -56,7 +56,7 @@ export async function apiCreateAlbum(formData) {
 export async function apiUpdateAlbum(id, formData) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(`${apiAlbumUrls.updateAlbum}/${id}`, formData, {
+    const response = await axios.put(`${apiAlbumUrls.apiAlbumUrl}/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
@@ -73,7 +73,7 @@ export async function apiUpdateAlbum(id, formData) {
 export async function apiDeleteAlbum(albumId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(apiAlbumUrls.deleteAlbum, {
+    const response = await axios.delete(apiAlbumUrls.apiAlbumUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -92,7 +92,7 @@ export async function apiAddSongToAlbum(albumId, songId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post(
-      apiAlbumUrls.addSongToAlbum,
+      `${apiAlbumUrls.apiAlbumUrl}/add-song`,
       {
         albumId,
         songId,
@@ -114,7 +114,7 @@ export async function apiRemoveSongFromAlbum(songId) {
   try {
     const token = localStorage.getItem('token');
 
-    const response = await axios.delete(`${apiAlbumUrls.removeSongFromAlbum}/${songId}/remove-song`, {
+    const response = await axios.delete(`${apiAlbumUrls.apiAlbumUrl}/${songId}/remove-song`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -130,7 +130,7 @@ export async function apiRemoveSongFromAlbum(songId) {
 export async function apiGetMyFavoriteAlbums() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiAlbumUrls.getMyFavoriteAlbums, {
+    const response = await axios.get(apiAlbumUrls.apiFavoriteAlbumUrl, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -145,7 +145,7 @@ export async function apiAddAlbumToFavorite(albumId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post(
-      `${apiAlbumUrls.addAlbumToFavorite}/${albumId}`,
+      `${apiAlbumUrls.apiFavoriteAlbumUrl}/${albumId}`,
       {},
       {
         headers: {
@@ -163,7 +163,7 @@ export async function apiAddAlbumToFavorite(albumId) {
 export async function apiRemoveAlbumFromFavorite(albumId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiAlbumUrls.removeAlbumFromFavorite}/${albumId}`, {
+    const response = await axios.delete(`${apiAlbumUrls.apiFavoriteAlbumUrl}/${albumId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

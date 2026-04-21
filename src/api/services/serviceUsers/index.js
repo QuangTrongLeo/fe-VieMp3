@@ -1,9 +1,9 @@
-import apiUsersUrls from '~/api/urls/apiUsers';
+import apiUserUrl from '~/api/urls/apiUsers';
 import axios from 'axios';
 
 export async function apiGetProfile() {
   const token = localStorage.getItem('token');
-  const res = await fetch(apiUsersUrls.getProfile, {
+  const res = await fetch(`${apiUserUrl}/me`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -19,7 +19,7 @@ export async function apiGetProfile() {
 
 export async function apiUpdateProfile(formData) {
   const token = localStorage.getItem('token');
-  const res = await fetch(apiUsersUrls.updateProfile, {
+  const res = await fetch(`${apiUserUrl}/me`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ export async function apiUpdateProfile(formData) {
 
 export async function apiUpdateUserRoles(data) {
   const token = localStorage.getItem('token');
-  const res = await axios.put(apiUsersUrls.updateUserRoles, data, {
+  const res = await axios.put(`${apiUserUrl}/roles`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -47,7 +47,7 @@ export async function apiUpdateUserRoles(data) {
 export async function apiGetUsers() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiUsersUrls.getUsers, {
+    const response = await axios.get(`${apiUserUrl}/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -63,7 +63,7 @@ export async function apiGetUsers() {
 export async function apiCheckUserIsStudent() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiUsersUrls.checkUserIsStudent, {
+    const response = await axios.get(`${apiUserUrl}/is-student`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

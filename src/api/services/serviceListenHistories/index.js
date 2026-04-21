@@ -1,10 +1,10 @@
-import apiListenHistoryUrls from '~/api/urls/apiListenHistories';
+import apiListenHistoryUrl from '~/api/urls/apiListenHistories';
 import axios from 'axios';
 
 export async function apiGetMyListenHistory() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiListenHistoryUrls.getMyListenHistory, {
+    const response = await axios.get(`${apiListenHistoryUrl}/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

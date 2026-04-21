@@ -1,4 +1,4 @@
-import apiAIUrls from '~/api/urls/apiAIs';
+import apiAIUrl from '~/api/urls/apiAIs';
 import axios from 'axios';
 
 // ===== CHAT AI =====
@@ -6,7 +6,7 @@ export async function apiChatAI(message) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.post(
-      apiAIUrls.chatAI,
+      `${apiAIUrl}/chat`,
       {
         message: message,
       },

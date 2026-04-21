@@ -1,11 +1,11 @@
-import apiAnalyticUrls from '~/api/urls/apiAnalytics';
+import apiAnalyticUrl from '~/api/urls/apiAnalytics';
 import axios from 'axios';
 
 // ===== LISTEN =====
 export async function apiGetListenByMonth() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiAnalyticUrls.getListenByMonth, {
+    const response = await axios.get(`${apiAnalyticUrl}/listen/month`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -19,7 +19,7 @@ export async function apiGetListenByMonth() {
 export async function apiGetListenByWeek() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiAnalyticUrls.getListenByWeek, {
+    const response = await axios.get(`${apiAnalyticUrl}/listen/week`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -34,7 +34,7 @@ export async function apiGetListenByWeek() {
 export async function apiGetGenreStatistics() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiAnalyticUrls.getGenreStatistics, {
+    const response = await axios.get(`${apiAnalyticUrl}/genres`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

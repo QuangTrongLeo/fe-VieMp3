@@ -1,11 +1,11 @@
-import apiVoucherUrls from '~/api/urls/apiVouchers';
+import apiVoucherUrl from '~/api/urls/apiVouchers';
 import axios from 'axios';
 
 // ===== CREATE VOUCHER =====
 export async function apiCreateVoucher(payload) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post(apiVoucherUrls.createVoucher, payload, {
+    const response = await axios.post(apiVoucherUrl, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export async function apiCreateVoucher(payload) {
 export async function apiUpdateVoucher(id, payload) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(`${apiVoucherUrls.updateVoucher}/${id}`, payload, {
+    const response = await axios.put(`${apiVoucherUrl}/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export async function apiUpdateVoucher(id, payload) {
 export async function apiDeleteVoucher(id) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiVoucherUrls.deleteVoucher}/${id}`, {
+    const response = await axios.delete(`${apiVoucherUrl}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -52,7 +52,7 @@ export async function apiDeleteVoucher(id) {
 export async function apiGetVoucherById(id) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${apiVoucherUrls.getVoucher}/${id}`, {
+    const response = await axios.get(`${apiVoucherUrl}/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -68,7 +68,7 @@ export async function apiGetVoucherById(id) {
 export async function apiGetAllVouchers() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiVoucherUrls.getAllVouchers, {
+    const response = await axios.get(`${apiVoucherUrl}/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -84,7 +84,7 @@ export async function apiGetAllVouchers() {
 export async function apiGetAvailableVouchers() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get(apiVoucherUrls.getAvailableVouchers, {
+    const response = await axios.get(`${apiVoucherUrl}/available`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

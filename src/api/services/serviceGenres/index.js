@@ -1,10 +1,10 @@
-import apiGenreUrls from '~/api/urls/apiGenres';
+import apiGenreUrl from '~/api/urls/apiGenres';
 import axios from 'axios';
 
 // Hàm gọi API lấy danh sách genres
 export async function apiGetGenres() {
   try {
-    const response = await axios.get(apiGenreUrls.getGenres);
+    const response = await axios.get(`${apiGenreUrl}/all`);
     return response.data.data;
   } catch (error) {
     const message =
@@ -16,7 +16,7 @@ export async function apiGetGenres() {
 // ===== GET GENRE =====
 export async function apiGetGenre(genreId) {
   try {
-    const response = await axios.get(`${apiGenreUrls.getGenre}/${genreId}`);
+    const response = await axios.get(`${apiGenreUrl}/${genreId}`);
     return response.data.data;
   } catch (error) {
     console.error('Lỗi khi lấy album:', error);
@@ -28,7 +28,7 @@ export async function apiGetGenre(genreId) {
 export async function apiCreateGenre(data) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.post(apiGenreUrls.createGenre, data, {
+    const response = await axios.post(apiGenreUrl, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -45,7 +45,7 @@ export async function apiCreateGenre(data) {
 export async function apiUpdateGenre(id, data) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.put(`${apiGenreUrls.updateGenre}/${id}`, data, {
+    const response = await axios.put(`${apiGenreUrl}/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -62,7 +62,7 @@ export async function apiUpdateGenre(id, data) {
 export async function apiDeleteGenre(genreId) {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.delete(`${apiGenreUrls.deleteGenre}/${genreId}`, {
+    const response = await axios.delete(`${apiGenreUrl}/${genreId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
