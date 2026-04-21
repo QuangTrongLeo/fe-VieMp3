@@ -54,17 +54,18 @@ function Analytic() {
     {
       title: 'Tổng lượt nghe',
       value: Intl.NumberFormat('vi-VN').format(totalListenCounts),
-      trend: '+12.5%',
-      icon: 'headset',
+      icon: icons.iconHeadphones,
     },
-    { title: 'Tổng người dùng', value: Intl.NumberFormat('vi-VN').format(totalUsers), trend: '+5.2%', icon: 'person' },
-    { title: 'Doanh thu tháng', value: '185.2M', trend: '+8.1%', unit: 'VND', icon: 'payments' },
+    {
+      title: 'Tổng người dùng',
+      value: Intl.NumberFormat('vi-VN').format(totalUsers),
+      icon: icons.iconUser,
+    },
+    { title: 'Doanh thu tháng', value: '185.2M', unit: 'VND', icon: icons.iconDollar },
     {
       title: 'Tổng số bài hát',
       value: Intl.NumberFormat('vi-VN').format(totalSongs),
-      trend: '-2.4%',
-      icon: 'music',
-      isDown: true,
+      icon: icons.iconMusic,
     },
   ];
 
@@ -85,8 +86,9 @@ function Analytic() {
         {kpis.map((kpi, index) => (
           <div key={index} className={cx('card')}>
             <div className={cx('cardHeader')}>
-              <span className={cx('cardIcon', 'material-symbols-outlined')}>{kpi.icon}</span>
-              <span className={cx('trend', kpi.isDown && 'down')}>{kpi.trend}</span>
+              <span className={cx('cardIcon', 'material-symbols-outlined')}>
+                <i className={cx(kpi.icon)}></i>
+              </span>
             </div>
             <div className={cx('cardContent')}>
               <p className={cx('cardTitle')}>{kpi.title}</p>

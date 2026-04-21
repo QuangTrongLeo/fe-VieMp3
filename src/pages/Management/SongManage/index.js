@@ -266,7 +266,7 @@ function SongManage() {
         </h3>
 
         <button className="btn btn-primary" onClick={() => setModalCreate(true)}>
-          + Thêm bài hát
+          Thêm bài hát
         </button>
       </div>
 

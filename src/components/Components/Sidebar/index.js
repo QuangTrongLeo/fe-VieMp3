@@ -24,7 +24,7 @@ const itemsRequireLogin = [
 ];
 
 const itemsManageMod = [
-  { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
+  { label: 'Tổng quan', iconClass: icons.iconHeadphones, href: config.routes.manage },
   { label: 'Quản lý nghệ sĩ', iconClass: icons.iconStar, href: config.routes.manageArtists },
   { label: 'Quản lý album', iconClass: icons.iconCompactDisc, href: config.routes.manageAlbums },
   { label: 'Quản lý bài hát', iconClass: icons.iconMusic, href: config.routes.manageSongs },
@@ -33,7 +33,7 @@ const itemsManageMod = [
 ];
 
 const itemsManageAdmin = [
-  { label: 'Tổng quan', iconClass: icons.iconGauge, href: config.routes.manage },
+  { label: 'Tổng quan', iconClass: icons.iconHeadphones, href: config.routes.manage },
   { label: 'Quản lý tài khoản', iconClass: icons.iconUser, href: config.routes.manageAccounts },
   { label: 'Quản lý gói Premium', iconClass: icons.iconPackage, href: config.routes.managePackages },
   { label: 'Quản lý doanh thu', iconClass: icons.iconDollar, href: config.routes.manageRevenues },

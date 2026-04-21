@@ -1,9 +1,14 @@
+// Variables cho Breakpoints
+$tablet: 1024px;
+$mobile: 768px;
+
 .wrapper {
   padding-bottom: 2rem;
+  padding-inline: 1rem; // Thêm padding 2 bên cho mobile
 }
 
 .editorial-header {
-  font-size: 3rem;
+  font-size: clamp(2rem, 5vw, 3rem); // Tự động co giãn font chữ
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
@@ -18,6 +23,13 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 1.5rem;
+
+  // Mobile: Chuyển tất cả về 1 cột
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .card {
@@ -36,33 +48,51 @@
 
 .total-songs {
   grid-column: span 5;
+
+  @media (max-width: $tablet) {
+    grid-column: span 12; // Chiếm hết hàng trên Tablet
+  }
+
   .number {
     color: #1db954;
-    font-size: 3rem;
+    font-size: clamp(2.5rem, 8vw, 3rem);
     font-weight: 800;
   }
 }
 
 .genre-chart {
   grid-column: span 7;
+
+  @media (max-width: $tablet) {
+    grid-column: span 12;
+  }
+
   .chart-content {
     display: flex;
     align-items: center;
     justify-content: space-around;
+    gap: 1.5rem;
+
+    @media (max-width: $mobile) {
+      flex-direction: column; // Xếp dọc biểu đồ và chú thích trên mobile
+      text-align: center;
+    }
   }
 }
 
-// FIX CHIỀU CAO ĐỘC LẬP TẠI ĐÂY
 .top-lists-wrapper {
-  grid-column: span 12; // Chiếm hết hàng
+  grid-column: span 12;
   display: grid;
-  grid-template-columns: 1fr 1fr; // Chia đôi hàng đó
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  align-items: start; // QUAN TRỌNG: Ngăn các card kéo giãn cao bằng nhau
+  align-items: start;
+
+  @media (max-width: $tablet) {
+    grid-template-columns: 1fr; // Chuyển thành 1 cột trên tablet/mobile
+  }
 }
 
 .top-list-item {
-  // Không cần grid-column ở đây vì đã ở trong wrapper chia 2 cột
   height: fit-content;
 
   .song-item {
@@ -83,6 +113,7 @@
       width: 1.5rem;
       font-weight: 800;
       color: #555;
+      flex-shrink: 0;
     }
 
     .thumb {
@@ -91,6 +122,8 @@
       margin: 0 1rem;
       border-radius: 6px;
       overflow: hidden;
+      flex-shrink: 0;
+
       img {
         width: 100%;
         height: 100%;
@@ -119,6 +152,8 @@
     .stats {
       text-align: right;
       margin-left: 1rem;
+      flex-shrink: 0;
+
       .views {
         font-weight: 800;
         &.heart {
@@ -134,11 +169,12 @@
   }
 }
 
-// Các class phụ khác
 .circular-chart {
   position: relative;
   width: 10rem;
   height: 10rem;
+  flex-shrink: 0;
+
   svg {
     transform: rotate(-90deg);
   }
@@ -150,6 +186,7 @@
     fill: transparent;
     stroke-width: 3.8;
   }
+
   .chart-label {
     position: absolute;
     inset: 0;
@@ -168,14 +205,22 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem 1rem;
+
+  @media (max-width: $mobile) {
+    width: 100%;
+    grid-template-columns: 1fr; // 1 cột cho chú thích trên mobile cực nhỏ
+  }
+
   .legend-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+
     .dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
     .name {
       font-size: 13px;
@@ -186,4 +231,13 @@
       color: #a7a7a7;
     }
   }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: #1db954;
 }

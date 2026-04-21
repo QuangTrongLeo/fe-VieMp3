@@ -168,7 +168,6 @@ function ArtistManage() {
         </h3>
 
         <button className="btn btn-primary" onClick={() => setModalCreateArtist(true)}>
-          <i className={`${icons.iconCirclePlus} me-2`}></i>
           Thêm nghệ sĩ
         </button>
       </div>

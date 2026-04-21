@@ -182,7 +182,7 @@ function PackageManage() {
             setModalCreate(true);
           }}
         >
-          + Thêm Gói mới
+          Thêm Gói mới
         </button>
       </div>
 

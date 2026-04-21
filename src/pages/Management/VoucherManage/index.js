@@ -206,7 +206,7 @@ function VoucherManage() {
             setModalCreate(true);
           }}
         >
-          + Thêm Voucher
+          Thêm Voucher
         </button>
       </div>
 

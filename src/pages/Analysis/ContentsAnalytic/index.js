@@ -76,7 +76,9 @@ function ContentsAnalytic() {
                     <circle
                       key={index}
                       className={cx('segment')}
-                      cx="18" cy="18" r="15.9"
+                      cx="18"
+                      cy="18"
+                      r="15.9"
                       stroke={chartColors[index % chartColors.length]}
                       strokeDasharray={strokeDashArray}
                       strokeDashoffset={strokeDashOffset}
@@ -97,7 +99,9 @@ function ContentsAnalytic() {
                   <div className={cx('dot')} style={{ backgroundColor: chartColors[index % chartColors.length] }}></div>
                   <div>
                     <p className={cx('name')}>{item.genreName}</p>
-                    <p className={cx('info')}>{item.percentage}% • {item.songCount} bài</p>
+                    <p className={cx('info')}>
+                      {item.percentage}% • {item.songCount} bài
+                    </p>
                   </div>
                 </div>
               ))}
@@ -114,9 +118,6 @@ function ContentsAnalytic() {
               <LimitedList
                 items={sortedListenSongs}
                 limit={5}
-                showAllText="Xem tất cả"
-                showLessText="Thu gọn"
-                wrapInRow={false}
                 renderItem={(song, index) => (
                   <div key={`listen-${song.id || index}`} className={cx('song-item')}>
                     <span className={cx('rank')}>{(index + 1).toString().padStart(2, '0')}</span>
@@ -144,9 +145,6 @@ function ContentsAnalytic() {
               <LimitedList
                 items={sortedFavoriteSongs}
                 limit={5}
-                showAllText="Xem tất cả"
-                showLessText="Thu gọn"
-                wrapInRow={false}
                 renderItem={(song, index) => (
                   <div key={`fav-${song.id || index}`} className={cx('song-item')}>
                     <span className={cx('rank')}>{(index + 1).toString().padStart(2, '0')}</span>

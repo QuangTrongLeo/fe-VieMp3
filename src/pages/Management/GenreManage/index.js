@@ -130,7 +130,7 @@ function GenreManage() {
         </h3>
 
         <button className="btn btn-primary" onClick={() => setModalCreate(true)}>
-          + Thêm thể loại
+          Thêm thể loại
         </button>
       </div>
 

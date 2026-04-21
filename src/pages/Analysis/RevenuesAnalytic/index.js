@@ -18,13 +18,6 @@ function RevenuesAnalytic() {
               Báo cáo tài chính chi tiết từ các gói hội viên Individual và Student qua cổng VNPAY.
             </p>
           </div>
-          <div className={cx('header-actions')}>
-            <div className={cx('date-picker')}>
-              <span className="material-symbols-outlined">calendar_today</span>
-              <span>Tháng 10, 2023</span>
-            </div>
-            <button className={cx('export-btn')}>Xuất báo cáo</button>
-          </div>
         </header>
 
         <div className={cx('bento-grid')}>
