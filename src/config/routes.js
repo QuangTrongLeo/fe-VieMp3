@@ -21,6 +21,7 @@ const routes = {
   register: '/register',
   song: '/song',
   premium: '/premium',
+  paymentCallback: 'payment-callback',
 
   manage: '/manage',
   manageAccounts: '/manage/accounts',

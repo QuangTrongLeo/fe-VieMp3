@@ -4,7 +4,7 @@ import styles from './Premium.module.scss';
 import classNames from 'classnames/bind';
 import icons from '~/assets/icons';
 import config from '~/config';
-import SubscriptionModal from '~/components/Components/SubscriptionModal';
+import PackageModal from '~/components/Components/PackageModal';
 import { useAuth } from '~/components/Components/AuthProvider';
 import { images } from '~/assets';
 import { apiGetPackages } from '~/api/services/servicePackages';
@@ -146,7 +146,7 @@ function Premium() {
         {renderCard('Gói Sinh viên', 'STUDENT', studentOptions, 'Tiết kiệm')}
       </section>
 
-      <SubscriptionModal show={showModal} onClose={() => setShowModal(false)} data={selectedPlan} />
+      <PackageModal show={showModal} onClose={() => setShowModal(false)} data={selectedPlan} />
     </div>
   );
 }

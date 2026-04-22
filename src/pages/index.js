@@ -16,6 +16,7 @@ export { default as Profile } from './Profile';
 export { default as Register } from './Register';
 export { default as SongDetail } from './SongDetail';
 export { default as Premium } from './Premium';
+export { default as PaymentCallback } from './PaymentCallback';
 
 export { default as Manage } from './Management/Manage';
 export { default as AccountManage } from './Management/AccountManage';

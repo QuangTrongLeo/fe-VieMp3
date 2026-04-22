@@ -17,6 +17,7 @@ import {
   Library,
   PlayList,
   PlayListDetail,
+  PaymentCallback,
 } from '~/pages';
 
 // modRoutes
@@ -53,6 +54,7 @@ const userRoutes = [
   { path: config.routes.library, component: Library },
   { path: config.routes.profile, component: Profile },
   { path: config.routes.playlists, component: PlayList },
+  { path: config.routes.paymentCallback, component: PaymentCallback },
   { path: config.routes.favoriteSongs, component: FavoriteSongs },
   { path: config.routes.favoriteAlbums, component: FavoriteAlbums },
   { path: config.routes.favoriteArtists, component: FavoriteArtists },

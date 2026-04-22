@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import styles from './SubscriptionModal.module.scss';
+import styles from './PackageModal.module.scss';
 import classNames from 'classnames/bind';
 import { apiGetAvailableVouchers } from '~/api/services/serviceVouchers';
+import { apiCreateOrder } from '~/api/services/serviceOrders';
+import { apiCreatePaymentUrl } from '~/api/services/servicePayments';
 
 const cx = classNames.bind(styles);
 
-function SubscriptionModal({ show, onClose, data }) {
+function PackageModal({ show, onClose, data }) {
   const [vouchers, setVouchers] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -49,19 +51,42 @@ function SubscriptionModal({ show, onClose, data }) {
     setSelectedVoucher(voucher || null);
   };
 
-  // Tính toán số tiền
   const originalPrice = parsePrice(data.price);
   let discountAmount = 0;
 
   if (selectedVoucher) {
     discountAmount = (originalPrice * selectedVoucher.discountPercentage) / 100;
-    // Chặn mức giảm tối đa theo maxDiscountAmount từ API
     if (discountAmount > selectedVoucher.maxDiscountAmount) {
       discountAmount = selectedVoucher.maxDiscountAmount;
     }
   }
 
   const finalAmount = originalPrice - discountAmount;
+
+  const handlePayment = async () => {
+    setLoading(true);
+    try {
+      const orderPayload = {
+        packageId: data.id,
+        voucherId: selectedVoucher ? selectedVoucher.id : null,
+        totalPrice: finalAmount,
+      };
+
+      const orderRes = await apiCreateOrder(orderPayload);
+      if (orderRes && orderRes.id) {
+        const resData = await apiCreatePaymentUrl(orderRes.id);
+        if (resData && resData.paymentUrl) {
+          window.location.href = resData.paymentUrl;
+        } else {
+          console.error('Không lấy được URL thanh toán từ phản hồi');
+        }
+      }
+    } catch (error) {
+      console.error('Lỗi thanh toán:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -149,8 +174,8 @@ function SubscriptionModal({ show, onClose, data }) {
               <button type="button" className={cx('btnCancel')} onClick={onClose}>
                 Hủy
               </button>
-              <button type="button" className={cx('btnConfirm')}>
-                Thanh toán ngay
+              <button type="button" className={cx('btnConfirm')} onClick={handlePayment} disabled={loading}>
+                {loading ? 'Đang xử lý...' : 'Thanh toán ngay'}
               </button>
             </div>
           </div>
@@ -160,4 +185,4 @@ function SubscriptionModal({ show, onClose, data }) {
   );
 }
 
-export default SubscriptionModal;
+export default PackageModal;
