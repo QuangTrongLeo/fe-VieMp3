@@ -33,6 +33,7 @@ const icons = {
   iconHeadphones: 'fa-solid fa-headphones',
   iconDownload: 'fa-solid fa-download',
   iconPackage: 'fas fa-cubes',
+  iconOrder: 'fas fa-file-invoice-dollar',
   iconVoucher: 'fas fa-ticket-alt',
 };
 

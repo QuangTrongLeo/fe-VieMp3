@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import classNames from 'classnames/bind';
+
+import config from '~/config';
 import { apiGetPaymentCallback } from '~/api/services/servicePayments';
+import styles from './PaymentCallback.module.scss';
+
+const cx = classNames.bind(styles);
 
 function PaymentCallback() {
   const location = useLocation();
@@ -34,45 +40,34 @@ function PaymentCallback() {
     verifyPayment();
   }, [location, navigate]);
 
-  const buttonStyle = {
-    marginTop: '20px',
-    padding: '10px 25px',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: 'bold',
-  };
-
   return (
-    <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'Arial, sans-serif' }}>
+    <div className={cx('wrapper')}>
       {status === 'processing' && (
-        <div>
-          <h2 style={{ color: '#007bff' }}>Đang xác thực giao dịch...</h2>
+        <div className={cx('processing')}>
+          <h2>Đang xác thực giao dịch...</h2>
           <p>Vui lòng không đóng trình duyệt.</p>
         </div>
       )}
 
       {status === 'success' && (
-        <div style={{ color: 'green' }}>
-          <div style={{ fontSize: '60px' }}>✅</div>
+        <div className={cx('success')}>
+          <div className={cx('icon')}>✅</div>
           <h2>Thanh toán thành công!</h2>
           <p>
             Tài khoản của bạn đã được nâng cấp <strong>PREMIUM</strong>.
           </p>
-          <button onClick={() => navigate('/')} style={{ ...buttonStyle, backgroundColor: '#28a745' }}>
-            Bắt đầu trải nghiệm ngay
+          <button onClick={() => navigate(config.routes.order)} className={cx('btn', 'btn-primary')}>
+            Đơn hàng của bạn
           </button>
         </div>
       )}
 
       {status === 'fail' && (
-        <div style={{ color: 'red' }}>
-          <div style={{ fontSize: '60px' }}>❌</div>
+        <div className={cx('fail')}>
+          <div className={cx('icon')}>❌</div>
           <h2>Thanh toán thất bại</h2>
           <p>Giao dịch đã bị hủy hoặc mã xác thực không hợp lệ.</p>
-          <button onClick={() => navigate('/')} style={{ ...buttonStyle, backgroundColor: '#dc3545' }}>
+          <button onClick={() => navigate(config.routes.home)} className={cx('btn', 'btn-danger')}>
             Quay lại trang chủ
           </button>
         </div>

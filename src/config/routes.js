@@ -14,6 +14,7 @@ const routes = {
   lyris: '/lyris',
   myAlbums: '/my-albums',
   mySongs: '/my-songs',
+  order: '/order',
   otp: '/otp',
   playlist: '/playlist',
   playlists: '/playlists',

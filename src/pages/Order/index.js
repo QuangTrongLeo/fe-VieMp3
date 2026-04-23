@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import styles from './OrderManage.module.scss';
+import styles from './Order.module.scss';
 import icons from '~/assets/icons';
 import { images } from '~/assets';
 import LimitedList from '~/components/Components/LimitedList';
-import { apiGetOrders, apiGetOrderById } from '~/api/services/serviceOrders';
+import { apiGetMyOrders, apiGetOrderById } from '~/api/services/serviceOrders';
 
 const cx = classNames.bind(styles);
 
-function OrderManage() {
+function Order() {
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -22,7 +22,7 @@ function OrderManage() {
 
   const fetchOrders = async () => {
     try {
-      const data = await apiGetOrders();
+      const data = await apiGetMyOrders();
       setOrders(data || []);
     } catch (error) {
       console.error('Lỗi fetch order:', error);
@@ -109,7 +109,7 @@ function OrderManage() {
     <div className={cx('wrapper')}>
       <div className={cx('header')}>
         <h3>
-          <i className="fas fa-history"></i> Lịch sử Giao dịch
+          <i className={icons.iconOrder}></i> Giao dịch Đơn hàng PREMIUM
         </h3>
       </div>
 
@@ -124,7 +124,14 @@ function OrderManage() {
       </div>
 
       <div className={cx('list')}>
-        <LimitedList items={filteredOrders} renderItem={renderOrder} />
+        {filteredOrders.length > 0 ? (
+          <LimitedList items={filteredOrders} renderItem={renderOrder} />
+        ) : (
+          <div className={cx('empty-state')}>
+            <i className={icons.iconPackage}></i>
+            <p>Bạn chưa có bất cứ giao dịch Đơn hàng nào</p>
+          </div>
+        )}
       </div>
 
       {/* MODAL CHI TIẾT */}
@@ -212,4 +219,4 @@ function OrderManage() {
   );
 }
 
-export default OrderManage;
+export default Order;

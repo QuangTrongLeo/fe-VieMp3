@@ -34,7 +34,7 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
     recognition.interimResults = false;
 
     recognition.onstart = () => {
-      console.log('🎤 Đang nghe...');
+      console.log('Đang nghe...');
     };
 
     recognition.onresult = async event => {
@@ -114,10 +114,7 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
             {/* Nếu đã đăng nhập */}
             {isLoggedIn ? (
               <>
-                {[
-                  // { icon: 'comment-dots', label: 'Tin nhắn', onClick: () => {} },
-                  { icon: 'bell', label: 'Thông báo', onClick: onToggleNotificationTablet },
-                ].map((item, i) => (
+                {[{ icon: 'bell', label: 'Thông báo', onClick: onToggleNotificationTablet }].map((item, i) => (
                   <li
                     key={i}
                     ref={bellButtonRef}
