@@ -25,7 +25,7 @@ export { default as ArtistManage } from './Management/ArtistManage';
 export { default as GenreManage } from './Management/GenreManage';
 export { default as SongManage } from './Management/SongManage';
 export { default as PackageManage } from './Management/PackageManage';
-export { default as RevenueManage } from './Management/RevenueManage';
+export { default as OrderManage } from './Management/OrderManage';
 export { default as VoucherManage } from './Management/VoucherManage';
 
 export { default as Analytic } from './Analysis/Analytic';

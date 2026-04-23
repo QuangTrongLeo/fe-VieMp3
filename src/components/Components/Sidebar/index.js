@@ -36,7 +36,7 @@ const itemsManageAdmin = [
   { label: 'Tổng quan', iconClass: icons.iconHeadphones, href: config.routes.manage },
   { label: 'Quản lý tài khoản', iconClass: icons.iconUser, href: config.routes.manageAccounts },
   { label: 'Quản lý gói Premium', iconClass: icons.iconPackage, href: config.routes.managePackages },
-  { label: 'Quản lý doanh thu', iconClass: icons.iconDollar, href: config.routes.manageRevenues },
+  { label: 'Quản lý đơn hàng', iconClass: icons.iconDollar, href: config.routes.manageOrders },
   ...itemsManageMod.slice(1),
 ];
 

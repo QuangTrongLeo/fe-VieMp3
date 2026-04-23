@@ -32,7 +32,7 @@ import {
   UsersAnalytic,
   AccountManage,
   PackageManage,
-  RevenueManage,
+  OrderManage,
 } from '~/pages';
 
 const publishRoutes = [
@@ -72,7 +72,7 @@ const modRoutes = [
 const adminRoutes = [
   { path: config.routes.manageAccounts, component: AccountManage },
   { path: config.routes.managePackages, component: PackageManage },
-  { path: config.routes.manageRevenues, component: RevenueManage },
+  { path: config.routes.manageOrders, component: OrderManage },
   { path: config.routes.analytic, component: Analytic },
   { path: config.routes.analyticArtists, component: ArtistsAnalytic },
   { path: config.routes.analyticContents, component: ContentsAnalytic },

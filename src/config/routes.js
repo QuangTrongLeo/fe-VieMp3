@@ -31,7 +31,7 @@ const routes = {
   manageGenres: '/manage/genres',
   managePlaylists: '/manage/playlists',
   managePackages: '/manage/packages',
-  manageRevenues: '/manage/revenue',
+  manageOrders: '/manage/orders',
   manageVouchers: '/manage/vouchers',
 
   analytic: '/analytic',
