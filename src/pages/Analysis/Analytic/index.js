@@ -8,7 +8,7 @@ import LimitedList from '~/components/Components/LimitedList';
 import { apiGetArtists } from '~/api/services/serviceArtists';
 import { apiGetSongs } from '~/api/services/serviceSongs';
 import { apiGetUsers } from '~/api/services/serviceUsers';
-import { apiGetListenByMonth, apiGetListenByWeek } from '~/api/services/serviceAnalytics';
+import { apiGetListenByMonth, apiGetListenByWeek, apiGetRevenueStatistics } from '~/api/services/serviceAnalytics';
 
 const cx = classNames.bind(styles);
 
@@ -16,25 +16,27 @@ function Analytic() {
   const [artists, setArtists] = useState([]);
   const [users, setUsers] = useState([]);
   const [songs, setSongs] = useState([]);
-
+  const [revenue, setRevenue] = useState({ totalRevenue: 0, totalOrders: 0 });
   const [chartData, setChartData] = useState([]);
   const [filterType, setFilterType] = useState('week');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [artistRes, userRes, songRes, weekRes, monthRes] = await Promise.all([
+        const [artistRes, userRes, songRes, weekRes, monthRes, revenueRes] = await Promise.all([
           apiGetArtists(),
           apiGetUsers(),
           apiGetSongs(),
           apiGetListenByWeek(),
           apiGetListenByMonth(),
+          apiGetRevenueStatistics(),
         ]);
         // sort artists
         const sortedArtists = [...artistRes].sort((a, b) => (b.favorites || 0) - (a.favorites || 0));
         setArtists(sortedArtists);
         setUsers(userRes);
         setSongs(songRes);
+        setRevenue(revenueRes);
 
         if (filterType === 'week') setChartData(weekRes);
         else setChartData(monthRes);
@@ -61,7 +63,12 @@ function Analytic() {
       value: Intl.NumberFormat('vi-VN').format(totalUsers),
       icon: icons.iconUser,
     },
-    { title: 'Doanh thu tháng', value: '185.2M', unit: 'VND', icon: icons.iconDollar },
+    {
+      title: 'Doanh thu',
+      value: Intl.NumberFormat('vi-VN').format(revenue.totalRevenue),
+      unit: 'VND',
+      icon: icons.iconDollar,
+    },
     {
       title: 'Tổng số bài hát',
       value: Intl.NumberFormat('vi-VN').format(totalSongs),

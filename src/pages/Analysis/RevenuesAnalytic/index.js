@@ -115,7 +115,7 @@ function RevenuesAnalytic() {
       <div className={cx('container')}>
         <header className={cx('header')}>
           <div className={cx('header-info')}>
-            <h1 className={cx('title')}>Dashboard Tài chính</h1>
+            <h1 className={cx('title')}>Thống kê doanh thu</h1>
             <p className={cx('subtitle')}>Báo cáo chi tiết doanh thu và phân bổ dịch vụ.</p>
           </div>
         </header>
