@@ -44,3 +44,44 @@ export async function apiGetGenreStatistics() {
     throw error;
   }
 }
+
+// ===== FINANCE (REVENUE & PACKAGES) =====
+export async function apiGetRevenueStatistics() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${apiAnalyticUrl}/finance/revenue`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function apiGetPackageDistribution() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${apiAnalyticUrl}/finance/packages`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function apiGetMonthlyRevenue() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${apiAnalyticUrl}/finance/revenue/monthly`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
