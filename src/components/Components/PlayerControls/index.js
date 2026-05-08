@@ -1,4 +1,3 @@
-// src/components/PlayerControls.jsx
 import React from 'react';
 import classNames from 'classnames/bind';
 import styles from './PlayerControls.module.scss';
