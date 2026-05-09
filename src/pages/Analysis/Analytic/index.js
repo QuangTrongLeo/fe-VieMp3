@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import styles from './Analytic.module.scss';
 import icons from '~/assets/icons';
 import LimitedList from '~/components/Components/LimitedList';
@@ -8,7 +8,12 @@ import LimitedList from '~/components/Components/LimitedList';
 import { apiGetArtists } from '~/api/services/serviceArtists';
 import { apiGetSongs } from '~/api/services/serviceSongs';
 import { apiGetUsers } from '~/api/services/serviceUsers';
-import { apiGetListenByMonth, apiGetListenByWeek, apiGetRevenueStatistics } from '~/api/services/serviceAnalytics';
+import {
+  apiGetListenByMonth,
+  apiGetListenByWeek,
+  apiGetListenByDay,
+  apiGetRevenueStatistics,
+} from '~/api/services/serviceAnalytics';
 
 const cx = classNames.bind(styles);
 
@@ -19,33 +24,51 @@ function Analytic() {
   const [revenue, setRevenue] = useState({ totalRevenue: 0, totalOrders: 0 });
   const [chartData, setChartData] = useState([]);
   const [filterType, setFilterType] = useState('week');
+  const [loadingChart, setLoadingChart] = useState(false);
 
+  // 1. Fetch dữ liệu tổng quan (chạy 1 lần duy nhất)
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStaticData = async () => {
       try {
-        const [artistRes, userRes, songRes, weekRes, monthRes, revenueRes] = await Promise.all([
+        const [artistRes, userRes, songRes, revenueRes] = await Promise.all([
           apiGetArtists(),
           apiGetUsers(),
           apiGetSongs(),
-          apiGetListenByWeek(),
-          apiGetListenByMonth(),
           apiGetRevenueStatistics(),
         ]);
-        // sort artists
+
         const sortedArtists = [...artistRes].sort((a, b) => (b.favorites || 0) - (a.favorites || 0));
         setArtists(sortedArtists);
         setUsers(userRes);
         setSongs(songRes);
         setRevenue(revenueRes);
-
-        if (filterType === 'week') setChartData(weekRes);
-        else setChartData(monthRes);
       } catch (err) {
-        console.error('Lỗi fetch dashboard:', err);
+        console.error('Lỗi fetch dữ liệu tổng quan:', err);
       }
     };
 
-    fetchData();
+    fetchStaticData();
+  }, []);
+
+  // 2. Fetch dữ liệu biểu đồ (chạy lại mỗi khi filterType thay đổi)
+  useEffect(() => {
+    const fetchChartData = async () => {
+      setLoadingChart(true);
+      try {
+        let res;
+        if (filterType === 'day') res = await apiGetListenByDay();
+        else if (filterType === 'month') res = await apiGetListenByMonth();
+        else res = await apiGetListenByWeek();
+
+        setChartData(res);
+      } catch (err) {
+        console.error('Lỗi fetch biểu đồ:', err);
+      } finally {
+        setLoadingChart(false);
+      }
+    };
+
+    fetchChartData();
   }, [filterType]);
 
   const totalUsers = users.length;
@@ -93,7 +116,7 @@ function Analytic() {
         {kpis.map((kpi, index) => (
           <div key={index} className={cx('card')}>
             <div className={cx('cardHeader')}>
-              <span className={cx('cardIcon', 'material-symbols-outlined')}>
+              <span className={cx('cardIcon')}>
                 <i className={cx(kpi.icon)}></i>
               </span>
             </div>
@@ -113,25 +136,37 @@ function Analytic() {
           <div className={cx('boxHeader')}>
             <h4 className={cx('boxTitle')}>Tăng trưởng lượt nghe</h4>
             <select className={cx('selectFilter')} value={filterType} onChange={e => setFilterType(e.target.value)}>
+              <option value="day">Theo ngày</option>
               <option value="week">Theo tuần</option>
               <option value="month">Theo tháng</option>
             </select>
           </div>
 
-          <div className={cx('chartPlaceholder')} style={{ width: '100%', height: 300 }}>
+          <div
+            className={cx('chartPlaceholder')}
+            style={{ width: '100%', height: 350, opacity: loadingChart ? 0.5 : 1, transition: '0.3s' }}
+          >
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorListen" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1db954" stopOpacity={0.3} />
+                    <stop offset="5%" stopColor="#1db954" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#1db954" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="period" stroke="#555" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#555" fontSize={12} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#222" />
+                <XAxis
+                  dataKey="period"
+                  stroke="#777"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={tick => (filterType === 'day' ? tick.split('-').slice(1).join('/') : tick)}
+                />
+                <YAxis stroke="#777" fontSize={11} tickLine={false} axisLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#1f1f1f', border: 'none', borderRadius: '8px', color: '#fff' }}
-                  itemStyle={{ color: '#1db954' }}
+                  contentStyle={{ backgroundColor: '#181818', border: '1px solid #333', borderRadius: '8px' }}
+                  itemStyle={{ color: '#1db954', fontWeight: 'bold' }}
                 />
                 <Area
                   type="monotone"
@@ -140,19 +175,20 @@ function Analytic() {
                   strokeWidth={3}
                   fillOpacity={1}
                   fill="url(#colorListen)"
+                  animationDuration={1500}
                 />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
+        {/* RANKING ARTISTS */}
         <div className={cx('artistBox')}>
           <h4 className={cx('boxTitle')}>Nghệ sĩ nổi bật</h4>
-
           <div className={cx('artistList')}>
             <LimitedList
               items={artists}
-              limit={4}
+              limit={5}
               wrapInRow={false}
               renderItem={(a, i) => (
                 <div key={a.id} className={cx('artistItem')}>
@@ -161,7 +197,10 @@ function Analytic() {
                   <div className={cx('artistInfo')}>
                     <div className={cx('artistName')}>{a.name}</div>
                   </div>
-                  <div className={cx('artistStats')}>{Intl.NumberFormat('vi-VN').format(a.favorites || 0)}</div>
+                  <div className={cx('artistStats')}>
+                    {Intl.NumberFormat('vi-VN').format(a.favorites || 0)}
+                    <span style={{ fontSize: '10px', marginLeft: '4px' }}>❤</span>
+                  </div>
                 </div>
               )}
             />

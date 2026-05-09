@@ -2,7 +2,7 @@ import './Header.scss';
 import React, { useRef } from 'react';
 import images from '~/assets/images';
 import config from '~/config';
-import icons from '~/assets/icons';
+// import icons from '~/assets/icons';
 import { ShortButton, LongButton } from '../Button';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
@@ -21,48 +21,48 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
     setCurrentToken('');
   };
 
-  const handleVoiceSearch = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // const handleVoiceSearch = () => {
+  //   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
-      alert('Trình duyệt không hỗ trợ voice search');
-      return;
-    }
+  //   if (!SpeechRecognition) {
+  //     alert('Trình duyệt không hỗ trợ voice search');
+  //     return;
+  //   }
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'vi-VN';
-    recognition.interimResults = false;
+  //   const recognition = new SpeechRecognition();
+  //   recognition.lang = 'vi-VN';
+  //   recognition.interimResults = false;
 
-    recognition.onstart = () => {
-      console.log('Đang nghe...');
-    };
+  //   recognition.onstart = () => {
+  //     console.log('Đang nghe...');
+  //   };
 
-    recognition.onresult = async event => {
-      const transcript = event.results[0][0].transcript;
-      console.log('Bạn nói:', transcript);
+  //   recognition.onresult = async event => {
+  //     const transcript = event.results[0][0].transcript;
+  //     console.log('Bạn nói:', transcript);
 
-      // Gửi lên backend
-      const response = await fetch('/api/v1/search/voice', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${currentToken}`,
-        },
-        body: JSON.stringify({ text: transcript }),
-      });
+  //     // Gửi lên backend
+  //     const response = await fetch('/api/v1/search/voice', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${currentToken}`,
+  //       },
+  //       body: JSON.stringify({ text: transcript }),
+  //     });
 
-      const result = await response.json();
+  //     const result = await response.json();
 
-      console.log('Kết quả AI:', result);
-    };
+  //     console.log('Kết quả AI:', result);
+  //   };
 
-    recognition.onerror = err => {
-      console.error('Lỗi nhận diện:', err);
-    };
+  //   recognition.onerror = err => {
+  //     console.error('Lỗi nhận diện:', err);
+  //   };
 
-    recognition.start();
-    recognitionRef.current = recognition;
-  };
+  //   recognition.start();
+  //   recognitionRef.current = recognition;
+  // };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top custom-navbar">
@@ -79,9 +79,9 @@ function Header({ onToggleNotificationTablet, bellButtonRef }) {
           <Search />
 
           {/* Voice button */}
-          <button className="btn voice-btn" onClick={handleVoiceSearch}>
+          {/* <button className="btn voice-btn" onClick={handleVoiceSearch}>
             <i className={icons.iconMicrophone}></i>
-          </button>
+          </button> */}
         </div>
 
         {/* Toggle button */}
