@@ -151,7 +151,7 @@ function Home() {
       </section>
 
       {/* FAVORITE SONGS OF THE WEEK */}
-      <section className={cx('section-block')}>
+      {/* <section className={cx('section-block')}>
         <h3>Top bài hát yêu thích của tuần</h3>
         <HorizontalScroll>
           {sortedFavoriteSongsOfTheWeek.map(song => (
@@ -164,7 +164,7 @@ function Home() {
             />
           ))}
         </HorizontalScroll>
-      </section>
+      </section> */}
 
       {/* TRENDING ARTISTS */}
       <section className={cx('section-block')}>

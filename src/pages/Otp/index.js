@@ -90,7 +90,7 @@ function Otp() {
                     Mã OTP đã được gửi vào email của bạn <b>{email}</b>
                   </div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--primary-color)' }}>
-                    Bạn có 10 phút để xác thực OTP
+                    Bạn có 5 phút để xác thực OTP
                   </div>
                 </div>
               </div>

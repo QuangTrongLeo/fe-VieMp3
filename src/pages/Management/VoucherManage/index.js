@@ -227,13 +227,25 @@ function VoucherManage() {
         <div className={cx('modal')}>
           <div className={cx('modal-content')}>
             <h4>Thêm Voucher mới</h4>
-            <input name="quantity" type="number" placeholder="Số lượng" onChange={handleChange} />
-            <input name="discountPercentage" type="number" placeholder="% Giảm giá" onChange={handleChange} />
-            <input name="maxDiscountAmount" type="number" placeholder="Giảm giá tối đa" onChange={handleChange} />
+            <input name="quantity" type="number" value={form.quantity} placeholder="Số lượng" onChange={handleChange} />
+            <input
+              name="discountPercentage"
+              type="number"
+              value={form.discountPercentage}
+              placeholder="% Giảm giá"
+              onChange={handleChange}
+            />
+            <input
+              name="maxDiscountAmount"
+              type="number"
+              value={form.maxDiscountAmount}
+              placeholder="Giảm giá tối đa"
+              onChange={handleChange}
+            />
             <label>Ngày bắt đầu:</label>
-            <input name="startDate" type="date" onChange={handleChange} />
+            <input name="startDate" type="date" value={form.startDate} onChange={handleChange} />
             <label>Ngày kết thúc:</label>
-            <input name="endDate" type="date" onChange={handleChange} />
+            <input name="endDate" type="date" value={form.endDate} onChange={handleChange} />
 
             <div className={cx('modal-actions')}>
               <button className="btn btn-secondary" onClick={() => setModalCreate(false)}>

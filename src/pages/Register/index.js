@@ -156,12 +156,12 @@ function Register() {
                 </div>
 
                 {/* LOGIN BY GG */}
-                <div className={cx('text-center')}>
+                {/* <div className={cx('text-center')}>
                   <p>hoặc đăng nhập với</p>
                   <button className={cx('google-btn')}>
                     <i className={cx('fab', 'fa-google')}></i>
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
