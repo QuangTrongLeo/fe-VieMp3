@@ -242,7 +242,7 @@ function VoucherManage() {
               placeholder="Giảm giá tối đa"
               onChange={handleChange}
             />
-            <label>Ngày bắt đầu:</label>
+            <label>Ngày bắt đầu(từ ngày hôm nay trở đi):</label>
             <input name="startDate" type="date" value={form.startDate} onChange={handleChange} />
             <label>Ngày kết thúc:</label>
             <input name="endDate" type="date" value={form.endDate} onChange={handleChange} />
